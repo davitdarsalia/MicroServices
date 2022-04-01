@@ -1,7 +1,10 @@
 package main
 
-import "dbPractice/pkg/routes"
+import (
+	"dbPractice/pkg/routes"
+)
 
 func main() {
 	routes.RootRouter()
+
 }

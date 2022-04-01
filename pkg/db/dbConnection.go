@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-func DbConnection() *sql.DB {
+func ConnectDB() *sql.DB {
 	defer fmt.Println("Db Connected")
 	db, dbOpenError := sql.Open("postgres", constants.DbConfig)
 	if dbOpenError != nil {
