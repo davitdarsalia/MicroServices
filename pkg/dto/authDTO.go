@@ -4,23 +4,24 @@ import (
 	"dbPractice/pkg/constants"
 	"dbPractice/pkg/db"
 	"dbPractice/pkg/models"
-	"log"
+	"fmt"
 	"net/http"
 )
 
-func CreateUserDTO(u models.UserSignUp, w http.ResponseWriter) {
+func CreateUserDTO(u models.UserSignUp, w http.ResponseWriter) (createUserErr bool) {
+	fmt.Println(createUserErr)
 	dB := db.ConnectDB()
 
 	_, err := dB.Exec(constants.UserSignUpQuery, u.Email, u.FirstName, u.LastName, u.Age, u.Password)
 
 	if err != nil {
-		_, writeErr := w.Write([]byte("Incorrect Values, Try Again"))
-
-		if writeErr != nil {
-			log.Println("\n", writeErr)
-		}
-		w.WriteHeader(http.StatusBadRequest)
+		createUserErr = true
+		w.WriteHeader(http.StatusConflict)
+	} else {
+		w.WriteHeader(http.StatusCreated)
 	}
+
+	return
 }
 
 func SignInUserDTO(email, password string) bool {
