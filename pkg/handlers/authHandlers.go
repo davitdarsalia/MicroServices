@@ -4,6 +4,7 @@ import (
 	"dbPractice/pkg/dto"
 	"dbPractice/pkg/models"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -46,4 +47,7 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("\nOne Of Your Credentials Is Incorrect. Please, Try Again \n")
 	}
 
+	token := JwtGenerator()
+
+	fmt.Println(token)
 }
