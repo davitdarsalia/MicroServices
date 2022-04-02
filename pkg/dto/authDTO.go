@@ -5,15 +5,21 @@ import (
 	"dbPractice/pkg/db"
 	"dbPractice/pkg/models"
 	"log"
+	"net/http"
 )
 
-func CreateUserDTO(u models.UserSignUp) {
+func CreateUserDTO(u models.UserSignUp, w http.ResponseWriter) {
 	dB := db.ConnectDB()
 
 	_, err := dB.Exec(constants.UserSignUpQuery, u.Email, u.FirstName, u.LastName, u.Age, u.Password)
 
 	if err != nil {
-		log.Fatal(err)
+		_, writeErr := w.Write([]byte("Incorrect Values, Try Again"))
+
+		if writeErr != nil {
+			log.Println("\n", writeErr)
+		}
+		w.WriteHeader(http.StatusBadRequest)
 	}
 }
 

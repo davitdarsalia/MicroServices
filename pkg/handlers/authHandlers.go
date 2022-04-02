@@ -15,7 +15,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	dto.CreateUserDTO(userModel)
+	dto.CreateUserDTO(userModel, w)
 
 	defer func() {
 		_, err = w.Write([]byte("User Created"))
