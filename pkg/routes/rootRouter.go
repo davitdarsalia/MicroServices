@@ -1,20 +1,26 @@
 package routes
 
 import (
-	"dbPractice/pkg/handlers"
+	"dbPractice/pkg/handlers/auth"
+	"dbPractice/pkg/handlers/user"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"os"
 )
 
 func RootRouter() {
+	port := os.Getenv("DEF_PORT")
 	router := mux.NewRouter()
 
-	router.HandleFunc("/signup", handlers.CreateUser).Methods("POST")
-	router.HandleFunc("/signin", handlers.SignInUser).Methods("POST")
+	if auth.IsAuthorized == true {
+		router.HandleFunc("/transactions", user.TransactionsHandler).Methods("GET").Headers()
+	} else if auth.IsAuthorized == false {
+		router.HandleFunc("/signup", auth.CreateUser).Methods("POST")
+		router.HandleFunc("/signin", auth.SignInUser).Methods("POST")
+	}
 
-	// Router presented as a handler
-	startErr := http.ListenAndServe(":8080", router)
+	startErr := http.ListenAndServe(port, router)
 
 	if startErr != nil {
 		log.Fatal(startErr)

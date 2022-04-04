@@ -1,12 +1,15 @@
-package handlers
+package auth
 
 import (
 	"dbPractice/pkg/dto"
+	"dbPractice/pkg/handlers"
 	"dbPractice/pkg/models"
 	"encoding/json"
 	"log"
 	"net/http"
 )
+
+var IsAuthorized bool
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var userModel models.UserSignUp
@@ -44,7 +47,7 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	token := JwtGenerator()
+	token := handlers.JwtGenerator()
 
 	byteResponse, marshalErr := json.Marshal([]byte(token))
 	if marshalErr != nil {
@@ -56,4 +59,5 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 	if byteWriterError != nil {
 		log.Println(byteWriterError)
 	}
+	IsAuthorized = true
 }
