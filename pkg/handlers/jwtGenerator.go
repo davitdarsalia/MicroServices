@@ -5,13 +5,15 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 )
 
 func JwtGenerator() string {
 	var (
 		signKey  = []byte(os.Getenv("SIGN_KEY"))
 		audience = os.Getenv("JWT_AUDIENCE")
-		id       = os.Getenv("JWT_ID")
+		issuer   = os.Getenv("ISSUER")
+		subject  = os.Getenv("JWT_SUBJECT")
 	)
 
 	expiryDate, parseIntErr := strconv.ParseInt(os.Getenv("JWT_EXPIRY_DATE"), 0, 0)
@@ -22,12 +24,10 @@ func JwtGenerator() string {
 
 	claims := jwt.StandardClaims{
 		Audience:  audience,
-		ExpiresAt: expiryDate,
-		Id:        id,
-		IssuedAt:  1,
-		Issuer:    "test",
-		NotBefore: 0,
-		Subject:   "Sign",
+		ExpiresAt: time.Now().Add(time.Minute * time.Duration(expiryDate)).Unix(),
+		IssuedAt:  time.Now().Unix(),
+		Issuer:    issuer,
+		Subject:   subject,
 	}
 
 	//
