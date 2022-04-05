@@ -3,6 +3,7 @@ package dto
 import (
 	"dbPractice/pkg/constants"
 	"dbPractice/pkg/db"
+	"dbPractice/pkg/handlers/security"
 	"dbPractice/pkg/models"
 	"fmt"
 	"net/http"
@@ -26,16 +27,15 @@ func CreateUserDTO(u models.UserSignUp, w http.ResponseWriter) (createUserErr bo
 
 func SignInUserDTO(email, password string) bool {
 	dB := db.ConnectDB()
+	hash := security.HashData(password)
+	password = hash
 
-	var emailRes string
+	// Retrieved value based on Db query
 	var passwordRes string
-
-	err := dB.QueryRow(constants.CheckUser, email, password).Scan(&emailRes, &passwordRes)
+	err := dB.QueryRow(constants.CheckUser, password, email).Scan(&passwordRes)
 
 	if err != nil {
 		return false
 	}
-
 	return true
-
 }

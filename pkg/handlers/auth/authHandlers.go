@@ -3,13 +3,12 @@ package auth
 import (
 	"dbPractice/pkg/dto"
 	"dbPractice/pkg/handlers"
+	"dbPractice/pkg/handlers/security"
 	"dbPractice/pkg/models"
 	"encoding/json"
 	"log"
 	"net/http"
 )
-
-var IsAuthorized bool
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var userModel models.UserSignUp
@@ -17,6 +16,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
+	hashedPassword := security.HashData(userModel.Password)
+
+	userModel.Password = hashedPassword
 
 	createError := dto.CreateUserDTO(userModel, w)
 
@@ -34,15 +36,17 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 func SignInUser(w http.ResponseWriter, r *http.Request) {
 	var userModel models.UserSignUp
+
 	err := json.NewDecoder(r.Body).Decode(&userModel)
 	if err != nil {
 		log.Println(err)
 	}
 
 	existence := dto.SignInUserDTO(userModel.Email, userModel.Password)
+
 	if existence == false {
 		w.WriteHeader(http.StatusNotFound)
-		log.Printf("\nOne Of Your Credentials Is Incorrect. Please, Try Again \n")
+		log.Println("\nOne Of Your Credentials Is Incorrect. Please, Try Again")
 		return
 	}
 
@@ -59,5 +63,4 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 	if byteWriterError != nil {
 		log.Println(byteWriterError)
 	}
-	IsAuthorized = true
 }

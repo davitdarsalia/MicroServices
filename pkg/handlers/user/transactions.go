@@ -1,13 +1,21 @@
 package user
 
 import (
-	"dbPractice/pkg/handlers/auth"
+	"fmt"
 	"net/http"
+	"strings"
 )
 
 func TransactionsHandler(w http.ResponseWriter, r *http.Request) {
-	if auth.IsAuthorized == false {
-		panic(any("Not Authorized"))
+
+	token := r.Header.Get("token")
+
+	fmt.Println("Done")
+
+	if strings.HasPrefix(token, "Bearer") {
+		// Trim space
+		token = strings.TrimPrefix(token, "Bearer")
+
 	}
 
 }

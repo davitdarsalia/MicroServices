@@ -13,12 +13,11 @@ func RootRouter() {
 	port := os.Getenv("DEF_PORT")
 	router := mux.NewRouter()
 
-	if auth.IsAuthorized == true {
-		router.HandleFunc("/transactions", user.TransactionsHandler).Methods("GET").Headers()
-	} else if auth.IsAuthorized == false {
-		router.HandleFunc("/signup", auth.CreateUser).Methods("POST")
-		router.HandleFunc("/signin", auth.SignInUser).Methods("POST")
-	}
+	router.HandleFunc("/signup", auth.CreateUser).Methods("POST")
+	router.HandleFunc("/signin", auth.SignInUser).Methods("POST")
+
+	router.HandleFunc("/transactions", user.TransactionsHandler).Methods("GET")
+	router.HandleFunc("/transactions/{:id}", user.TransactionsHandler).Methods("GET")
 
 	startErr := http.ListenAndServe(port, router)
 
