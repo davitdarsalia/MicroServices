@@ -10,7 +10,7 @@ import (
 
 func JwtGenerator() string {
 	var (
-		signKey  = []byte(os.Getenv("SIGN_KEY"))
+		secret   = []byte(os.Getenv("SIGN_KEY"))
 		audience = os.Getenv("JWT_AUDIENCE")
 		issuer   = os.Getenv("ISSUER")
 		subject  = os.Getenv("JWT_SUBJECT")
@@ -30,14 +30,11 @@ func JwtGenerator() string {
 		Subject:   subject,
 	}
 
-	//
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	strToken, err := token.SignedString(secret)
 
-	signedString, ssError := token.SignedString(signKey)
-
-	if ssError != nil {
-		log.Println(ssError)
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	return signedString
+	return strToken
 }

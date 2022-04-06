@@ -5,12 +5,10 @@ import (
 	"dbPractice/pkg/db"
 	"dbPractice/pkg/handlers/security"
 	"dbPractice/pkg/models"
-	"fmt"
 	"net/http"
 )
 
 func CreateUserDTO(u models.UserSignUp, w http.ResponseWriter) (createUserErr bool) {
-	fmt.Println(createUserErr)
 	dB := db.ConnectDB()
 
 	_, err := dB.Exec(constants.UserSignUpQuery, u.Email, u.FirstName, u.LastName, u.Age, u.Password)
@@ -21,7 +19,6 @@ func CreateUserDTO(u models.UserSignUp, w http.ResponseWriter) (createUserErr bo
 	} else {
 		w.WriteHeader(http.StatusCreated)
 	}
-
 	return
 }
 
@@ -37,5 +34,6 @@ func SignInUserDTO(email, password string) bool {
 	if err != nil {
 		return false
 	}
+
 	return true
 }

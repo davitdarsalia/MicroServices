@@ -16,8 +16,12 @@ func RootRouter() {
 	router.HandleFunc("/signup", auth.CreateUser).Methods("POST")
 	router.HandleFunc("/signin", auth.SignInUser).Methods("POST")
 
-	router.HandleFunc("/transactions", user.TransactionsHandler).Methods("GET")
-	router.HandleFunc("/transactions/{:id}", user.TransactionsHandler).Methods("GET")
+	// Generic Requests
+	router.HandleFunc("/allusers", user.GetAllUsers).Methods("GET")
+	router.HandleFunc("/allusers/{id}", user.GetUserById).Methods("GET")
+
+	// Authorization Filter
+	router.HandleFunc("/userinfo/{id}", user.InfoHandler).Methods("GET")
 
 	startErr := http.ListenAndServe(port, router)
 

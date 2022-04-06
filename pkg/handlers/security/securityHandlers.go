@@ -2,9 +2,9 @@ package security
 
 import (
 	"crypto/sha256"
+	"errors"
 	"fmt"
-	"golang.org/x/crypto/bcrypt"
-	"log"
+	"github.com/dgrijalva/jwt-go"
 )
 
 // HashData - Uses Sha256 as an encryption algorithm.
@@ -17,12 +17,25 @@ func HashData(data string) string {
 
 // CompareHashes - Compares hashed values
 
-func CompareHashes(data, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(data))
-
+func ValidateJWT(token string, secret string) (claims jwt.MapClaims, err error) {
+	tok, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("unexpected signing method")
+		}
+		return []byte(secret), nil
+	})
 	if err != nil {
-		log.Println("Error While Comparing Hashes")
+		return
+	}
+	if tok == nil {
+		err = errors.New("invalid token string")
+		return
 	}
 
-	return err == nil
+	claims, ok := tok.Claims.(jwt.MapClaims)
+	if !ok || !tok.Valid {
+		err = errors.New("invalid signature")
+	}
+
+	return
 }

@@ -1,5 +1,0 @@
-package dto
-
-func TransactionsDTO() {
-
-}
