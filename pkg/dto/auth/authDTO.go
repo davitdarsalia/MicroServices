@@ -12,7 +12,6 @@ func CreateUserDTO(u models.UserSignUp, w http.ResponseWriter) (createUserErr bo
 	dB := db.ConnectDB()
 
 	_, err := dB.Exec(constants.UserSignUpQuery, u.Email, u.FirstName, u.LastName, u.Age, u.Password)
-
 	if err != nil {
 		createUserErr = true
 		w.WriteHeader(http.StatusConflict)

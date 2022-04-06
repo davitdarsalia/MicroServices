@@ -20,3 +20,10 @@ type UserRating struct {
 type UserBalance struct {
 	Balance int32 `json:"balance"`
 }
+
+type UserTransaction struct {
+	TransactionId int    `json:"transactionid"`
+	Recipient     string `json:"recipient"`
+	Amount        int    `json:"amount"`
+	Currency      string `json:"currency"`
+}

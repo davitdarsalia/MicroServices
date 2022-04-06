@@ -4,20 +4,19 @@ import (
 	"dbPractice/pkg/dto/user"
 	"dbPractice/pkg/models"
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"strconv"
 )
 
-func IncreaseRating(w http.ResponseWriter, r *http.Request) {
-	var rating models.UserRating
+func MakeTransaction(w http.ResponseWriter, r *http.Request) {
+	var transactionModel models.UserTransaction
 
 	identifier := mux.Vars(r)
 	id := identifier["id"]
 
-	decodeErr := json.NewDecoder(r.Body).Decode(&rating)
-
+	decodeErr := json.NewDecoder(r.Body).Decode(&transactionModel)
 	if decodeErr != nil {
 		log.Println(decodeErr)
 	}
@@ -30,8 +29,12 @@ func IncreaseRating(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	fmt.Println(rating, "rating")
+	idInt, parseError := strconv.ParseInt(id, 0, 0)
 
-	user.RatingDTO(w, id, rating.Rating)
+	if parseError != nil {
+		log.Fatal(parseError, "DDD")
+	}
+
+	user.TransactionDTO(w, transactionModel, idInt)
 
 }

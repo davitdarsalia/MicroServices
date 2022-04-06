@@ -25,6 +25,9 @@ func RootRouter() {
 	router.HandleFunc("/increase_rating/{id}", user.IncreaseRating).Methods("POST")
 	router.HandleFunc("/increase_balance/{id}", user.IncreaseBalance).Methods("POST")
 
+	// Payment - Half Anonymous Transaction
+	router.HandleFunc("/transaction", user.MakeTransaction).Methods("POST")
+
 	startErr := http.ListenAndServe(port, router)
 
 	if startErr != nil {
