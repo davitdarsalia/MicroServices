@@ -4,8 +4,12 @@ const UserSignUpQuery = `INSERT INTO "userAuth" (email, firstname, lastname, age
 
 const CheckUser = `select password from "userAuth" where password = $1 and email = $2`
 
-const FetchUserInfo = `select * from "userInfo" where userid = $1`
+const FetchUserInfo = `select balance, rating from "userInfo" where userid = $1`
 
 const GetAllUsers = `select id, email, firstname, lastname, age from "userAuth"`
 
 const GetUserByID = `select id, email, firstname, lastname, age  from "userAuth" where id = $1`
+
+const IncreaseRatingByID = `update "userInfo" set rating = $1 where userid = $2`
+
+const IncreaseBalance = `update "userInfo" set balance = $1 where userid = $2`

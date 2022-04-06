@@ -1,14 +1,14 @@
 package user
 
 import (
-	"dbPractice/pkg/dto"
+	"dbPractice/pkg/dto/user"
 	"encoding/json"
 	"log"
 	"net/http"
 )
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	users, err := dto.AllUsersDTO(w)
+	users, err := user.AllUsersDTO(w)
 
 	if err != nil {
 		log.Println(err)

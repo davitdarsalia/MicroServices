@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"dbPractice/pkg/dto"
+	"dbPractice/pkg/dto/auth"
 	"dbPractice/pkg/handlers"
 	"dbPractice/pkg/handlers/security"
 	"dbPractice/pkg/models"
@@ -20,7 +20,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	userModel.Password = hashedPassword
 
-	createError := dto.CreateUserDTO(userModel, w)
+	createError := auth.CreateUserDTO(userModel, w)
 
 	if createError != false {
 		_, writeErr := w.Write([]byte("User Already Exists"))
@@ -42,7 +42,7 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	existence := dto.SignInUserDTO(userModel.Email, userModel.Password)
+	existence := auth.SignInUserDTO(userModel.Email, userModel.Password)
 
 	if existence == false {
 		w.WriteHeader(http.StatusNotFound)

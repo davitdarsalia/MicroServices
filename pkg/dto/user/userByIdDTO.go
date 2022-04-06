@@ -1,4 +1,4 @@
-package dto
+package user
 
 import (
 	"dbPractice/pkg/constants"
@@ -10,7 +10,6 @@ import (
 
 func UserByIdDTO(w http.ResponseWriter, id string) models.UserBasicInfo {
 	var user models.UserBasicInfo
-
 	dB := db.ConnectDB()
 
 	row := dB.QueryRow(constants.GetUserByID, id).Scan(&user.Id, &user.Email, &user.FirstName, &user.LastName, &user.Age)

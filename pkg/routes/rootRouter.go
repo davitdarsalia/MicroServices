@@ -21,7 +21,9 @@ func RootRouter() {
 	router.HandleFunc("/allusers/{id}", user.GetUserById).Methods("GET")
 
 	// Authorization Filter
-	router.HandleFunc("/userinfo/{id}", user.InfoHandler).Methods("GET")
+	router.HandleFunc("/userinfo/{id}", user.GetUserInfo).Methods("GET")
+	router.HandleFunc("/increase_rating/{id}", user.IncreaseRating).Methods("POST")
+	router.HandleFunc("/increase_balance/{id}", user.IncreaseBalance).Methods("POST")
 
 	startErr := http.ListenAndServe(port, router)
 

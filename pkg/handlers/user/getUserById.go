@@ -1,7 +1,7 @@
 package user
 
 import (
-	"dbPractice/pkg/dto"
+	"dbPractice/pkg/dto/user"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"log"
@@ -12,7 +12,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	identifier := mux.Vars(r)
 	id := identifier["id"]
 
-	user := dto.UserByIdDTO(w, id)
+	user := user.UserByIdDTO(w, id)
 
 	userJson, err := json.Marshal(user)
 
