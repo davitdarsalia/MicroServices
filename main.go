@@ -8,6 +8,8 @@ import (
 
 func main() {
 	routes.RootRouter()
+	//d := handlers.TokenIsValid("")
+	//fmt.Println(d)
 }
 
 func init() {

@@ -21,18 +21,24 @@ func CreateUserDTO(u models.UserSignUp, w http.ResponseWriter) (createUserErr bo
 	return
 }
 
-func SignInUserDTO(email, password string) bool {
+func SignInUserDTO(email, password string) (bool, string) {
 	dB := db.ConnectDB()
 	hash := security.HashData(password)
 	password = hash
 
 	// Retrieved value based on Db query
 	var passwordRes string
-	err := dB.QueryRow(constants.CheckUser, password, email).Scan(&passwordRes)
+	var userId string
 
+	err := dB.QueryRow(constants.CheckUser, password, email).Scan(&passwordRes)
 	if err != nil {
-		return false
+		return false, ""
 	}
 
-	return true
+	err = dB.QueryRow(constants.FetchUserId, email, password).Scan(&userId)
+	if err != nil {
+		return false, ""
+	}
+
+	return true, userId
 }

@@ -42,7 +42,7 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	existence := auth.SignInUserDTO(userModel.Email, userModel.Password)
+	existence, userId := auth.SignInUserDTO(userModel.Email, userModel.Password)
 
 	if existence == false {
 		w.WriteHeader(http.StatusNotFound)
@@ -51,7 +51,7 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	token := handlers.JwtGenerator(w, 1)
+	token := handlers.JwtGenerator(w, userId)
 	byteToken, marshalErr := json.Marshal(token)
 
 	if marshalErr != nil {
