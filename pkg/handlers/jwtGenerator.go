@@ -3,7 +3,6 @@ package handlers
 import (
 	"github.com/dgrijalva/jwt-go"
 	"log"
-	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -14,7 +13,7 @@ type claims struct {
 	userId int
 }
 
-func JwtGenerator(w http.ResponseWriter, userId string) string {
+func JwtGenerator(userId string) string {
 	var secretKey = []byte(os.Getenv("SIGN_KEY"))
 	expiryDate, parseIntErr := strconv.ParseInt(os.Getenv("JWT_EXPIRY_DATE"), 0, 0)
 

@@ -51,7 +51,7 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	token := handlers.JwtGenerator(w, userId)
+	token := handlers.JwtGenerator(userId)
 	byteToken, marshalErr := json.Marshal(token)
 
 	if marshalErr != nil {
