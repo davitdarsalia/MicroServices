@@ -10,22 +10,18 @@ import (
 
 func AllUsersDTO(w http.ResponseWriter) ([]models.UserBasicInfo, error) {
 	var allUsers []models.UserBasicInfo
-
 	dB := db.ConnectDB()
-
 	rows, err := dB.Query(constants.GetAllUsers)
 	defer func() {
-		rowError := rows.Close()
-		if rowError != nil {
-			log.Fatal(rowError)
+		rowCloseErr := rows.Close()
+		if rowCloseErr != nil {
+			log.Fatal(rowCloseErr)
 		}
 	}()
-
 	if err != nil {
 		log.Println(err)
 		return nil, nil
 	}
-
 	for rows.Next() {
 		var user models.UserBasicInfo
 
@@ -34,9 +30,7 @@ func AllUsersDTO(w http.ResponseWriter) ([]models.UserBasicInfo, error) {
 		}
 		allUsers = append(allUsers, user)
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-
 	return allUsers, nil
 }

@@ -2,13 +2,14 @@ package db
 
 import (
 	"database/sql"
-	"dbPractice/pkg/constants"
 	_ "github.com/lib/pq"
 	"log"
+	"os"
 )
 
 func ConnectDB() *sql.DB {
-	db, dbOpenError := sql.Open("postgres", constants.DbConfig)
+	dbConfig := os.Getenv("DB_CONFIG")
+	db, dbOpenError := sql.Open("postgres", dbConfig)
 	if dbOpenError != nil {
 		log.Fatal(dbOpenError)
 	}

@@ -8,11 +8,10 @@ import (
 	"net/http"
 )
 
-func UserInfoDTO(w http.ResponseWriter, id string) models.Info {
+func GetUserInfoByIDDTO(w http.ResponseWriter, id string) models.Info {
 	var info models.Info
 	dB := db.ConnectDB()
 	row := dB.QueryRow(constants.FetchUserInfo, id).Scan(&info.Balance, &info.Rating)
-
 	if row != nil {
 		errPayload := "0"
 		w.WriteHeader(http.StatusNotFound)
@@ -22,6 +21,5 @@ func UserInfoDTO(w http.ResponseWriter, id string) models.Info {
 			log.Fatal(writeErr)
 		}
 	}
-
 	return info
 }

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"dbPractice/pkg/handlers/auth"
+	"dbPractice/pkg/handlers/global"
 	"dbPractice/pkg/handlers/user"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -20,6 +21,8 @@ func RootRouter() {
 	// Generic Requests
 	router.HandleFunc("/allusers", user.GetAllUsers).Methods("GET")
 	router.HandleFunc("/allusers/{id}", user.GetUserById).Methods("GET")
+	router.HandleFunc("/allCountries", global.GetAllCountryCodes).Methods("GET")
+	router.HandleFunc("/allCountries/{id}", global.GetCountryCodeByID).Methods("GET")
 
 	// Authorization Filter
 	router.HandleFunc("/userinfo/{id}", user.GetUserInfo).Methods("GET")

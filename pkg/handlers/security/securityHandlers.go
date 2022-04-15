@@ -11,11 +11,8 @@ import (
 func HashData(data string) string {
 	hash := sha256.Sum256([]byte(data))
 	strData := fmt.Sprintf("%x", hash)
-
 	return strData
 }
-
-// CompareHashes - Compares hashed values
 
 func ValidateJWT(token string, secret string) (claims jwt.MapClaims, err error) {
 	tok, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
@@ -31,11 +28,9 @@ func ValidateJWT(token string, secret string) (claims jwt.MapClaims, err error) 
 		err = errors.New("invalid token string")
 		return
 	}
-
 	claims, ok := tok.Claims.(jwt.MapClaims)
 	if !ok || !tok.Valid {
 		err = errors.New("invalid signature")
 	}
-
 	return
 }
