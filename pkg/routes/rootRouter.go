@@ -28,14 +28,16 @@ func RootRouter() {
 	router.HandleFunc("/userinfo/{id}", user.GetUserInfo).Methods("GET")
 	router.HandleFunc("/increase_rating/{id}", user.IncreaseRating).Methods("POST")
 	router.HandleFunc("/increase_balance/{id}", user.IncreaseBalance).Methods("POST")
+	router.HandleFunc("/refreshlogin", auth.RefreshLogin).Methods("POST")
+
+	// Logout
+	router.HandleFunc("/logout", auth.LogOut).Methods("POST")
 
 	// Payment - Half Anonymous Transaction
 	router.HandleFunc("/transaction", user.MakeTransaction).Methods("POST")
 
-	router.Use()
-
 	// Cors Policy Resolver
-	startErr := http.ListenAndServe(port, handlers.CORS()(router))
+	startErr := http.ListenAndServe(port, handlers.CompressHandler(handlers.CORS()(router)))
 
 	if startErr != nil {
 		log.Fatal(startErr)

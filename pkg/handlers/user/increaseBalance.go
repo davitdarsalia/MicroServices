@@ -18,5 +18,4 @@ func IncreaseBalance(w http.ResponseWriter, r *http.Request) {
 		log.Println(decodeErr)
 	}
 	user.BalanceDTO(w, id, balance.Balance)
-
 }
