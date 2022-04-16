@@ -55,3 +55,28 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 		log.Println(byteWriterError)
 	}
 }
+
+func LogOut(w http.ResponseWriter, r *http.Request) {
+	var token string
+	decodeErr := json.NewDecoder(r.Body).Decode(&token)
+	if decodeErr != nil {
+		log.Fatal(decodeErr)
+	}
+	defer func() {
+		closeErr := r.Body.Close()
+		if closeErr != nil {
+			log.Fatal(closeErr)
+		}
+	}()
+}
+
+func RefreshLogin(w http.ResponseWriter, r *http.Request) {
+	token := r.Header.Get("token")
+	newToken, _ := handlers.RefreshLogin(token, "1")
+	_, writeErr := w.Write([]byte(newToken))
+	if writeErr != nil {
+		log.Fatal(writeErr)
+	}
+	w.WriteHeader(http.StatusOK)
+
+}
