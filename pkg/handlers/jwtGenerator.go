@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"log"
+	"math/rand"
 	"os"
 	"strconv"
 	"time"
@@ -33,7 +34,7 @@ func JwtGenerator(userId string) models.TokenModel {
 	}
 	var t = models.TokenModel{
 		AccessToken: token,
-		ExpiresIn:   date,
+		ExpiresIn:   time.Duration(date),
 		TokenType:   "Bearer",
 		UserId:      userId,
 	}
@@ -52,17 +53,13 @@ func TokenIsValid(tokenStr string) bool {
 	return token.Valid
 }
 
-// Refactor This
+func RefreshToken() (string, error) {
+	b := make([]byte, 32)
+	s := rand.NewSource(time.Now().Unix())
+	r := rand.New(s)
+	if _, err := r.Read(b); err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%x", b), nil
 
-func RefreshLogin(token string, userId string) (string, error) {
-	valid := TokenIsValid(token)
-	fmt.Println(valid)
-
-	//if valid {
-	//	newToken := JwtGenerator(userId)
-	//	return newToken, nil
-	//}
-	//newToken := JwtGenerator(userId)
-	//return newToken, nil
-	return "", nil
 }
