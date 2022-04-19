@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"dbPractice/pkg/models"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"log"
 	"os"
@@ -8,9 +10,10 @@ import (
 	"time"
 )
 
-func JwtGenerator(userId string) string {
+func JwtGenerator(userId string) models.TokenModel {
 	var secretKey = []byte(os.Getenv("SIGN_KEY"))
-	expiryDate, parseIntErr := strconv.ParseInt(os.Getenv("JWT_EXPIRY_DATE"), 0, 0)
+	var expiresIn = os.Getenv("JWT_EXPIRY_DATE")
+	expiryDate, parseIntErr := strconv.ParseInt(expiresIn, 0, 0)
 	if parseIntErr != nil {
 		log.Println(parseIntErr)
 	}
@@ -24,7 +27,18 @@ func JwtGenerator(userId string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return token
+	date, parseErr := strconv.ParseInt(expiresIn, 0, 0)
+	if parseErr != nil {
+		log.Fatal(parseErr)
+	}
+	var t = models.TokenModel{
+		AccessToken: token,
+		ExpiresIn:   date,
+		TokenType:   "Bearer",
+		UserId:      userId,
+	}
+
+	return t
 }
 
 func TokenIsValid(tokenStr string) bool {
@@ -38,13 +52,17 @@ func TokenIsValid(tokenStr string) bool {
 	return token.Valid
 }
 
+// Refactor This
+
 func RefreshLogin(token string, userId string) (string, error) {
 	valid := TokenIsValid(token)
+	fmt.Println(valid)
 
-	if valid {
-		newToken := JwtGenerator(userId)
-		return newToken, nil
-	}
-	newToken := JwtGenerator(userId)
-	return newToken, nil
+	//if valid {
+	//	newToken := JwtGenerator(userId)
+	//	return newToken, nil
+	//}
+	//newToken := JwtGenerator(userId)
+	//return newToken, nil
+	return "", nil
 }
