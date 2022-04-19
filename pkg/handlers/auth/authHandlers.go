@@ -45,6 +45,11 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	token := handlers.JwtGenerator(userId)
+	refreshToken, refreshTokenErr := handlers.RefreshToken()
+	if refreshTokenErr != nil {
+		log.Fatal(refreshTokenErr)
+	}
+	token.RefreshToken = refreshToken
 	byteToken, marshalErr := json.Marshal(token)
 	if marshalErr != nil {
 		log.Println(marshalErr)
@@ -72,11 +77,19 @@ func LogOut(w http.ResponseWriter, r *http.Request) {
 
 func RefreshLogin(w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("token")
-	newToken, _ := handlers.RefreshLogin(token, "1")
-	_, writeErr := w.Write([]byte(newToken))
-	if writeErr != nil {
-		log.Fatal(writeErr)
+	isValid := handlers.TokenIsValid(token)
+	if isValid == true {
+		w.WriteHeader(http.StatusOK)
+		newToken, _ := handlers.RefreshToken()
+		_, writeErr := w.Write([]byte(newToken))
+		if writeErr != nil {
+			log.Fatal(writeErr)
+		}
+	} else if isValid == false {
+		w.WriteHeader(http.StatusForbidden)
+		_, writeErr := w.Write([]byte("Access Forbidden"))
+		if writeErr != nil {
+			log.Println(writeErr)
+		}
 	}
-	w.WriteHeader(http.StatusOK)
-
 }
