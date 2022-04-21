@@ -30,6 +30,9 @@ func RegistrationHandler(c *gin.Context) {
 
 func LoginHandler(c *gin.Context) {
 	var u models.UserSignUp
+	if u.Email == "" || u.Password == "" {
+		c.Status(http.StatusBadRequest)
+	}
 	err := json.NewDecoder(c.Request.Body).Decode(&u)
 	defer func() {
 		closeErr := c.Request.Body.Close()
@@ -51,10 +54,8 @@ func LoginHandler(c *gin.Context) {
 		log.Fatal(marshalErr)
 	}
 	c.String(http.StatusOK, string(bToken))
-
 }
 func RefreshLoginHandler(c *gin.Context) {
-	return
 }
 
 func LogoutHandler(c *gin.Context) {
