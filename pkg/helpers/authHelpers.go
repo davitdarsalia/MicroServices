@@ -40,3 +40,14 @@ func JWTGenerator(userId string) models.TokenModel {
 	}
 	return token
 }
+
+func CheckToken(t string) bool {
+	key := os.Getenv("SIGN_KEY")
+	token, err := jwt.Parse(t, func(t *jwt.Token) (interface{}, error) {
+		return []byte(key), nil
+	})
+	if err != nil {
+		return false
+	}
+	return token.Valid
+}
