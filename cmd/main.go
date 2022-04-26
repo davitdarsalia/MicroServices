@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	todo "github.com/davitdarsalia/BookStoreMicroservices"
 	"github.com/davitdarsalia/BookStoreMicroservices/pkg/handler"
 	"github.com/davitdarsalia/BookStoreMicroservices/pkg/repository"
@@ -9,7 +11,21 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"os"
+	"os/signal"
+	"syscall"
 )
+
+// @title Todo App API
+// @version 1.0
+// @description API Server for TodoList App
+
+// @host localhost:8080
+// @basePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
@@ -40,8 +56,22 @@ func main() {
 	handlers := handler.NewHandler(services)
 
 	s := new(todo.Server)
-	if err := s.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
-		logrus.Fatalf("Error occured while running Server on port %s", "8080")
+	go func() {
+		if err := s.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
+			logrus.Fatalf("Error occured while running Server on port %s", "8080")
+		}
+	}()
+	logrus.Println("App Started")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+	logrus.Println("App Shutting Down")
+
+	s.ShutDown(context.Background())
+
+	if err := db.Close(); err != nil {
+		fmt.Errorf("error occured on db connection close: %s", err.Error())
 	}
 }
 
