@@ -12,7 +12,7 @@ type Server struct {
 	httpServer *http.Server
 }
 
-// Run - Just a method of Server, which runs a server on a particular prt. Also, Run requires a basic handler struct
+// Run - Just a method of Server, which runs a server on a particular prt. Also, Run requires a basic handlers struct
 func (s *Server) Run(port string, h http.Handler) error {
 	s.httpServer = &http.Server{
 		Addr:           fmt.Sprintf(":%s", port),

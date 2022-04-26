@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	todo "github.com/davitdarsalia/BookStoreMicroservices"
-	"github.com/davitdarsalia/BookStoreMicroservices/pkg/handler"
+	"github.com/davitdarsalia/BookStoreMicroservices/pkg/handlers"
 	"github.com/davitdarsalia/BookStoreMicroservices/pkg/repository"
 	"github.com/davitdarsalia/BookStoreMicroservices/pkg/service"
 	"github.com/joho/godotenv"
@@ -53,7 +53,7 @@ func main() {
 
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
-	handlers := handler.NewHandler(services)
+	handlers := handlers.NewHandler(services)
 
 	s := new(todo.Server)
 	go func() {
