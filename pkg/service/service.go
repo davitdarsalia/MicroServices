@@ -22,6 +22,6 @@ type Transactions interface {
 type Deletions interface {
 }
 
-func NewService(repos repository.Repository) *Service {
+func NewService(repos *repository.Repository) *Service {
 	return &Service{}
 }

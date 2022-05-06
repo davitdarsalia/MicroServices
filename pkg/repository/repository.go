@@ -1,7 +1,5 @@
 package repository
 
-import "github.com/davitdarsalia/LendAppBackend/pkg/service"
-
 type Repository struct {
 	Authorization
 	Account
@@ -21,6 +19,6 @@ type Transactions interface {
 type Deletions interface {
 }
 
-func NewRepository(service service.Service) *Repository {
+func NewRepository() *Repository {
 	return &Repository{}
 }
