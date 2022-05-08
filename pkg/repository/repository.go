@@ -1,6 +1,9 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	"github.com/davitdarsalia/LendAppBackend/entities"
+	"github.com/jmoiron/sqlx"
+)
 
 type Repository struct {
 	Authorization
@@ -10,6 +13,7 @@ type Repository struct {
 }
 
 type Authorization interface {
+	RegisterUser(u *entities.User) (int, error)
 }
 
 type Account interface {
@@ -22,5 +26,10 @@ type Deletions interface {
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
-	return &Repository{}
+	return &Repository{
+		Authorization: NewAuthPostgres(db),
+		//Account:       nil,
+		//Transactions:  nil,
+		//Deletions:     nil,
+	}
 }
