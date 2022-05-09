@@ -25,6 +25,7 @@ func main() {
 		logrus.Fatalf("Error WHile Initializing DataBase Connection; %s", err.Error())
 	}
 
+	//redisConn := cache.NewRedisCache()
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
