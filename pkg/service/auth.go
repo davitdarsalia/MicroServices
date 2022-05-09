@@ -1,7 +1,7 @@
 package service
 
 import (
-	"crypto/sha512"
+	"crypto/sha256"
 	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
@@ -31,6 +31,8 @@ func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 	u.Password = hash
 	u.Salt = salt
 
+	fmt.Println(u.Password, len(u.Password))
+
 	// Moving user instance to the lower level - Repository level
 	return s.repo.RegisterUser(u)
 }
@@ -40,11 +42,8 @@ func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 // generateHash - Returns an actual hash string + slice of bytes
 // which will be stored in DataBase as a unique salt
 func (s *AuthService) generateHash(password string) (string, []byte) {
-	// Define nullish constructor
-	hash := sha512.New()
-
-	salt := generateUniqueSalt(255)
-	// Write password with slice of bytes
+	hash := sha256.New()
+	salt := generateUniqueSalt(20)
 	hash.Write([]byte(password))
 
 	return fmt.Sprintf("%x", hash.Sum(salt)), salt

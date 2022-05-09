@@ -1,38 +1,33 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
 )
 
-func (h *Handler) signUp(c *gin.Context) {
-	var userInstance entities.User
+func (h *Handler) signIn(c *gin.Context) {
+	var u entities.User
 
-	if err := c.BindJSON(&userInstance); err != nil {
+	if err := c.BindJSON(&u); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	id, err := h.services.Authorization.RegisterUser(&userInstance)
+	id, err := h.services.Authorization.RegisterUser(&u)
+
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
 	}
 
-	/* Writing statusCode to the response */
 	c.JSON(http.StatusCreated, map[string]interface{}{
 		"user_id":    id,
 		"message":    "User Created Successfully",
-		"created_at": time.Now().Format("2006-01-02 15:04:05"),
+		"created_at": time.Now().Format(entities.RegularFormat),
 	})
-
-	fmt.Println(userInstance)
-
 }
 
-func (h *Handler) signIn(c *gin.Context) {
+func (h *Handler) signUp(c *gin.Context) {
 
 }
