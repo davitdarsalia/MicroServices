@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func NewRedisCache() *redis.Conn {
+func NewRedisCache() redis.Conn {
 	var (
 		connType  = "tcp"
 		redisPort = "localhost:6379"
@@ -17,5 +17,5 @@ func NewRedisCache() *redis.Conn {
 		log.Fatalf("Error Initializing Redis Connection: %s", err.Error())
 	}
 
-	return &redisInstance
+	return redisInstance
 }
