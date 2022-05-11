@@ -38,7 +38,7 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	id, err := h.services.Authorization.LoginUser(&u)
+	id, err := h.services.Authorization.CheckUser(&u)
 
 	fmt.Println(id, err)
 

@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/davitdarsalia/LendAppBackend/cache"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/davitdarsalia/LendAppBackend/pkg/handler"
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
 	"github.com/davitdarsalia/LendAppBackend/pkg/service"
+	"github.com/go-redis/redis/v8"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
@@ -25,9 +27,12 @@ func main() {
 		logrus.Fatalf("Error WHile Initializing DataBase Connection; %s", err.Error())
 	}
 
-	//redisConn := cache.NewRedisCache()
+	redisConn := cache.NewRedisCache(&redis.Options{
+		Addr: "localhost:6379",
+		DB:   0,
+	})
 	repos := repository.NewRepository(db)
-	services := service.NewService(repos)
+	services := service.NewService(repos, redisConn)
 	handlers := handler.NewHandler(services)
 
 	srv := new(entities.MainServer)
