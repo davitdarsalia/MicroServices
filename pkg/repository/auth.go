@@ -13,7 +13,7 @@ type AuthPostgres struct {
 func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 	var userId int
 
-	row := r.db.QueryRow(constants.REGISTER_USER_QUERY, u.PersonalNumber, u.PhoneNumber, u.UserName, u.Email, u.FirstName, u.LastName, u.IpAddress, u.Password, u.Salt)
+	row := r.db.QueryRow(constants.RegisterUserQuery, u.PersonalNumber, u.PhoneNumber, u.UserName, u.Email, u.FirstName, u.LastName, u.IpAddress, u.Password, u.Salt)
 
 	if err := row.Scan(&userId); err != nil {
 		return 0, err
@@ -22,6 +22,9 @@ func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 	return userId, nil
 }
 
-func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
-	return &AuthPostgres{db: db}
+func (r *AuthPostgres) CheckUser(username, password string) (entities.UserInput, error) {
+	var u entities.UserInput
+	err := r.db.Get(&u, constants.CheckUserQuery, u.UserName, u.Password)
+
+	return u, err
 }

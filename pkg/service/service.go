@@ -3,9 +3,9 @@ package service
 import (
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
+	"github.com/go-redis/redis/v8"
 )
 
-// Service - Contains all the provided services from our Bank Api
 type Service struct {
 	Authorization
 	Account
@@ -14,10 +14,8 @@ type Service struct {
 }
 
 type Authorization interface {
-	// RegisterUser - Accepts User instance struct and returns its ID and an Error
 	RegisterUser(u *entities.User) (int, error)
-	// LoginUser - Accepts the same parameter and returns the same values as method below
-	LoginUser(u entities.User) (int, error)
+	CheckUser(u *entities.UserInput) (int, error)
 }
 
 type Account interface {
@@ -29,9 +27,9 @@ type Transactions interface {
 type Deletions interface {
 }
 
-func NewService(repos *repository.Repository) *Service {
+func NewService(repos *repository.Repository, redisConn *redis.Client) *Service {
 	return &Service{
-		Authorization: NewAuthService(repos),
+		Authorization: NewAuthService(repos, redisConn),
 		Account:       nil,
 		Transactions:  nil,
 		Deletions:     nil,
