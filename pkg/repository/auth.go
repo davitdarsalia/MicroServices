@@ -28,7 +28,3 @@ func (r *AuthPostgres) CheckUser(username, password string) (entities.UserInput,
 
 	return u, err
 }
-
-func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
-	return &AuthPostgres{db: db}
-}

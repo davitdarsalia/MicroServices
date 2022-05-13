@@ -37,11 +37,13 @@ func main() {
 
 	srv := new(entities.MainServer)
 
-	loadEnv()
-
 	if err := srv.Run(os.Getenv("PORT"), handlers.InitRoutes()); err != nil {
 		logrus.Fatalf("Error While Running Server On Port %s", os.Getenv("PORT"))
 	}
+}
+
+func init() {
+	loadEnv()
 }
 
 func loadEnv() {
@@ -52,10 +54,7 @@ func loadEnv() {
 }
 
 func initConfig() error {
-	// Add config root directory
 	viper.AddConfigPath("configs")
-	// Specify name of the root config
 	viper.SetConfigName("config")
-	// Next, read the config
 	return viper.ReadInConfig()
 }

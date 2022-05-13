@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -19,7 +18,7 @@ func (h *Handler) signUp(c *gin.Context) {
 	id, err := h.services.Authorization.RegisterUser(&u)
 
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newErrorResponse(c, http.StatusConflict, err.Error())
 	}
 
 	c.JSON(http.StatusCreated, map[string]interface{}{
@@ -30,7 +29,6 @@ func (h *Handler) signUp(c *gin.Context) {
 }
 
 func (h *Handler) signIn(c *gin.Context) {
-
 	var u entities.UserInput
 
 	if err := c.BindJSON(&u); err != nil {
@@ -40,6 +38,13 @@ func (h *Handler) signIn(c *gin.Context) {
 
 	id, err := h.services.Authorization.CheckUser(&u)
 
-	fmt.Println(id, err)
+	if err != nil {
+		newErrorResponse(c, http.StatusNotFound, err.Error())
+	}
 
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"user_id":   id,
+		"message":   "User Logged In Successfully",
+		"signed_at": time.Now().Format(entities.RegularFormat),
+	})
 }

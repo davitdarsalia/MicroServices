@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"crypto/sha256"
 	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
@@ -8,7 +9,13 @@ import (
 	"github.com/thanhpk/randstr"
 )
 
-// NewAuthService - Root Auth instance creator for Root Service Interface
+var localContext = context.Background()
+
+type AuthService struct {
+	repo      repository.Authorization
+	redisConn *redis.Client
+}
+
 func NewAuthService(r repository.Authorization, redisConn *redis.Client) *AuthService {
 	return &AuthService{repo: r, redisConn: redisConn}
 }
