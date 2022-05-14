@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/entities"
+	"github.com/davitdarsalia/LendAppBackend/pkg/service"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/thanhpk/randstr"
 	"math/rand"
@@ -10,6 +11,10 @@ import (
 	"os"
 	"time"
 )
+
+func NewHandler(services *service.Service) *Handler {
+	return &Handler{services: services}
+}
 
 func generateToken(userID int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, entities.CustomToken{

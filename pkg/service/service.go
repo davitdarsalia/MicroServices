@@ -30,8 +30,8 @@ type Deletions interface {
 func NewService(repos *repository.Repository, redisConn *redis.Client) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos, redisConn),
-		Account:       nil,
-		Transactions:  nil,
-		Deletions:     nil,
+		Account:       NewAccountService(repos, redisConn),
+		Transactions:  NewTransactionsService(repos, redisConn),
+		Deletions:     NewDeletionsService(repos, redisConn),
 	}
 }
