@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -33,16 +32,32 @@ func (h *Handler) signIn(c *gin.Context) {
 	var u entities.UserInput
 
 	if err := c.BindJSON(&u); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusNotAcceptable, err.Error())
 		return
 	}
 
-	user, err := h.services.CheckUser(&u)
-	fmt.Println(user)
+	userID, err := h.services.CheckUser(&u)
 
+	// userID - If 0 , means that user doesn't exists
+	if userID == 0 {
+		c.JSON(http.StatusNotFound, entities.SignedInUserResponse{
+			Message: "User Not Found",
+		})
+		return
+	}
 	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+	}
+
+	token, tokenError := generateToken(userID)
+
+	if tokenError != nil {
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{})
+	c.JSON(http.StatusOK, entities.SignedInUserResponse{
+		UserId:      userID,
+		Message:     "User Signed In Successfully",
+		AccessToken: token,
+	})
 }
