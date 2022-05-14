@@ -1,28 +1,17 @@
 package service
 
 import (
-	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"log"
 )
 
-func (s *AuthService) CheckUser(u *entities.UserInput) (int, error) {
-	salt, redisGetError := s.redisConn.Get(localContext, "UniqueSalt").Result()
-
-	if redisGetError != nil {
-		log.Fatal(redisGetError)
-	}
-
-	fmt.Println(salt, "DDDD Salt")
-
-	return 0, nil
-}
-
 func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
-	hash, salt := generateHash(u.Password)
+	amountOfBytes := generateRandNumber(5, 20)
+	salt := generateUniqueSalt(amountOfBytes)
+	hash := generateHash(u.Password, salt)
 
 	u.Password = hash
-	u.Salt = salt
+	u.Salt = []byte(salt)
 
 	redisWriteErr := s.redisConn.Set(localContext, "UniqueSalt", salt, 0).Err()
 
@@ -31,4 +20,18 @@ func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 	}
 
 	return s.repo.RegisterUser(u)
+}
+
+func (s *AuthService) CheckUser(u *entities.UserInput) (int, error) {
+	salt, redisGetError := s.redisConn.Get(localContext, "UniqueSalt").Result()
+
+	if redisGetError != nil {
+		log.Fatal(redisGetError)
+	}
+
+	hash := generateHash(u.Password, salt)
+
+	u.Password = hash
+
+	return s.repo.CheckUser(u.UserName, u.Password)
 }

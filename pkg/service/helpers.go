@@ -7,6 +7,8 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
 	"github.com/go-redis/redis/v8"
 	"github.com/thanhpk/randstr"
+	"math/rand"
+	"time"
 )
 
 var localContext = context.Background()
@@ -20,23 +22,24 @@ func NewAuthService(r repository.Authorization, redisConn *redis.Client) *AuthSe
 	return &AuthService{repo: r, redisConn: redisConn}
 }
 
-func GenerateToken(username, password string) (string, error) {
-	return "", nil
-}
-
-func generateHash(password string) (string, []byte) {
+func generateHash(password string, salt string) string {
 	hash := sha256.New()
-	salt := generateUniqueSalt(20)
 	hash.Write([]byte(password))
 
-	return fmt.Sprintf("%x", hash.Sum(salt)), salt
+	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
 }
 
-func generateUniqueSalt(bytesAmount int) []byte {
+func generateUniqueSalt(bytesAmount int) string {
 	var saltBytes []byte
 
 	for i := 0; i < 10; i++ {
 		saltBytes = randstr.Bytes(bytesAmount)
 	}
-	return saltBytes
+	return string(saltBytes)
+}
+
+func generateRandNumber(min, max int) int {
+	rand.Seed(time.Now().UnixNano())
+
+	return rand.Intn((max - min + 1) + min)
 }

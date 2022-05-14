@@ -22,9 +22,14 @@ func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 	return userId, nil
 }
 
-func (r *AuthPostgres) CheckUser(username, password string) (entities.UserInput, error) {
-	var u entities.UserInput
-	err := r.db.Get(&u, constants.CheckUserQuery, u.UserName, u.Password)
+func (r *AuthPostgres) CheckUser(username, password string) (int, error) {
+	var userID int
 
-	return u, err
+	row := r.db.QueryRow(constants.CheckUserQuery, username, password)
+
+	if err := row.Scan(&userID); err != nil {
+		return 0, nil
+	}
+
+	return userID, nil
 }

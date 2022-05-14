@@ -1,5 +1,7 @@
 package entities
 
+import "github.com/dgrijalva/jwt-go"
+
 type User struct {
 	UserID         int    `json:"user_id"`
 	PersonalNumber string `json:"personal_number" binding:"required"`
@@ -14,6 +16,14 @@ type User struct {
 }
 
 type UserInput struct {
-	UserName string `json:"user_name" binding:"required"`
+	UserId   string `json:"user_id"`
+	UserName string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+type CustomToken struct {
+	jwt.StandardClaims
+	Username string `json:"username"`
+	Role     string `json:"role"`
+	Ip       string `json:"ip_address"`
 }
