@@ -29,8 +29,8 @@ type Deletions interface {
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
-		Account:       nil,
-		Transactions:  nil,
-		Deletions:     nil,
+		Account:       NewAccountPostgres(db),
+		Transactions:  NewTransactionsPostgres(db),
+		Deletions:     NewDeletionsPostgres(db),
 	}
 }

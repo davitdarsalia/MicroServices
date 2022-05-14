@@ -18,9 +18,36 @@ type AuthService struct {
 	redisConn *redis.Client
 }
 
+type AccountService struct {
+	repo      repository.Authorization
+	redisConn *redis.Client
+}
+
+type TransactionsService struct {
+	repo      repository.Authorization
+	redisConn *redis.Client
+}
+
+type DeletionsService struct {
+	repo      repository.Authorization
+	redisConn *redis.Client
+}
+
 func NewAuthService(r repository.Authorization, redisConn *redis.Client) *AuthService {
 	return &AuthService{repo: r, redisConn: redisConn}
 }
+
+func NewAccountService(r repository.Authorization, redisConn *redis.Client) *AccountService {
+	return &AccountService{repo: r, redisConn: redisConn}
+}
+func NewTransactionsService(r repository.Authorization, redisConn *redis.Client) *AccountService {
+	return &AccountService{repo: r, redisConn: redisConn}
+}
+func NewDeletionsService(r repository.Authorization, redisConn *redis.Client) *AccountService {
+	return &AccountService{repo: r, redisConn: redisConn}
+}
+
+// Non Interface Methods
 
 func generateHash(password string, salt string) string {
 	hash := sha256.New()
