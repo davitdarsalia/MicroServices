@@ -23,7 +23,7 @@ type UserInput struct {
 
 type CustomToken struct {
 	jwt.StandardClaims
-	Role      string `json:"role"`
-	Ip        string `json:"ip_address"`
-	SessionId string `json:"session_id"`
+	Username string `json:"username"`
+	Role     string `json:"role"`
+	Ip       string `json:"ip_address"`
 }
