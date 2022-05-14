@@ -6,7 +6,7 @@ import (
 )
 
 func NewPostgresDB() (*sqlx.DB, error) {
-	db, err := sqlx.Open("postgres", "host=localhost port=5432 user=postgres  sslmode=disable")
+	db, err := sqlx.Open("postgres", "host=localhost port=5433 user=postgres  sslmode=disable")
 	if err != nil {
 		log.Fatalf("Failed To Connect DB. %s", err.Error())
 	}
