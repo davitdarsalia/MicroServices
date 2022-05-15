@@ -22,14 +22,26 @@ func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 	return userId, nil
 }
 
-func (r *AuthPostgres) CheckUser(username, password string) (int, error) {
-	var userID int
+func (r *AuthPostgres) CheckUser(username, password string) (entities.User, error) {
+	var u entities.User
 
-	row := r.db.QueryRow(constants.CheckUserQuery, username, password)
+	err := r.db.Get(&u, constants.CheckUserQuery, username, password)
 
-	if err := row.Scan(&userID); err != nil {
-		return 0, nil
-	}
+	return u, err
+}
 
-	return userID, nil
+func (r *AuthPostgres) refreshLogin() {
+
+}
+
+func (r *AuthPostgres) resetPassword() {
+
+}
+
+func (r *AuthPostgres) resetPasswordProfile() {
+
+}
+
+func (r *AuthPostgres) otpGenerator() {
+
 }

@@ -8,6 +8,8 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/thanhpk/randstr"
 	"math/rand"
+	"net"
+	"os"
 	"time"
 )
 
@@ -69,4 +71,18 @@ func generateRandNumber(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 
 	return rand.Intn((max - min + 1) + min)
+}
+
+func getIp() string {
+	var result string
+
+	host, _ := os.Hostname()
+	address, _ := net.LookupIP(host)
+	for _, a := range address {
+		if ipv4 := a.To4(); ipv4 != nil {
+			result = fmt.Sprintf("IPv4: %s ", ipv4)
+		}
+	}
+
+	return result
 }

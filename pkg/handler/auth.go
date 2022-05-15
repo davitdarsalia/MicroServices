@@ -4,6 +4,7 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -32,32 +33,33 @@ func (h *Handler) signIn(c *gin.Context) {
 	var u entities.UserInput
 
 	if err := c.BindJSON(&u); err != nil {
-		newErrorResponse(c, http.StatusNotAcceptable, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	userID, err := h.services.CheckUser(&u)
+	token, err := h.services.Authorization.CheckUser(u.UserName, u.Password)
 
-	// userID - If 0 , means that user doesn't exists
-	if userID == 0 {
-		c.JSON(http.StatusNotFound, entities.SignedInUserResponse{
-			Message: "User Not Found",
-		})
-		return
-	}
+	// Fix this - err is always nil
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-	}
-
-	token, tokenError := generateToken(userID)
-
-	if tokenError != nil {
+		newErrorResponse(c, http.StatusNotFound, err.Error())
 		return
 	}
 
 	c.JSON(http.StatusOK, entities.SignedInUserResponse{
-		UserId:      userID,
-		Message:     "User Signed In Successfully",
-		AccessToken: token,
+		Message:         "User Successfully Signed In",
+		AccessToken:     token,
+		AccessTokenExp:  os.Getenv("ACCESS_TOKEN_EXP"),
+		RefreshToken:    newRefreshToken(),
+		RefreshTokenExp: "Never",
 	})
+
+}
+
+func (h *Handler) refreshLogin(c *gin.Context) {
+}
+func (h *Handler) resetPassword(c *gin.Context) {
+}
+func (h *Handler) resetPasswordProfile(c *gin.Context) {
+}
+func (h *Handler) otpGenerator(c *gin.Context) {
 }

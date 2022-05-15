@@ -7,7 +7,9 @@ type RegisteredUserResponse struct {
 }
 
 type SignedInUserResponse struct {
-	UserId      int    `json:"user_id"`
-	Message     string `json:"message"`
-	AccessToken string `json:"access_token"`
+	Message         string `json:"message"`
+	AccessToken     string `json:"access_token"`
+	AccessTokenExp  string `json:"access_token_exp"`
+	RefreshToken    string `json:"refresh_token"`
+	RefreshTokenExp string `json:"refresh_token_exp"`
 }

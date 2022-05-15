@@ -16,13 +16,14 @@ type User struct {
 }
 
 type UserInput struct {
-	UserId   string `json:"user_id"`
+	UserId   string `json:"user_id" db:"user_id"`
 	UserName string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
 type CustomToken struct {
 	jwt.StandardClaims
+	UserID   int    `json:"user_id"`
 	Username string `json:"username"`
 	Role     string `json:"role"`
 	Ip       string `json:"ip_address"`
