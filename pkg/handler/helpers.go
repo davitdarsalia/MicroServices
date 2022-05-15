@@ -5,8 +5,6 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/davitdarsalia/LendAppBackend/pkg/service"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/thanhpk/randstr"
-	"math/rand"
 	"net"
 	"os"
 	"time"
@@ -29,8 +27,7 @@ func generateToken(userID int) (string, error) {
 		Ip:   getIp(),
 	})
 
-	byteSignature := randstr.Bytes(rand.Intn(55))
-	return token.SignedString(byteSignature)
+	return token.SignedString(entities.SignKey)
 }
 
 func getIp() string {
