@@ -27,3 +27,9 @@ type CustomToken struct {
 	Role     string `json:"role"`
 	Ip       string `json:"ip_address"`
 }
+
+const (
+	Header  = "Authorization"
+	SignKey = "466785cf408836b1f39aea588291b9aef5838439c65833f4c1bf6d09022802ba"
+	UserCtx = "userName"
+)
