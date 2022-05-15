@@ -18,7 +18,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/sign-in", h.signIn)
 	}
 
-	account := r.Group("/api/account")
+	account := r.Group("/api/account", checkAuth)
 	{
 		account.GET("/user-info", h.signUp)
 		account.GET("/rating", h.signUp)
@@ -28,7 +28,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		account.GET("/deposit", h.signUp)
 	}
 
-	transactions := r.Group("/api/transactions")
+	transactions := r.Group("/api/transactions", checkAuth)
 	{
 		transactions.PUT("/rating", h.signUp)
 		transactions.PUT("/deposit", h.signUp)
@@ -38,7 +38,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		transactions.PUT("/bonus", h.signUp)
 	}
 
-	deletions := r.Group("/api/remove")
+	deletions := r.Group("/api/remove", checkAuth)
 	{
 		deletions.DELETE("/deposit", h.signUp)
 		deletions.DELETE("/currency", h.signUp)
