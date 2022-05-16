@@ -55,10 +55,32 @@ func (h *Handler) signIn(c *gin.Context) {
 	})
 
 }
+func (h *Handler) resetPassword(c *gin.Context) {
+	var r entities.ResetPassword
+
+	if err := c.BindJSON(&r); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	err := h.services.Authorization.ResetPassword(&r)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusNotAcceptable, constants.ResetPasswordError)
+	}
+
+	c.JSON(http.StatusResetContent, entities.ResetPasswordResponse{
+		Message:   constants.ResetPasswordSuccess,
+		ResetDate: time.Now().Format(entities.RegularFormat),
+	})
+}
+
+func (h *Handler) validateResetEmail(c *gin.Context) {
+	//var r entities.ResetPassword
+
+}
 
 func (h *Handler) refreshLogin(c *gin.Context) {
-}
-func (h *Handler) resetPassword(c *gin.Context) {
 }
 func (h *Handler) resetPasswordProfile(c *gin.Context) {
 }
