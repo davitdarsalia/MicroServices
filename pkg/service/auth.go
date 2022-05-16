@@ -1,8 +1,13 @@
 package service
 
 import (
-	"github.com/davitdarsalia/LendAppBackend/entities"
+	"fmt"
 	"log"
+	"os"
+	"time"
+
+	"github.com/davitdarsalia/LendAppBackend/entities"
+	"github.com/dgrijalva/jwt-go"
 )
 
 func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
@@ -22,16 +27,50 @@ func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 	return s.repo.RegisterUser(u)
 }
 
-func (s *AuthService) CheckUser(u *entities.UserInput) (int, error) {
-	salt, redisGetError := s.redisConn.Get(localContext, "UniqueSalt").Result()
+func (s *AuthService) CheckUser(username, password string) (string, error) {
+	salt, _ := s.redisConn.Get(localContext, "UniqueSalt").Result()
+	user, err := s.repo.CheckUser(username, generateHash(password, salt))
 
-	if redisGetError != nil {
-		log.Fatal(redisGetError)
+	if err != nil {
+		return "", err
 	}
 
-	hash := generateHash(u.Password, salt)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, entities.CustomToken{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Minute * 2).Unix(),
+			Id:        fmt.Sprintf("%d", user.UserID),
+			IssuedAt:  time.Now().Unix(),
+			Issuer:    os.Getenv("ISSUER"),
+			Subject:   "Authentication",
+		},
+		UserID: user.UserID,
+		Role:   "user",
+		Ip:     getIp(),
+	})
 
-	u.Password = hash
+	return token.SignedString([]byte(entities.SignKey))
+}
 
-	return s.repo.CheckUser(u.UserName, u.Password)
+func (s *AuthService) ResetPassword(r *entities.ResetPassword) error {
+	otp := generateResetEmail(r.Email)
+
+	s.redisConn.Set(localContext, "OTP", otp, entities.OtpExpireDate)
+
+	return nil
+}
+
+func (s *AuthService) ValidateResetEmail() {
+
+}
+
+func (s *AuthService) RefreshLogin() {
+
+}
+
+func (s *AuthService) ResetPasswordProfile() {
+
+}
+
+func (s *AuthService) OtpGenerator() {
+
 }

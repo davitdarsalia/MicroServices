@@ -16,6 +16,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		auth.POST("/sign-up", h.signUp)
 		auth.POST("/sign-in", h.signIn)
+		auth.POST("/reset-password", h.resetPassword)
+		auth.POST("/generate-otp", h.otpGenerator)
+
+		protected := r.Group("/protected", checkAuth)
+		{
+			protected.POST("/reset-password-profile", h.resetPasswordProfile)
+			protected.POST("/refresh-login", h.refreshLogin)
+		}
+
 	}
 
 	account := r.Group("/api/account", checkAuth)

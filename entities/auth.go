@@ -1,6 +1,10 @@
 package entities
 
-import "github.com/dgrijalva/jwt-go"
+import (
+	"fmt"
+	"github.com/dgrijalva/jwt-go"
+	"time"
+)
 
 type User struct {
 	UserID         int    `json:"user_id"`
@@ -16,20 +20,43 @@ type User struct {
 }
 
 type UserInput struct {
-	UserId   string `json:"user_id"`
+	UserId   string `json:"user_id" db:"user_id"`
 	UserName string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
 type CustomToken struct {
 	jwt.StandardClaims
+	UserID   int    `json:"user_id"`
 	Username string `json:"username"`
 	Role     string `json:"role"`
 	Ip       string `json:"ip_address"`
+}
+
+type ResetPassword struct {
+	Email          string `json:"email" db:"email" binding:"required"`
+	PersonalNumber string `json:"personal_number" db:"personal_number" binding:"required"`
+	UserName       string `json:"username" db:"username" binding:"required"`
+}
+
+type ValidateResetEmail struct {
+	ValidationCode string `json:"validation_code" binding:"required"`
 }
 
 const (
 	Header  = "Authorization"
 	SignKey = "466785cf408836b1f39aea588291b9aef5838439c65833f4c1bf6d09022802ba"
 	UserCtx = "userName"
+
+	SendMailFrom = "d.app.geo1@gmail.com"
+	MailHost     = "smtp.gmail.com"
+	MailPort     = "587"
+
+	MailAuthPassword = "David.1998!"
+
+	OtpExpireDate = time.Minute * 1
+)
+
+var (
+	MailAddress = fmt.Sprintf("%s : %s", MailHost, MailPort)
 )

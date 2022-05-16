@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -11,19 +13,20 @@ func (h *Handler) signUp(c *gin.Context) {
 	var u entities.User
 
 	if err := c.BindJSON(&u); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
 		return
 	}
 
 	id, err := h.services.Authorization.RegisterUser(&u)
 
 	if err != nil {
-		newErrorResponse(c, http.StatusConflict, err.Error())
+		newErrorResponse(c, http.StatusConflict, constants.UserAlreadyRegistered)
+		return
 	}
 
 	c.JSON(http.StatusCreated, entities.RegisteredUserResponse{
 		UserId:    id,
-		Message:   "User Created Successfully",
+		Message:   constants.CreatedUserSuccess,
 		CreatedAt: time.Now().Format(entities.RegularFormat),
 	})
 }
@@ -32,32 +35,54 @@ func (h *Handler) signIn(c *gin.Context) {
 	var u entities.UserInput
 
 	if err := c.BindJSON(&u); err != nil {
-		newErrorResponse(c, http.StatusNotAcceptable, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
 		return
 	}
 
-	userID, err := h.services.CheckUser(&u)
+	token, err := h.services.Authorization.CheckUser(u.UserName, u.Password)
 
-	// userID - If 0 , means that user doesn't exists
-	if userID == 0 {
-		c.JSON(http.StatusNotFound, entities.SignedInUserResponse{
-			Message: "User Not Found",
-		})
-		return
-	}
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-	}
-
-	token, tokenError := generateToken(userID)
-
-	if tokenError != nil {
+		newErrorResponse(c, http.StatusNotFound, constants.UserNotFoundError)
 		return
 	}
 
 	c.JSON(http.StatusOK, entities.SignedInUserResponse{
-		UserId:      userID,
-		Message:     "User Signed In Successfully",
-		AccessToken: token,
+		Message:         constants.SuccessfulSignIn,
+		AccessToken:     token,
+		AccessTokenExp:  os.Getenv("ACCESS_TOKEN_EXP"),
+		RefreshToken:    newRefreshToken(),
+		RefreshTokenExp: "Never",
 	})
+
+}
+func (h *Handler) resetPassword(c *gin.Context) {
+	var r entities.ResetPassword
+
+	if err := c.BindJSON(&r); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	err := h.services.Authorization.ResetPassword(&r)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusNotAcceptable, constants.ResetPasswordError)
+	}
+
+	c.JSON(http.StatusResetContent, entities.ResetPasswordResponse{
+		Message:   constants.ResetPasswordSuccess,
+		ResetDate: time.Now().Format(entities.RegularFormat),
+	})
+}
+
+func (h *Handler) validateResetEmail(c *gin.Context) {
+	//var r entities.ResetPassword
+
+}
+
+func (h *Handler) refreshLogin(c *gin.Context) {
+}
+func (h *Handler) resetPasswordProfile(c *gin.Context) {
+}
+func (h *Handler) otpGenerator(c *gin.Context) {
 }

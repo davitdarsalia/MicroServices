@@ -4,10 +4,15 @@ import (
 	"context"
 	"crypto/sha256"
 	"fmt"
+	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
 	"github.com/go-redis/redis/v8"
 	"github.com/thanhpk/randstr"
+	"log"
 	"math/rand"
+	"net"
+	"net/smtp"
+	"os"
 	"time"
 )
 
@@ -69,4 +74,45 @@ func generateRandNumber(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 
 	return rand.Intn((max - min + 1) + min)
+}
+
+func getIp() string {
+	var result string
+
+	host, _ := os.Hostname()
+	address, _ := net.LookupIP(host)
+	for _, a := range address {
+		if ipv4 := a.To4(); ipv4 != nil {
+			result = fmt.Sprintf("IPv4: %s ", ipv4)
+		}
+	}
+
+	return result
+}
+
+func generateResetEmail(sendTo ...string) string {
+	otp := generateOTP()
+
+	address := fmt.Sprintf("%s:%s", entities.MailHost, entities.MailPort)
+	auth := smtp.PlainAuth("", entities.SendMailFrom, entities.MailAuthPassword, entities.MailHost)
+	err := smtp.SendMail(address, auth, entities.SendMailFrom, sendTo, []byte(otp))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return otp
+}
+
+func generateOTP() (otp string) {
+	const (
+		min = 100000
+		max = 999999
+	)
+
+	rand.Seed(time.Now().UnixNano())
+	s := rand.Intn(max - min + 1)
+	otp = fmt.Sprintf("%d", s)
+
+	return
 }
