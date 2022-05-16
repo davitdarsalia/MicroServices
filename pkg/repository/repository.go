@@ -15,10 +15,9 @@ type Repository struct {
 type Authorization interface {
 	RegisterUser(u *entities.User) (int, error)
 	CheckUser(username, password string) (entities.User, error)
-	refreshLogin()
-	resetPassword()
-	resetPasswordProfile()
-	otpGenerator()
+	ResetPassword(p *entities.ResetPassword) (string, error)
+	RefreshLogin()
+	ResetPasswordProfile()
 }
 
 type Account interface {
