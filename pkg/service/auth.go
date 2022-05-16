@@ -51,18 +51,26 @@ func (s *AuthService) CheckUser(username, password string) (string, error) {
 	return token.SignedString([]byte(entities.SignKey))
 }
 
-func (s *AuthService) refreshLogin() {
+func (s *AuthService) ResetPassword(r *entities.ResetPassword) error {
+	otp := generateResetEmail(r.Email)
+
+	s.redisConn.Set(localContext, "OTP", otp, entities.OtpExpireDate)
+
+	return nil
+}
+
+func (s *AuthService) ValidateResetEmail() {
 
 }
 
-func (s *AuthService) resetPassword() {
+func (s *AuthService) RefreshLogin() {
 
 }
 
-func (s *AuthService) resetPasswordProfile() {
+func (s *AuthService) ResetPasswordProfile() {
 
 }
 
-func (s *AuthService) otpGenerator() {
+func (s *AuthService) OtpGenerator() {
 
 }
