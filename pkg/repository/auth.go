@@ -12,7 +12,6 @@ type AuthPostgres struct {
 
 func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 	var userId int
-
 	err := r.db.QueryRow(constants.RegisterUserQuery, u.PersonalNumber, u.PhoneNumber, u.UserName, u.Email, u.FirstName, u.LastName, u.IpAddress, u.Password, u.Salt).Scan(&userId)
 
 	return userId, err
