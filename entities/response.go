@@ -13,3 +13,8 @@ type SignedInUserResponse struct {
 	RefreshToken    string `json:"refresh_token"`
 	RefreshTokenExp string `json:"refresh_token_exp"`
 }
+
+type ResetPasswordResponse struct {
+	Message   string `json:"message"`
+	ResetDate string `json:"reset_date"'`
+}
