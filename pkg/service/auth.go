@@ -32,7 +32,7 @@ func (s *AuthService) CheckUser(username, password string) (string, error) {
 	user, err := s.repo.CheckUser(username, generateHash(password, salt))
 
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, entities.CustomToken{

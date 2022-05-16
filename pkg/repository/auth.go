@@ -13,18 +13,13 @@ type AuthPostgres struct {
 func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 	var userId int
 
-	row := r.db.QueryRow(constants.RegisterUserQuery, u.PersonalNumber, u.PhoneNumber, u.UserName, u.Email, u.FirstName, u.LastName, u.IpAddress, u.Password, u.Salt)
+	err := r.db.QueryRow(constants.RegisterUserQuery, u.PersonalNumber, u.PhoneNumber, u.UserName, u.Email, u.FirstName, u.LastName, u.IpAddress, u.Password, u.Salt).Scan(&userId)
 
-	if err := row.Scan(&userId); err != nil {
-		return 0, err
-	}
-
-	return userId, nil
+	return userId, err
 }
 
 func (r *AuthPostgres) CheckUser(username, password string) (entities.User, error) {
 	var u entities.User
-
 	err := r.db.Get(&u, constants.CheckUserQuery, username, password)
 
 	return u, err
