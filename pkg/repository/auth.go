@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/jmoiron/sqlx"
@@ -24,18 +25,20 @@ func (r *AuthPostgres) CheckUser(username, password string) (entities.User, erro
 	return u, err
 }
 
-func (r *AuthPostgres) refreshLogin() {
+func (r *AuthPostgres) ResetPassword(p *entities.ResetPassword) (string, error) {
+	var userID string
+	err := r.db.Get(&userID, constants.CheckUserByEmail, p.Email, p.UserName, p.PersonalNumber)
+	fmt.Println(userID)
+	if err != nil {
+		return "", err
+	}
+	return userID, nil
+}
+
+func (r *AuthPostgres) RefreshLogin() {
 
 }
 
-func (r *AuthPostgres) resetPassword() {
-
-}
-
-func (r *AuthPostgres) resetPasswordProfile() {
-
-}
-
-func (r *AuthPostgres) otpGenerator() {
+func (r *AuthPostgres) ResetPasswordProfile() {
 
 }

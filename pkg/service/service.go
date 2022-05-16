@@ -16,11 +16,10 @@ type Service struct {
 type Authorization interface {
 	RegisterUser(u *entities.User) (int, error)
 	CheckUser(username, password string) (string, error)
-	ResetPassword(r *entities.ResetPassword) error
+	ResetPassword(r *entities.ResetPassword) (string, error)
 	ValidateResetEmail()
 	RefreshLogin()
 	ResetPasswordProfile()
-	OtpGenerator()
 }
 
 type Account interface {

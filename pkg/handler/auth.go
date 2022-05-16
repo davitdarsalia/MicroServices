@@ -63,21 +63,22 @@ func (h *Handler) resetPassword(c *gin.Context) {
 		return
 	}
 
-	err := h.services.Authorization.ResetPassword(&r)
+	userId, err := h.services.Authorization.ResetPassword(&r)
 
 	if err != nil {
 		newErrorResponse(c, http.StatusNotAcceptable, constants.ResetPasswordError)
+		return
 	}
 
 	c.JSON(http.StatusResetContent, entities.ResetPasswordResponse{
+		UserID:    userId,
 		Message:   constants.ResetPasswordSuccess,
 		ResetDate: time.Now().Format(entities.RegularFormat),
 	})
 }
 
 func (h *Handler) validateResetEmail(c *gin.Context) {
-	//var r entities.ResetPassword
-
+	// Code
 }
 
 func (h *Handler) refreshLogin(c *gin.Context) {

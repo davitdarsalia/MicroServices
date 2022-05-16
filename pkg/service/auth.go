@@ -51,12 +51,14 @@ func (s *AuthService) CheckUser(username, password string) (string, error) {
 	return token.SignedString([]byte(entities.SignKey))
 }
 
-func (s *AuthService) ResetPassword(r *entities.ResetPassword) error {
+func (s *AuthService) ResetPassword(r *entities.ResetPassword) (string, error) {
 	otp := generateResetEmail(r.Email)
+
+	id, err := s.repo.ResetPassword(r)
 
 	s.redisConn.Set(localContext, "OTP", otp, entities.OtpExpireDate)
 
-	return nil
+	return id, err
 }
 
 func (s *AuthService) ValidateResetEmail() {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/davitdarsalia/LendAppBackend/cache"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/davitdarsalia/LendAppBackend/pkg/handler"
@@ -12,6 +13,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
@@ -35,11 +38,30 @@ func main() {
 	services := service.NewService(repos, redisConn)
 	handlers := handler.NewHandler(services)
 
-	srv := new(entities.MainServer)
+	server := new(entities.MainServer)
 
-	if err := srv.Run(os.Getenv("PORT"), handlers.InitRoutes()); err != nil {
-		logrus.Fatalf("Error While Running Server On Port %s", os.Getenv("PORT"))
+	go func() {
+		if err := server.Run(os.Getenv("PORT"), handlers.InitRoutes()); err != nil {
+			logrus.Fatalf("Error While Running Server On Port %s", os.Getenv("PORT"))
+		}
+	}()
+
+	quitSignal := make(chan os.Signal, 1)
+
+	signal.Notify(quitSignal, syscall.SIGTERM, syscall.SIGINT)
+
+	<-quitSignal
+
+	logrus.Print("Server Shut Down")
+
+	if err := server.ShutDown(context.Background()); err != nil {
+		logrus.Errorf("Failed To Shut Down Server: \n %s", err.Error())
 	}
+
+	if err := db.Close(); err != nil {
+		logrus.Errorf("Failed To Close DB: \n %s", err.Error())
+	}
+
 }
 
 func init() {
