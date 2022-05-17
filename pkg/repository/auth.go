@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/jmoiron/sqlx"
@@ -39,8 +38,10 @@ func (r *AuthPostgres) ResetPassword(p *entities.ResetPassword) (string, error) 
 
 func (r *AuthPostgres) ValidateResetEmail(p *entities.ValidateResetEmail) error {
 	// TODO - Implement Get Location Function (Lat. Lng. City, Country Is Optional)
+
 	_, err := r.db.Exec(constants.InsertProfileActivity, p.PersonalNumber, time.Now(), time.Now(), "Tbilisi")
-	fmt.Println(err)
+	_, err = r.db.Exec(constants.UpdatePassword, p.NewPassword, p.PersonalNumber)
+
 	return err
 }
 
