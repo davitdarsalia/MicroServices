@@ -15,7 +15,11 @@ type SignedInUserResponse struct {
 }
 
 type ResetPasswordResponse struct {
-	UserID    string `json:"user_id"`
+	UserID  string `json:"user_id"`
+	Message string `json:"message"`
+}
+
+type ValidateResetPasswordResponse struct {
 	Message   string `json:"message"`
 	ResetDate string `json:"reset_date"'`
 }
