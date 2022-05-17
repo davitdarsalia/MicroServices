@@ -5,6 +5,7 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/jmoiron/sqlx"
+	"time"
 )
 
 type AuthPostgres struct {
@@ -28,11 +29,19 @@ func (r *AuthPostgres) CheckUser(username, password string) (entities.User, erro
 func (r *AuthPostgres) ResetPassword(p *entities.ResetPassword) (string, error) {
 	var userID string
 	err := r.db.Get(&userID, constants.CheckUserByEmail, p.Email, p.UserName, p.PersonalNumber)
-	fmt.Println(userID)
+
 	if err != nil {
 		return "", err
 	}
+
 	return userID, nil
+}
+
+func (r *AuthPostgres) ValidateResetEmail(p *entities.ValidateResetEmail) error {
+	// TODO - Implement Get Location Function (Lat. Lng. City, Country Is Optional)
+	_, err := r.db.Exec(constants.InsertProfileActivity, p.PersonalNumber, time.Now(), time.Now(), "Tbilisi")
+	fmt.Println(err)
+	return err
 }
 
 func (r *AuthPostgres) RefreshLogin() {
