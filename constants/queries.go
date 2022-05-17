@@ -9,6 +9,6 @@ const (
 								),
 								last_reset_password = $2,
 								last_password_change = $3,
-								location = $4
-`
+								location = $4`
+	UpdatePassword = `UPDATE users set password = $1 where personal_number = $2`
 )

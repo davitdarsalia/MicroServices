@@ -64,6 +64,9 @@ func (s *AuthService) ResetPassword(r *entities.ResetPassword) (string, error) {
 
 func (s *AuthService) ValidateResetEmail(e *entities.ValidateResetEmail) error {
 	otp, _ := s.redisConn.Get(localContext, "OTP").Result()
+	salt, _ := s.redisConn.Get(localContext, "UniqueSalt").Result()
+
+	e.NewPassword = generateHash(e.NewPassword, salt)
 
 	if e.ValidationCode != otp {
 		return errors.New("incorrect OTP Code")
