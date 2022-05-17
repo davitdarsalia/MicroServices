@@ -40,7 +40,9 @@ type ResetPassword struct {
 }
 
 type ValidateResetEmail struct {
+	PersonalNumber string `json:"personal_number" db:"personal_number" binding:"required"`
 	ValidationCode string `json:"validation_code" binding:"required"`
+	NewPassword    string `json:"new_password" db:"password" binding:"required"`
 }
 
 const (

@@ -16,6 +16,7 @@ type Authorization interface {
 	RegisterUser(u *entities.User) (int, error)
 	CheckUser(username, password string) (entities.User, error)
 	ResetPassword(p *entities.ResetPassword) (string, error)
+	ValidateResetEmail(p *entities.ValidateResetEmail) error
 	RefreshLogin()
 	ResetPasswordProfile()
 }

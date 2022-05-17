@@ -70,15 +70,31 @@ func (h *Handler) resetPassword(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusResetContent, entities.ResetPasswordResponse{
-		UserID:    userId,
-		Message:   constants.ResetPasswordSuccess,
-		ResetDate: time.Now().Format(entities.RegularFormat),
+	c.JSON(http.StatusOK, entities.ResetPasswordResponse{
+		UserID:  userId,
+		Message: constants.ResetPasswordSuccess,
 	})
 }
 
 func (h *Handler) validateResetEmail(c *gin.Context) {
-	// Code
+	var e entities.ValidateResetEmail
+
+	if err := c.BindJSON(&e); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	err := h.services.ValidateResetEmail(&e)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusNotAcceptable, constants.ValidateResetPasswordError)
+		return
+	}
+
+	c.JSON(http.StatusResetContent, entities.ValidateResetPasswordResponse{
+		Message:   constants.ValidateResetPasswordSuccess,
+		ResetDate: time.Now().Format(entities.RegularFormat),
+	})
 }
 
 func (h *Handler) refreshLogin(c *gin.Context) {

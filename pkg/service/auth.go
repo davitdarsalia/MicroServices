@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -61,7 +62,15 @@ func (s *AuthService) ResetPassword(r *entities.ResetPassword) (string, error) {
 	return id, err
 }
 
-func (s *AuthService) ValidateResetEmail() {
+func (s *AuthService) ValidateResetEmail(e *entities.ValidateResetEmail) error {
+	otp, _ := s.redisConn.Get(localContext, "OTP").Result()
+
+	if e.ValidationCode != otp {
+		return errors.New("incorrect OTP Code")
+	}
+
+	err := s.repo.ValidateResetEmail(e)
+	return err
 
 }
 
