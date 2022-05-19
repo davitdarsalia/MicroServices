@@ -3,6 +3,7 @@ package entities
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"os"
 	"time"
 )
 
@@ -54,16 +55,16 @@ type RefreshLoginInput struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-const (
-	Header  = "Authorization"
-	SignKey = "466785cf408836b1f39aea588291b9aef5838439c65833f4c1bf6d09022802ba"
-	UserCtx = "userId"
+var (
+	Header  = os.Getenv("TOKEN_HEADER")
+	SignKey = os.Getenv("SIGN_IN_KEY")
+	UserCtx = os.Getenv("USER_CONTEXT")
 
-	SendMailFrom = "d.app.geo1@gmail.com"
-	MailHost     = "smtp.gmail.com"
-	MailPort     = "587"
+	SendMailFrom = os.Getenv("ROOT_SENDER_MAIL")
+	MailHost     = os.Getenv("MAIL_HOST")
+	MailPort     = os.Getenv("MAIL_PORT")
 
-	MailAuthPassword = "David.1998!"
+	MailAuthPassword = os.Getenv("MAIL_PASSWORD")
 
 	OtpExpireDate = time.Minute * 1
 )

@@ -31,7 +31,7 @@ func main() {
 	}
 
 	redisConn := cache.NewRedisCache(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: os.Getenv("REDIS_CACHE_PORT"),
 		DB:   0,
 	})
 	repos := repository.NewRepository(db)
