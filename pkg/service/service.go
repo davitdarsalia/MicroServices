@@ -9,8 +9,7 @@ import (
 type Service struct {
 	Authorization
 	Account
-	Transactions
-	Deletions
+	Settings
 }
 
 type Authorization interface {
@@ -70,7 +69,6 @@ func NewService(repos *repository.Repository, redisConn *redis.Client) *Service 
 	return &Service{
 		Authorization: NewAuthService(repos, redisConn),
 		Account:       NewAccountService(repos, redisConn),
-		Transactions:  NewTransactionsService(repos, redisConn),
-		Deletions:     NewDeletionsService(repos, redisConn),
+		Settings:      NewSettingsService(repos, redisConn),
 	}
 }
