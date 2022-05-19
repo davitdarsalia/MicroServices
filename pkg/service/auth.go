@@ -77,11 +77,16 @@ func (s *AuthService) ValidateResetEmail(e *entities.ValidateResetEmail) error {
 
 }
 
-func (s *AuthService) RefreshLogin() {
+func (s *AuthService) ResetPasswordProfile(e *entities.ResetPasswordInput) error {
+	salt, _ := s.redisConn.Get(localContext, "UniqueSalt").Result()
+	e.NewPassword = generateHash(e.NewPassword, salt)
+	err := s.repo.ResetPasswordProfile(e)
+
+	return err
 
 }
 
-func (s *AuthService) ResetPasswordProfile() {
+func (s *AuthService) RefreshLogin() {
 
 }
 

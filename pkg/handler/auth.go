@@ -97,9 +97,31 @@ func (h *Handler) validateResetEmail(c *gin.Context) {
 	})
 }
 
-func (h *Handler) refreshLogin(c *gin.Context) {
-}
+// Start Here
 func (h *Handler) resetPasswordProfile(c *gin.Context) {
+	var refreshInput entities.ResetPasswordInput
+
+	if err := c.BindJSON(&refreshInput); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	err := h.services.ResetPasswordProfile(&refreshInput)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusNotAcceptable, constants.ResetPasswordError)
+		return
+	}
+
+	c.JSON(http.StatusResetContent, entities.ResetPasswordProfileResponse{
+		Message:   constants.ValidateResetPasswordSuccess,
+		ResetDate: time.Now().Format(entities.RegularFormat),
+	})
+}
+
+// TODO Here
+func (h *Handler) refreshLogin(c *gin.Context) {
+
 }
 func (h *Handler) otpGenerator(c *gin.Context) {
 }

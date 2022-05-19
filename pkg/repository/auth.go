@@ -39,16 +39,19 @@ func (r *AuthPostgres) ResetPassword(p *entities.ResetPassword) (string, error) 
 func (r *AuthPostgres) ValidateResetEmail(p *entities.ValidateResetEmail) error {
 	// TODO - Implement Get Location Function (Lat. Lng. City, Country Is Optional)
 
-	_, err := r.db.Exec(constants.InsertProfileActivity, p.PersonalNumber, time.Now(), time.Now(), "Tbilisi")
+	_, err := r.db.Exec(constants.InsertProfileActivityResetPassword, p.PersonalNumber, time.Now(), time.Now(), "Tbilisi")
 	_, err = r.db.Exec(constants.UpdatePassword, p.NewPassword, p.PersonalNumber)
 
 	return err
 }
 
-func (r *AuthPostgres) RefreshLogin() {
+func (r *AuthPostgres) ResetPasswordProfile(e *entities.ResetPasswordInput) error {
+	_, err := r.db.Exec(constants.InsertProfileActivityResetPasswordProfile, time.Now(), time.Now(), "Tbilisi")
+	_, err = r.db.Exec(constants.UpdatePasswordFromProfile, e.NewPassword, e.UserName)
 
+	return err
 }
 
-func (r *AuthPostgres) ResetPasswordProfile() {
+func (r *AuthPostgres) RefreshLogin() {
 
 }

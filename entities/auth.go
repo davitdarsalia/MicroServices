@@ -45,10 +45,15 @@ type ValidateResetEmail struct {
 	NewPassword    string `json:"password" db:"password" binding:"required"`
 }
 
+type ResetPasswordInput struct {
+	UserName    string `json:"username" db:"username" binding:"required"`
+	NewPassword string `json:"new_password" db:"password" binding:"required"`
+}
+
 const (
 	Header  = "Authorization"
 	SignKey = "466785cf408836b1f39aea588291b9aef5838439c65833f4c1bf6d09022802ba"
-	UserCtx = "userName"
+	UserCtx = "userId"
 
 	SendMailFrom = "d.app.geo1@gmail.com"
 	MailHost     = "smtp.gmail.com"
