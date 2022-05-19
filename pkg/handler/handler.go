@@ -20,15 +20,14 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/verify-reset-email", h.validateResetEmail)
 		auth.POST("/generate-otp", h.otpGenerator)
 
-		protected := r.Group("/protected", checkAuth)
+		protected := r.Group("/protected", h.checkAuth)
 		{
 			protected.POST("/reset-password-profile", h.resetPasswordProfile)
 			protected.POST("/refresh-login", h.refreshLogin)
 		}
-
 	}
 
-	account := r.Group("/api/account", checkAuth)
+	account := r.Group("/api/account", h.checkAuth)
 	{
 		account.GET("/user-info", h.signUp)
 		account.GET("/rating", h.signUp)
@@ -38,7 +37,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		account.GET("/deposit", h.signUp)
 	}
 
-	transactions := r.Group("/api/transactions", checkAuth)
+	transactions := r.Group("/api/transactions", h.checkAuth)
 	{
 		transactions.PUT("/rating", h.signUp)
 		transactions.PUT("/deposit", h.signUp)
@@ -48,7 +47,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		transactions.PUT("/bonus", h.signUp)
 	}
 
-	deletions := r.Group("/api/remove", checkAuth)
+	deletions := r.Group("/api/remove", h.checkAuth)
 	{
 		deletions.DELETE("/deposit", h.signUp)
 		deletions.DELETE("/currency", h.signUp)
