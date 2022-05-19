@@ -19,7 +19,7 @@ type Authorization interface {
 	ResetPassword(r *entities.ResetPassword) (string, error)
 	ValidateResetEmail(e *entities.ValidateResetEmail) error
 	ResetPasswordProfile(e *entities.ResetPasswordInput) error
-	RefreshLogin()
+	RefreshLogin() int
 
 	ParseToken(token string) (int, error)
 }

@@ -4,6 +4,7 @@ package constants
 const (
 	UserNotFoundError          = "[LogIn Handler] - User Not Found"
 	BadRequest                 = "[All Handlers] - Some Of Your Credentials Are Missing"
+	InternalServerError        = "[All Handlers] - Internal Server Error"
 	UserAlreadyRegistered      = "[Register Handler] - User Already Registered"
 	ResetPasswordError         = "[Reset Password Handler] - Some Of Your Credentials Are Invalid\n Failed To Reset Password"
 	ValidateResetPasswordError = "[Validate Password Handler] - Incorrect Validation Code, Try Again "

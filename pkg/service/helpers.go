@@ -12,7 +12,6 @@ import (
 	"github.com/thanhpk/randstr"
 	"log"
 	"math/rand"
-	"net"
 	"net/smtp"
 	"os"
 	"time"
@@ -56,6 +55,22 @@ func NewDeletionsService(r repository.Authorization, redisConn *redis.Client) *A
 
 // Non Interface Methods
 
+func (s *AuthService) GenerateToken(userID int) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, entities.CustomToken{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Minute * 2).Unix(),
+			Id:        fmt.Sprintf("%d", userID),
+			IssuedAt:  time.Now().Unix(),
+			Issuer:    os.Getenv("ISSUER"),
+			Subject:   "Authentication",
+		},
+		UserID: userID,
+		Role:   "user",
+		Ip:     entities.GetIp(),
+	})
+	return token.SignedString([]byte(entities.SignKey))
+}
+
 func (s *AuthService) ParseToken(token string) (int, error) {
 	t, err := jwt.ParseWithClaims(token, &entities.CustomToken{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -97,20 +112,6 @@ func generateRandNumber(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 
 	return rand.Intn((max - min + 1) + min)
-}
-
-func getIp() string {
-	var result string
-
-	host, _ := os.Hostname()
-	address, _ := net.LookupIP(host)
-	for _, a := range address {
-		if ipv4 := a.To4(); ipv4 != nil {
-			result = fmt.Sprintf("IPv4: %s ", ipv4)
-		}
-	}
-
-	return result
 }
 
 func generateResetEmail(sendTo ...string) string {
