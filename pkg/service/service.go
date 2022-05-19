@@ -25,7 +25,7 @@ type Authorization interface {
 	ParseToken(token string) (int, error)
 }
 
-// Account - Get, Post , Put Or Update
+// Account TODO - Get, Post , Put Or Update
 type Account interface {
 	GetProfileDetails()
 	GetUserInfo()
@@ -45,7 +45,19 @@ type Account interface {
 	SetPasscode()
 }
 
+// Settings TODO - Settings - Get, Put
 type Settings interface {
+	GetProfileSettings()
+	GetNotificationSettings()
+	// GetPaymentOptions - Payments
+	GetPaymentOptions()
+	GetPrivacySettings()
+	GetSecuritySettings()
+
+	UpdateNotificationSettings()
+	UpdatePaymentOptions()
+	UpdatePrivacySettings()
+	UpdateSecuritySettings()
 }
 
 type Transactions interface {
