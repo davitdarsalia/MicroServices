@@ -3,13 +3,8 @@ package repository
 import (
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
-	"github.com/jmoiron/sqlx"
 	"time"
 )
-
-type AuthPostgres struct {
-	db *sqlx.DB
-}
 
 func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 	var userId int

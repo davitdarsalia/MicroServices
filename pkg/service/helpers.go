@@ -29,12 +29,7 @@ type AccountService struct {
 	redisConn *redis.Client
 }
 
-type TransactionsService struct {
-	repo      repository.Authorization
-	redisConn *redis.Client
-}
-
-type DeletionsService struct {
+type SettingsService struct {
 	repo      repository.Authorization
 	redisConn *redis.Client
 }
@@ -46,11 +41,9 @@ func NewAuthService(r repository.Authorization, redisConn *redis.Client) *AuthSe
 func NewAccountService(r repository.Authorization, redisConn *redis.Client) *AccountService {
 	return &AccountService{repo: r, redisConn: redisConn}
 }
-func NewTransactionsService(r repository.Authorization, redisConn *redis.Client) *AccountService {
-	return &AccountService{repo: r, redisConn: redisConn}
-}
-func NewDeletionsService(r repository.Authorization, redisConn *redis.Client) *AccountService {
-	return &AccountService{repo: r, redisConn: redisConn}
+
+func NewSettingsService(r repository.Authorization, redisConn *redis.Client) *SettingsService {
+	return &SettingsService{repo: r, redisConn: redisConn}
 }
 
 // Non Interface Methods

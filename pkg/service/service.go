@@ -9,8 +9,7 @@ import (
 type Service struct {
 	Authorization
 	Account
-	Transactions
-	Deletions
+	Settings
 }
 
 type Authorization interface {
@@ -21,10 +20,43 @@ type Authorization interface {
 	ResetPasswordProfile(e *entities.ResetPasswordInput) error
 	RefreshLogin() int
 
+	// ParseToken - Helper Method For AuthChecker
 	ParseToken(token string) (int, error)
 }
 
+// Account TODO - Get, Post , Put Or Update
 type Account interface {
+	GetProfileDetails()
+	GetUserInfo()
+	GetTrustedDevices()
+	GetUserById()
+
+	BlockUser()
+	UnblockUser()
+	BlockedUsersList()
+	UploadProfileImage()
+	LogoutSession()
+
+	UpdateProfileDetails()
+	UpdateTrustedDevices()
+
+	// SetPasscode - Public/Private Keys
+	SetPasscode()
+}
+
+// Settings TODO - Settings - Get, Put
+type Settings interface {
+	GetProfileSettings()
+	GetNotificationSettings()
+	// GetPaymentOptions - Payments
+	GetPaymentOptions()
+	GetPrivacySettings()
+	GetSecuritySettings()
+
+	UpdateNotificationSettings()
+	UpdatePaymentOptions()
+	UpdatePrivacySettings()
+	UpdateSecuritySettings()
 }
 
 type Transactions interface {
@@ -37,7 +69,6 @@ func NewService(repos *repository.Repository, redisConn *redis.Client) *Service 
 	return &Service{
 		Authorization: NewAuthService(repos, redisConn),
 		Account:       NewAccountService(repos, redisConn),
-		Transactions:  NewTransactionsService(repos, redisConn),
-		Deletions:     NewDeletionsService(repos, redisConn),
+		Settings:      NewSettingsService(repos, redisConn),
 	}
 }

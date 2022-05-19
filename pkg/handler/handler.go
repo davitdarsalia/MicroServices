@@ -18,39 +18,18 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/sign-in", h.signIn)
 		auth.POST("/reset-password", h.resetPassword)
 		auth.POST("/verify-reset-email", h.validateResetEmail)
-		auth.POST("/generate-otp", h.otpGenerator)
 
-		protected := r.Group("/protected", h.checkAuth)
+		auth.POST("/reset-password-profile", h.resetPasswordProfile, h.checkAuth)
+		auth.POST("/refresh-login", h.refreshLogin, h.checkAuth)
+	}
+
+	protected := r.Group("api/protected")
+	{
+		account := protected.Group("/account", h.checkAuth)
 		{
-			protected.POST("/reset-password-profile", h.resetPasswordProfile)
-			protected.POST("/refresh-login", h.refreshLogin)
+			account.GET("/user-info", h.signUp)
 		}
-	}
 
-	account := r.Group("/api/account", h.checkAuth)
-	{
-		account.GET("/user-info", h.signUp)
-		account.GET("/rating", h.signUp)
-		account.GET("/bonus", h.signUp)
-		account.GET("/balance", h.signUp)
-		account.GET("/cashback", h.signUp)
-		account.GET("/deposit", h.signUp)
-	}
-
-	transactions := r.Group("/api/transactions", h.checkAuth)
-	{
-		transactions.PUT("/rating", h.signUp)
-		transactions.PUT("/deposit", h.signUp)
-		transactions.PUT("/balance", h.signUp)
-		transactions.PUT("/available-currencies", h.signUp)
-		transactions.PUT("/cashback", h.signUp)
-		transactions.PUT("/bonus", h.signUp)
-	}
-
-	deletions := r.Group("/api/remove", h.checkAuth)
-	{
-		deletions.DELETE("/deposit", h.signUp)
-		deletions.DELETE("/currency", h.signUp)
 	}
 
 	return r
