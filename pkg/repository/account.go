@@ -1,5 +1,9 @@
 package repository
 
+func (r *AuthPostgres) GetProfileDetails() {
+	//TODO implement me
+}
+
 func (r *AuthPostgres) GetUserInfo() {
 	//TODO implement me
 }
