@@ -23,3 +23,8 @@ type ValidateResetPasswordResponse struct {
 	Message   string `json:"message"`
 	ResetDate string `json:"reset_date"'`
 }
+
+type ResetPasswordProfileResponse struct {
+	Message   string `json:"message"`
+	ResetDate string `json:"reset_date"`
+}

@@ -17,8 +17,8 @@ type Authorization interface {
 	CheckUser(username, password string) (entities.User, error)
 	ResetPassword(p *entities.ResetPassword) (string, error)
 	ValidateResetEmail(p *entities.ValidateResetEmail) error
+	ResetPasswordProfile(p *entities.ResetPasswordInput) error
 	RefreshLogin()
-	ResetPasswordProfile()
 }
 
 type Account interface {
