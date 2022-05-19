@@ -18,8 +18,10 @@ type Authorization interface {
 	CheckUser(username, password string) (string, error)
 	ResetPassword(r *entities.ResetPassword) (string, error)
 	ValidateResetEmail(e *entities.ValidateResetEmail) error
+	ResetPasswordProfile(e *entities.ResetPasswordInput) error
 	RefreshLogin()
-	ResetPasswordProfile()
+
+	ParseToken(token string) (int, error)
 }
 
 type Account interface {

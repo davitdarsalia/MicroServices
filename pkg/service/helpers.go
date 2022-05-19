@@ -3,9 +3,11 @@ package service
 import (
 	"context"
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis/v8"
 	"github.com/thanhpk/randstr"
 	"log"
@@ -53,6 +55,27 @@ func NewDeletionsService(r repository.Authorization, redisConn *redis.Client) *A
 }
 
 // Non Interface Methods
+
+func (s *AuthService) ParseToken(token string) (int, error) {
+	t, err := jwt.ParseWithClaims(token, &entities.CustomToken{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid Signing Method")
+		}
+		return []byte(entities.SignKey), nil
+	})
+
+	if err != nil {
+		return 0, err
+	}
+
+	claims, ok := t.Claims.(*entities.CustomToken)
+
+	if !ok {
+		return 0, errors.New("invalid Token Claims")
+	}
+
+	return claims.UserID, nil
+}
 
 func generateHash(password string, salt string) string {
 	hash := sha256.New()

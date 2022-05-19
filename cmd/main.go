@@ -27,7 +27,7 @@ func main() {
 	db, err := repository.NewPostgresDB()
 
 	if err != nil {
-		logrus.Fatalf("Error WHile Initializing DataBase Connection; %s", err.Error())
+		logrus.Fatalf("Error While Initializing DataBase Connection; %s", err.Error())
 	}
 
 	redisConn := cache.NewRedisCache(&redis.Options{
