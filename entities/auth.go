@@ -50,6 +50,10 @@ type ResetPasswordInput struct {
 	NewPassword string `json:"new_password" db:"password" binding:"required"`
 }
 
+type RefreshLoginInput struct {
+	RefreshToken string `json:"refresh_token"`
+}
+
 const (
 	Header  = "Authorization"
 	SignKey = "466785cf408836b1f39aea588291b9aef5838439c65833f4c1bf6d09022802ba"
