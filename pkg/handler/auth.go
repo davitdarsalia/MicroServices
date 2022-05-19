@@ -119,8 +119,29 @@ func (h *Handler) resetPasswordProfile(c *gin.Context) {
 	})
 }
 
-// TODO Here
 func (h *Handler) refreshLogin(c *gin.Context) {
+	var r entities.RefreshLoginInput
+
+	if err := c.BindJSON(&r); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	id := h.services.RefreshLogin()
+
+	token, err := entities.GenerateToken(id)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, constants.InternalServerError)
+	}
+
+	c.JSON(http.StatusOK, entities.SignedInUserResponse{
+		Message:         constants.SuccessfulSignIn,
+		AccessToken:     token,
+		AccessTokenExp:  os.Getenv("ACCESS_TOKEN_EXP"),
+		RefreshToken:    newRefreshToken(),
+		RefreshTokenExp: "Never",
+	})
 
 }
 func (h *Handler) otpGenerator(c *gin.Context) {

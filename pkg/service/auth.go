@@ -2,13 +2,9 @@ package service
 
 import (
 	"errors"
-	"fmt"
-	"log"
-	"os"
-	"time"
-
 	"github.com/davitdarsalia/LendAppBackend/entities"
-	"github.com/dgrijalva/jwt-go"
+	"log"
+	"strconv"
 )
 
 func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
@@ -32,24 +28,13 @@ func (s *AuthService) CheckUser(username, password string) (string, error) {
 	salt, _ := s.redisConn.Get(localContext, "UniqueSalt").Result()
 	user, err := s.repo.CheckUser(username, generateHash(password, salt))
 
+	s.redisConn.Set(localContext, "UserID", user.UserID, 0)
+
 	if err != nil {
 		return "", err
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, entities.CustomToken{
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute * 2).Unix(),
-			Id:        fmt.Sprintf("%d", user.UserID),
-			IssuedAt:  time.Now().Unix(),
-			Issuer:    os.Getenv("ISSUER"),
-			Subject:   "Authentication",
-		},
-		UserID: user.UserID,
-		Role:   "user",
-		Ip:     getIp(),
-	})
-
-	return token.SignedString([]byte(entities.SignKey))
+	return entities.GenerateToken(user.UserID)
 }
 
 func (s *AuthService) ResetPassword(r *entities.ResetPassword) (string, error) {
@@ -86,7 +71,20 @@ func (s *AuthService) ResetPasswordProfile(e *entities.ResetPasswordInput) error
 
 }
 
-func (s *AuthService) RefreshLogin() {
+func (s *AuthService) RefreshLogin() int {
+	id, err := s.redisConn.Get(localContext, "UserID").Result()
+
+	if err != nil {
+		log.Fatal("Redis Get UserID Error")
+	}
+
+	intID, err := strconv.Atoi(id)
+
+	if err != nil {
+		log.Fatal("ParseInt Error")
+	}
+
+	return intID
 
 }
 
