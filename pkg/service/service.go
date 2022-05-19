@@ -21,10 +21,31 @@ type Authorization interface {
 	ResetPasswordProfile(e *entities.ResetPasswordInput) error
 	RefreshLogin() int
 
+	// ParseToken - Helper Method For AuthChecker
 	ParseToken(token string) (int, error)
 }
 
+// Account - Get, Post , Put Or Update
 type Account interface {
+	GetProfileDetails()
+	GetUserInfo()
+	GetTrustedDevices()
+	GetUserById()
+
+	BlockUser()
+	UnblockUser()
+	BlockedUsersList()
+	UploadProfileImage()
+	LogoutSession()
+
+	UpdateProfileDetails()
+	UpdateTrustedDevices()
+
+	// SetPasscode - Public/Private Keys
+	SetPasscode()
+}
+
+type Settings interface {
 }
 
 type Transactions interface {
