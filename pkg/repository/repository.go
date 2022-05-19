@@ -22,6 +22,22 @@ type Authorization interface {
 }
 
 type Account interface {
+	GetProfileDetails()
+	GetUserInfo()
+	GetTrustedDevices()
+	GetUserById()
+
+	BlockUser()
+	UnblockUser()
+	BlockedUsersList()
+	UploadProfileImage()
+	LogoutSession()
+
+	UpdateProfileDetails()
+	UpdateTrustedDevices()
+
+	// SetPasscode - Public/Private Keys
+	SetPasscode()
 }
 
 type Transactions interface {
