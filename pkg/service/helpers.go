@@ -25,12 +25,12 @@ type AuthService struct {
 }
 
 type AccountService struct {
-	repo      repository.Authorization
+	repo      repository.Account
 	redisConn *redis.Client
 }
 
 type SettingsService struct {
-	repo      repository.Authorization
+	repo      repository.Settings
 	redisConn *redis.Client
 }
 
@@ -38,11 +38,11 @@ func NewAuthService(r repository.Authorization, redisConn *redis.Client) *AuthSe
 	return &AuthService{repo: r, redisConn: redisConn}
 }
 
-func NewAccountService(r repository.Authorization, redisConn *redis.Client) *AccountService {
+func NewAccountService(r repository.Account, redisConn *redis.Client) *AccountService {
 	return &AccountService{repo: r, redisConn: redisConn}
 }
 
-func NewSettingsService(r repository.Authorization, redisConn *redis.Client) *SettingsService {
+func NewSettingsService(r repository.Settings, redisConn *redis.Client) *SettingsService {
 	return &SettingsService{repo: r, redisConn: redisConn}
 }
 
