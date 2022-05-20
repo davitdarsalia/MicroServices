@@ -18,4 +18,5 @@ const (
 								location = $4`
 	UpdatePassword            = `UPDATE users set password = $1 where personal_number = $2`
 	UpdatePasswordFromProfile = `Update users set password = $1 where username = $2`
+	GetProfileDetails         = `SELECT * FROM userinfo where userid = $1`
 )
