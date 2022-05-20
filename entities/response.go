@@ -28,3 +28,16 @@ type ResetPasswordProfileResponse struct {
 	Message   string `json:"message"`
 	ResetDate string `json:"reset_date"`
 }
+
+type GetProfileDetailsResponse struct {
+	Message            string `json:"message"`
+	ProfileImage       []byte `json:"profileimage"`
+	Followers          int    `json:"followers"`
+	Following          int    `json:"following"`
+	BlockedUsersAmount int    `json:"blocked_users_amount"`
+	WorkingPlace       string `json:"working_place"`
+	Education          string `json:"education"`
+	Origin             string `json:"origin"`
+	AdditionalEmail    string `json:"additional_email"`
+	UserID             string `json:"userid"`
+}
