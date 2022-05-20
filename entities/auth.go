@@ -56,7 +56,7 @@ type RefreshLoginInput struct {
 }
 
 var (
-	Header  = os.Getenv("TOKEN_HEADER")
+	Header  = "Authorization"
 	SignKey = os.Getenv("SIGN_IN_KEY")
 	UserCtx = os.Getenv("USER_CONTEXT")
 

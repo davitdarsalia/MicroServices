@@ -1,37 +1,37 @@
 package repository
 
-func (r *AuthPostgres) GetProfileSettings() {
+func (r *SettingsPostgres) GetProfileSettings() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) GetNotificationSettings() {
+func (r *SettingsPostgres) GetNotificationSettings() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) GetPaymentOptions() {
+func (r *SettingsPostgres) GetPaymentOptions() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) GetPrivacySettings() {
+func (r *SettingsPostgres) GetPrivacySettings() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) GetSecuritySettings() {
+func (r *SettingsPostgres) GetSecuritySettings() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) UpdateNotificationSettings() {
+func (r *SettingsPostgres) UpdateNotificationSettings() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) UpdatePaymentOptions() {
+func (r *SettingsPostgres) UpdatePaymentOptions() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) UpdatePrivacySettings() {
+func (r *SettingsPostgres) UpdatePrivacySettings() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) UpdateSecuritySettings() {
+func (r *SettingsPostgres) UpdateSecuritySettings() {
 	//TODO implement me
 }

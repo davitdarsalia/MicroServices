@@ -8,6 +8,7 @@ const (
 	UserAlreadyRegistered      = "[Register Handler] - User Already Registered"
 	ResetPasswordError         = "[Reset Password Handler] - Some Of Your Credentials Are Invalid\n Failed To Reset Password"
 	ValidateResetPasswordError = "[Validate Password Handler] - Incorrect Validation Code, Try Again "
+	GetProfileDetailsError     = "[Get Profile Details Handler] - Failed To Fetch Error Detail"
 )
 
 // Success
@@ -16,4 +17,5 @@ const (
 	SuccessfulSignIn             = "[LogIn Handler] - User Successfully Signed In"
 	ResetPasswordSuccess         = "[Reset Password Handler] - Password Email Sent Successfully"
 	ValidateResetPasswordSuccess = "[Validate Password Handler] - Password Changed Successfully"
+	GetProfileDetailsSuccess     = "[Validate Password Handler] - Profile Details Fetched Successfully"
 )

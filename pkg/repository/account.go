@@ -1,49 +1,58 @@
 package repository
 
-func (r *AuthPostgres) GetProfileDetails() {
+import (
+	"github.com/davitdarsalia/LendAppBackend/constants"
+	"github.com/davitdarsalia/LendAppBackend/entities"
+)
+
+func (r *AccountPostgres) GetProfileDetails(userid int) (*entities.ProfileDetails, error) {
+	var p entities.ProfileDetails
+
+	err := r.db.QueryRow(constants.GetProfileDetails, userid).Scan(&p)
+
+	return &p, err
+}
+
+func (r *AccountPostgres) GetUserInfo() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) GetUserInfo() {
+func (r *AccountPostgres) GetTrustedDevices() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) GetTrustedDevices() {
+func (r *AccountPostgres) GetUserById() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) GetUserById() {
+func (r *AccountPostgres) BlockUser() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) BlockUser() {
+func (r *AccountPostgres) UnblockUser() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) UnblockUser() {
+func (r *AccountPostgres) BlockedUsersList() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) BlockedUsersList() {
+func (r *AccountPostgres) UploadProfileImage() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) UploadProfileImage() {
+func (r *AccountPostgres) LogoutSession() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) LogoutSession() {
+func (r *AccountPostgres) UpdateProfileDetails() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) UpdateProfileDetails() {
+func (r *AccountPostgres) UpdateTrustedDevices() {
 	//TODO implement me
 }
 
-func (r *AuthPostgres) UpdateTrustedDevices() {
-	//TODO implement me
-}
-
-func (r *AuthPostgres) SetPasscode() {
+func (r *AccountPostgres) SetPasscode() {
 	//TODO implement me
 }

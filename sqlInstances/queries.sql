@@ -2,6 +2,18 @@ UPDATE profileactivities set
             userid = (
                 select userid from users where personal_number = $1 and username = $2 and email = $3
             ),
-            last_reset_password = $4,
-            last_password_change = $5,
-            location = $6
+            last_reset_password = '1998-08-08',
+            last_password_change = '1998-08-08',
+            location = 'Tbilisi';
+
+CREATE TABLE userinfo (
+            profileImage  bytea,
+            followers INT DEFAULT 0 NOT NULL,
+            following INT DEFAULT 0 NOT NULL,
+            blocked_users_amount INT DEFAULT 0 NOT NULL,
+            working_place VARCHAR(200),
+            education VARCHAR(200),
+            origin VARCHAR(200),
+            additional_email VARCHAR(200),
+            userid BIGINT REFERENCES users (userid)
+)

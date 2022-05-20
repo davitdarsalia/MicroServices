@@ -20,13 +20,12 @@ type Authorization interface {
 	ResetPasswordProfile(e *entities.ResetPasswordInput) error
 	RefreshLogin() int
 
-	// ParseToken - Helper Method For AuthChecker
 	ParseToken(token string) (int, error)
 }
 
 // Account TODO - Get, Post , Put Or Update
 type Account interface {
-	GetProfileDetails()
+	GetProfileDetails() (*entities.ProfileDetails, error)
 	GetUserInfo()
 	GetTrustedDevices()
 	GetUserById()
@@ -67,8 +66,8 @@ type Deletions interface {
 
 func NewService(repos *repository.Repository, redisConn *redis.Client) *Service {
 	return &Service{
-		Authorization: NewAuthService(repos, redisConn),
-		Account:       NewAccountService(repos, redisConn),
-		Settings:      NewSettingsService(repos, redisConn),
+		Authorization: NewAuthService(repos.Authorization, redisConn),
+		Account:       NewAccountService(repos.Account, redisConn),
+		Settings:      NewSettingsService(repos.Settings, redisConn),
 	}
 }
