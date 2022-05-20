@@ -5,13 +5,19 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"net"
 	"os"
+	"strconv"
 	"time"
 )
 
 func GenerateToken(userID int) (string, error) {
+	exp := os.Getenv("ACCESS_TOKEN_EXP")
+	intExp, _ := strconv.Atoi(exp)
+
+	duration := time.Minute * time.Duration(intExp)
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, CustomToken{
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute * 2).Unix(),
+			ExpiresAt: time.Now().Add(duration).Unix(),
 			Id:        fmt.Sprintf("%d", userID),
 			IssuedAt:  time.Now().Unix(),
 			Issuer:    os.Getenv("ISSUER"),
