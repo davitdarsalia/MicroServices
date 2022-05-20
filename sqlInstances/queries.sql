@@ -1,6 +1,6 @@
 UPDATE profileactivities set
             userid = (
-                select userid from users where personal_number = '01027090407' and username = 'davit.darsalia' and email = 'darsalia.david1998@gmail.com'
+                select userid from users where personal_number = $1 and username = $2 and email = $3
             ),
             last_reset_password = '1998-08-08',
             last_password_change = '1998-08-08',
