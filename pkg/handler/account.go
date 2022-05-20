@@ -39,6 +39,7 @@ func (h *Handler) GetProfileDetails(c *gin.Context) {
 
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, constants.GetProfileDetailsError)
+		return
 	}
 
 	c.JSON(http.StatusOK, entities.GetProfileDetailsResponse{
