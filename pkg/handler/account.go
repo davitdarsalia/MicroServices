@@ -34,7 +34,6 @@ func (h *Handler) UploadProfilePicture(c *gin.Context) {
 }
 
 func (h *Handler) GetProfileDetails(c *gin.Context) {
-
 	p, err := h.services.GetProfileDetails()
 
 	if err != nil {
