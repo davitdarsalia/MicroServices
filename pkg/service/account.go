@@ -2,19 +2,14 @@ package service
 
 import (
 	"github.com/davitdarsalia/LendAppBackend/entities"
-	"log"
 	"strconv"
 )
 
 func (a *AccountService) GetProfileDetails() (*entities.ProfileDetails, error) {
 	id, _ := a.redisConn.Get(localContext, "UserID").Result()
-	intID, err := strconv.Atoi(id)
+	intID, _ := strconv.Atoi(id)
 
-	if err != nil {
-		log.Println("[Account Service] - ParseInt Handler Error")
-	}
-
-	return a.repo.GetProfileDetails(intID)
+	return a.repo.GetProfileDetails(&intID)
 }
 
 func (a *AccountService) GetUserInfo() {
