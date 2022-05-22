@@ -1,13 +1,13 @@
 package entities
 
 type ProfileDetails struct {
-	ProfileImage       []byte `json:"profileimage" binding:"required"`
-	Followers          int    `json:"followers" binding:"required"`
-	Following          int    `json:"following" binding:"required"`
-	BlockedUsersAmount int    `json:"blocked_users_amount" binding:"required"`
-	WorkingPlace       string `json:"working_place" binding:"required"`
-	Education          string `json:"education" binding:"required"`
-	Origin             string `json:"origin" binding:"required"`
-	AdditionalEmail    string `json:"additional_email" binding:"required"`
-	UserID             string `json:"userid" db:"userid"`
+	ProfileImage       []byte `json:"profileimage"`
+	Followers          int    `json:"followers"`
+	Following          int    `json:"following"`
+	BlockedUsersAmount int    `json:"blocked_users_amount"`
+	WorkingPlace       string `json:"working_place"`
+	Education          string `json:"education"`
+	Origin             string `json:"origin"`
+	AdditionalEmail    string `json:"additional_email"`
+	UserID             string `json:"userid"`
 }

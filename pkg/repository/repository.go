@@ -16,7 +16,7 @@ type Authorization interface {
 
 // Account - TODO // Implement These Methods
 type Account interface {
-	GetProfileDetails(userID int) (*entities.ProfileDetails, error)
+	GetProfileDetails(userID *int) (*entities.ProfileDetails, error)
 	GetUserInfo()
 	GetTrustedDevices()
 	GetUserById()
