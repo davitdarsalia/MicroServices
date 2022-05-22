@@ -5,12 +5,22 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/entities"
 )
 
-func (r *AccountPostgres) GetProfileDetails(userid int) (*entities.ProfileDetails, error) {
+func (r *AccountPostgres) GetProfileDetails(userid *int) (*entities.ProfileDetails, error) {
 	var p entities.ProfileDetails
 
-	err := r.db.QueryRow(constants.GetProfileDetails, userid).Scan(&p)
+	r.db.QueryRow(constants.GetProfileDetails, userid).Scan(
+		&p.ProfileImage,
+		&p.Followers,
+		&p.Following,
+		&p.BlockedUsersAmount,
+		&p.WorkingPlace,
+		&p.Education,
+		&p.Origin,
+		&p.AdditionalEmail,
+		&p.UserID,
+	)
 
-	return &p, err
+	return &p, nil
 }
 
 func (r *AccountPostgres) GetUserInfo() {
