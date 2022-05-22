@@ -12,8 +12,11 @@ func (a *AccountService) GetProfileDetails() (*entities.ProfileDetails, error) {
 	return a.repo.GetProfileDetails(&intID)
 }
 
-func (a *AccountService) GetUserInfo() {
-	//TODO implement me
+func (a *AccountService) GetUserInfo() (*entities.UserInfo, error) {
+	id, _ := a.redisConn.Get(localContext, "UserID").Result()
+	intID, _ := strconv.Atoi(id)
+
+	return a.repo.GetUserInfo(&intID)
 }
 
 func (a *AccountService) GetTrustedDevices() {

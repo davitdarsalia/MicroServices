@@ -5,6 +5,7 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func (h *Handler) UploadProfilePicture(c *gin.Context) {
@@ -56,6 +57,39 @@ func (h *Handler) GetProfileDetails(c *gin.Context) {
 
 }
 func (h *Handler) GetUserInfo(c *gin.Context) {
+
+	p, err := h.services.GetUserInfo()
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, constants.GetUserInfoError)
+		return
+	}
+
+	id, _ := strconv.Atoi(p.UserName)
+
+	c.JSON(http.StatusOK, entities.GetUserInfoResponse{
+		Message: constants.GetUserInfoSuccess,
+		User: entities.User{
+			UserID:         id,
+			PersonalNumber: p.PersonalNumber,
+			PhoneNumber:    p.PhoneNumber,
+			UserName:       p.UserName,
+			Email:          p.Email,
+			FirstName:      p.FirstName,
+			LastName:       p.LastName,
+			IpAddress:      p.IpAddress,
+			Password:       p.Password,
+			Salt:           p.Salt,
+		},
+		ProfileImage:       p.ProfileImage,
+		Followers:          p.Followers,
+		Following:          p.Following,
+		BlockedUsersAmount: p.BlockedUsersAmount,
+		WorkingPlace:       p.WorkingPlace,
+		Education:          p.Education,
+		Origin:             p.Origin,
+		AdditionalEmail:    p.AdditionalEmail,
+	})
 
 }
 func (h *Handler) GetTrustedDevices(c *gin.Context) {

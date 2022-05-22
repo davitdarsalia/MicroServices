@@ -5,10 +5,10 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/entities"
 )
 
-func (r *AccountPostgres) GetProfileDetails(userid *int) (*entities.ProfileDetails, error) {
+func (r *AccountPostgres) GetProfileDetails(userID *int) (*entities.ProfileDetails, error) {
 	var p entities.ProfileDetails
 
-	r.db.QueryRow(constants.GetProfileDetails, userid).Scan(
+	r.db.QueryRow(constants.GetProfileDetails, userID).Scan(
 		&p.ProfileImage,
 		&p.Followers,
 		&p.Following,
@@ -23,8 +23,32 @@ func (r *AccountPostgres) GetProfileDetails(userid *int) (*entities.ProfileDetai
 	return &p, nil
 }
 
-func (r *AccountPostgres) GetUserInfo() {
-	//TODO implement me
+func (r *AccountPostgres) GetUserInfo(userID *int) (*entities.UserInfo, error) {
+	var p entities.UserInfo
+
+	r.db.QueryRow(constants.GetUserInfo, userID).Scan(
+		&p.UserID,
+		&p.PersonalNumber,
+		&p.PhoneNumber,
+		&p.UserName,
+		&p.Email,
+		&p.FirstName,
+		&p.LastName,
+		&p.IpAddress,
+		&p.Password,
+		&p.Salt,
+		&p.ProfileImage,
+		&p.Followers,
+		&p.Following,
+		&p.BlockedUsersAmount,
+		&p.WorkingPlace,
+		&p.Education,
+		&p.Origin,
+		&p.AdditionalEmail,
+		&p.Education,
+	)
+
+	return nil, nil
 }
 
 func (r *AccountPostgres) GetTrustedDevices() {
