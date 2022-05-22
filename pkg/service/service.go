@@ -26,7 +26,7 @@ type Authorization interface {
 // Account TODO - Get, Post , Put Or Update
 type Account interface {
 	GetProfileDetails() (*entities.ProfileDetails, error)
-	GetUserInfo()
+	GetUserInfo() (*entities.UserInfo, error)
 	GetTrustedDevices()
 	GetUserById()
 

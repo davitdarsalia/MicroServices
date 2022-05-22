@@ -9,6 +9,7 @@ const (
 	ResetPasswordError         = "[Reset Password Handler] - Some Of Your Credentials Are Invalid\n Failed To Reset Password"
 	ValidateResetPasswordError = "[Validate Password Handler] - Incorrect Validation Code, Try Again "
 	GetProfileDetailsError     = "[Get Profile Details Handler] - Failed To Fetch Profile Details"
+	GetUserInfoError           = "[Get User Info Handler] - Failed To Fetch UserInfo"
 )
 
 // Success
@@ -18,4 +19,5 @@ const (
 	ResetPasswordSuccess         = "[Reset Password Handler] - Password Email Sent Successfully"
 	ValidateResetPasswordSuccess = "[Validate Password Handler] - Password Changed Successfully"
 	GetProfileDetailsSuccess     = "[Validate Password Handler] - Profile Details Fetched Successfully"
+	GetUserInfoSuccess           = "[Get User Info Handler] - Failed To Fetch UserInfo"
 )

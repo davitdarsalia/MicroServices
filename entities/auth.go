@@ -10,7 +10,7 @@ import (
 type User struct {
 	UserID         int    `json:"user_id"`
 	PersonalNumber string `json:"personal_number" binding:"required"`
-	PhoneNumber    string `json:"phone_number" binding:"required"`
+	PhoneNumber    string `json:"phonenum" binding:"required"`
 	UserName       string `json:"user_name" binding:"required"`
 	Email          string `json:"email" binding:"required"`
 	FirstName      string `json:"first_name" binding:"required"`
