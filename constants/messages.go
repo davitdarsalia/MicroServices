@@ -10,6 +10,7 @@ const (
 	ValidateResetPasswordError = "[Validate Password Handler] - Incorrect Validation Code, Try Again "
 	GetProfileDetailsError     = "[Get Profile Details Handler] - Failed To Fetch Profile Details"
 	GetUserInfoError           = "[Get User Info Handler] - Failed To Fetch UserInfo"
+	UpdateTrustedDevicesError  = "[Update Trusted Devices Handler] - Failed To Add A Trusted Device"
 )
 
 // Success
@@ -20,4 +21,5 @@ const (
 	ValidateResetPasswordSuccess = "[Validate Password Handler] - Password Changed Successfully"
 	GetProfileDetailsSuccess     = "[Validate Password Handler] - Profile Details Fetched Successfully"
 	GetUserInfoSuccess           = "[Get User Info Handler] - Failed To Fetch UserInfo"
+	UpdateTrustedDevicesSuccess  = "[Update Trusted Devices Handler] - Trusted Device Added Successfully"
 )
