@@ -21,7 +21,7 @@ type ResetPasswordResponse struct {
 
 type ValidateResetPasswordResponse struct {
 	Message   string `json:"message"`
-	ResetDate string `json:"reset_date"'`
+	ResetDate string `json:"reset_date"`
 }
 
 type ResetPasswordProfileResponse struct {
@@ -40,4 +40,21 @@ type GetProfileDetailsResponse struct {
 	Origin             string `json:"origin"`
 	AdditionalEmail    string `json:"additional_email"`
 	UserID             string `json:"userid"`
+}
+type GetUserInfoResponse struct {
+	User
+	Message            string `json:"message"`
+	ProfileImage       []byte `json:"profileimage"`
+	Followers          int    `json:"followers"`
+	Following          int    `json:"following"`
+	BlockedUsersAmount int    `json:"blocked_users_amount"`
+	WorkingPlace       string `json:"working_place"`
+	Education          string `json:"education"`
+	Origin             string `json:"origin"`
+	AdditionalEmail    string `json:"additional_email"`
+}
+
+type TrustedDevicesResponse struct {
+	Message string `json:"message"`
+	UserID  string `json:"userid"`
 }

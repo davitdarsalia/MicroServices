@@ -20,13 +20,14 @@ type Authorization interface {
 	ResetPasswordProfile(e *entities.ResetPasswordInput) error
 	RefreshLogin() int
 
+	// ParseToken - Not Endpoint Based Method
 	ParseToken(token string) (int, error)
 }
 
 // Account TODO - Get, Post , Put Or Update
 type Account interface {
 	GetProfileDetails() (*entities.ProfileDetails, error)
-	GetUserInfo()
+	GetUserInfo() (*entities.UserInfo, error)
 	GetTrustedDevices()
 	GetUserById()
 
@@ -37,7 +38,7 @@ type Account interface {
 	LogoutSession()
 
 	UpdateProfileDetails()
-	UpdateTrustedDevices()
+	AddTrustedDevice(d *entities.TrustedDevices) (int, error)
 
 	// SetPasscode - Public/Private Keys
 	SetPasscode()

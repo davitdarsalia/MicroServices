@@ -6,6 +6,12 @@ UPDATE profileactivities set
             last_password_change = '1998-08-08',
             location = 'Tbilisi';
 
+UPDATE trusted_devices set
+            device_id = 1,
+            userid = 23
+    where userid = 23;
+
+
 CREATE TABLE userinfo (
             profileImage  bytea,
             followers INT DEFAULT 0 NOT NULL,
@@ -17,3 +23,4 @@ CREATE TABLE userinfo (
             additional_email VARCHAR(200),
             userid BIGINT REFERENCES users (userid)
 )
+
