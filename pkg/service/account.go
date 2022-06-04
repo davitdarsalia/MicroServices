@@ -2,55 +2,44 @@ package service
 
 import (
 	"fmt"
-	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"log"
 	"strconv"
 )
 
 func (a *AccountService) GetProfileDetails() (*entities.ProfileDetails, error) {
-	id, err := a.redisConn.Get(localContext, "UserID").Result()
+	id := a.getRedisUserID()
 
-	if err != nil {
-		log.Fatalf("%s : %s", err, "RedisGetError")
-	}
-	intID, _ := strconv.Atoi(id)
-
-	return a.repo.GetProfileDetails(&intID)
+	return a.repo.GetProfileDetails(&id)
 }
 
 func (a *AccountService) GetUserInfo() (*entities.UserInfo, error) {
-	id, err := a.redisConn.Get(localContext, constants.RedisID).Result()
-	intID, _ := strconv.Atoi(id)
+	id := a.getRedisUserID()
 
-	if err != nil {
-		log.Fatalf("%s : %s", err, "RedisGetError")
-	}
-
-	return a.repo.GetUserInfo(&intID)
+	return a.repo.GetUserInfo(&id)
 }
 
 func (a *AccountService) GetTrustedDevices() ([]entities.TrustedDevices, error) {
-	id, err := a.redisConn.Get(localContext, constants.RedisID).Result()
-	intID, _ := strconv.Atoi(id)
+	id := a.getRedisUserID()
 
-	if err != nil {
-		log.Fatalf("%s : %s", err, "RedisGetError")
-	}
-
-	return a.repo.GetTrustedDevices(&intID)
+	return a.repo.GetTrustedDevices(&id)
 }
 
-func (a *AccountService) GetUserById() {
-	//TODO implement me
+func (a *AccountService) BlockUser(b *entities.BlockingUser) error {
+	id := a.getRedisUserID()
+
+	b.BlockedAt = formatNowDate()
+
+	return a.repo.BlockUser(&id, b)
 }
 
-func (a *AccountService) BlockUser() {
-	//TODO implement me
-}
+func (a *AccountService) UnblockUser(b *entities.UnblockingUser) error {
+	id := a.getRedisUserID()
 
-func (a *AccountService) UnblockUser() {
-	//TODO implement me
+	fmt.Println(id)
+
+	return a.repo.UnblockUser(&id, b)
+
 }
 
 func (a *AccountService) BlockedUsersList() {
