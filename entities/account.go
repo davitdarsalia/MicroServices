@@ -24,3 +24,11 @@ type UserInfo struct {
 	AdditionalEmail    string `json:"additional_email"`
 	UserID             string `json:"userid"`
 }
+
+type TrustedDevices struct {
+	UserID           string `json:"userid"`
+	DeviceID         int    `json:"device_id"`
+	DeviceName       string `json:"device_name" binding:"required"`
+	DeviceIpAddress  string `json:"device_ip_address"`
+	DeviceIdentifier string `json:"device_identifier"`
+}
