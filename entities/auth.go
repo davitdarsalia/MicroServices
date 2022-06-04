@@ -60,11 +60,11 @@ var (
 	SignKey = os.Getenv("SIGN_IN_KEY")
 	UserCtx = os.Getenv("USER_CONTEXT")
 
-	SendMailFrom = os.Getenv("ROOT_SENDER_MAIL")
-	MailHost     = os.Getenv("MAIL_HOST")
-	MailPort     = os.Getenv("MAIL_PORT")
+	SendMailFrom = "d.app.geo1@gmail.com"
+	MailHost     = "smtp.gmail.com"
+	MailPort     = "587"
 
-	MailAuthPassword = os.Getenv("MAIL_PASSWORD")
+	MailAuthPassword = "David.1998!"
 
 	OtpExpireDate = time.Minute * 1
 )
