@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-gonic/gin"
@@ -57,7 +58,6 @@ func (h *Handler) GetProfileDetails(c *gin.Context) {
 
 }
 func (h *Handler) GetUserInfo(c *gin.Context) {
-
 	p, err := h.services.GetUserInfo()
 
 	if err != nil {
@@ -93,8 +93,31 @@ func (h *Handler) GetUserInfo(c *gin.Context) {
 
 }
 func (h *Handler) GetTrustedDevices(c *gin.Context) {
+}
+
+// AddTrustedDevice TODO - Make Ip Unique For DBMS
+func (h *Handler) AddTrustedDevice(c *gin.Context) {
+	var d entities.TrustedDevices
+
+	if err := c.BindJSON(&d); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	id, err := h.services.Account.AddTrustedDevice(&d)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, constants.UpdateTrustedDevicesError)
+		return
+	}
+
+	c.JSON(http.StatusResetContent, entities.TrustedDevicesResponse{
+		Message: constants.UpdateTrustedDevicesSuccess,
+		UserID:  fmt.Sprintf("%d", id),
+	})
 
 }
+
 func (h *Handler) GetUserById(c *gin.Context) {
 
 }
@@ -116,9 +139,7 @@ func (h *Handler) LogoutSession(c *gin.Context) {
 func (h *Handler) UpdateProfileDetails(c *gin.Context) {
 
 }
-func (h *Handler) UpdateTrustedDevices(c *gin.Context) {
 
-}
 func (h *Handler) SetPasscode(c *gin.Context) {
 
 }
