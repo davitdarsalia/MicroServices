@@ -28,7 +28,7 @@ type Account interface {
 	LogoutSession()
 
 	UpdateProfileDetails()
-	UpdateTrustedDevices()
+	AddTrustedDevice(userID *int, t *entities.TrustedDevices) (int, error)
 
 	// SetPasscode - Public/Private Keys
 	SetPasscode()
