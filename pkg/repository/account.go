@@ -83,8 +83,11 @@ func (r *AccountPostgres) UpdateProfileDetails() {
 	//TODO implement me
 }
 
-func (r *AccountPostgres) UpdateTrustedDevices() {
-	//TODO implement me
+func (r *AccountPostgres) AddTrustedDevice(userID *int, t *entities.TrustedDevices) (int, error) {
+	_, err := r.db.Exec(constants.AddTrustedDevice, *userID,
+		t.DeviceID, t.DeviceName, t.DeviceIpAddress, t.DeviceIdentifier)
+
+	return *userID, err
 }
 
 func (r *AccountPostgres) SetPasscode() {
