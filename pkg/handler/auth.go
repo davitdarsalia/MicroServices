@@ -133,6 +133,7 @@ func (h *Handler) refreshLogin(c *gin.Context) {
 
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, constants.InternalServerError)
+		return
 	}
 
 	c.JSON(http.StatusOK, entities.SignedInUserResponse{
