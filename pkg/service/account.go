@@ -2,31 +2,43 @@ package service
 
 import (
 	"fmt"
+	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"log"
 	"strconv"
 )
 
 func (a *AccountService) GetProfileDetails() (*entities.ProfileDetails, error) {
-	id, _ := a.redisConn.Get(localContext, "UserID").Result()
+	id, err := a.redisConn.Get(localContext, "UserID").Result()
+
+	if err != nil {
+		log.Fatalf("%s : %s", err, "RedisGetError")
+	}
 	intID, _ := strconv.Atoi(id)
 
 	return a.repo.GetProfileDetails(&intID)
 }
 
 func (a *AccountService) GetUserInfo() (*entities.UserInfo, error) {
-	id, err := a.redisConn.Get(localContext, "UserID").Result()
+	id, err := a.redisConn.Get(localContext, constants.RedisID).Result()
 	intID, _ := strconv.Atoi(id)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("%s : %s", err, "RedisGetError")
 	}
 
 	return a.repo.GetUserInfo(&intID)
 }
 
-func (a *AccountService) GetTrustedDevices() {
-	//TODO implement me
+func (a *AccountService) GetTrustedDevices() ([]entities.TrustedDevices, error) {
+	id, err := a.redisConn.Get(localContext, constants.RedisID).Result()
+	intID, _ := strconv.Atoi(id)
+
+	if err != nil {
+		log.Fatalf("%s : %s", err, "RedisGetError")
+	}
+
+	return a.repo.GetTrustedDevices(&intID)
 }
 
 func (a *AccountService) GetUserById() {

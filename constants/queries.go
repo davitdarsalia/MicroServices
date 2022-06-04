@@ -25,4 +25,6 @@ const (
 									 WHERE users.userid = $1`
 	AddTrustedDevice = `INSERT INTO trusteddevices (userid, device_id, device_name, device_ip_address, device_identifier)
 								   VALUES($1, $2, $3 , $4, $5)`
+	GetTrustedDevices = `select userid, device_id, device_name, device_ip_address,device_identifier
+    							   from trusteddevices where userid = $1`
 )

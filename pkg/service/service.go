@@ -28,7 +28,7 @@ type Authorization interface {
 type Account interface {
 	GetProfileDetails() (*entities.ProfileDetails, error)
 	GetUserInfo() (*entities.UserInfo, error)
-	GetTrustedDevices()
+	GetTrustedDevices() ([]entities.TrustedDevices, error)
 	GetUserById()
 
 	BlockUser()
