@@ -54,6 +54,11 @@ type GetUserInfoResponse struct {
 	AdditionalEmail    string `json:"additional_email"`
 }
 
+type GetTrustedDevices struct {
+	Message    string           `json:"message"`
+	DeviceList []TrustedDevices `json:"device_list"`
+}
+
 type TrustedDevicesResponse struct {
 	Message string `json:"message"`
 	UserID  string `json:"userid"`
