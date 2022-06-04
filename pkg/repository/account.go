@@ -1,8 +1,10 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
+	"log"
 )
 
 func (r *AccountPostgres) GetProfileDetails(userID *int) (*entities.ProfileDetails, error) {
@@ -48,11 +50,40 @@ func (r *AccountPostgres) GetUserInfo(userID *int) (*entities.UserInfo, error) {
 		&p.Education,
 	)
 
-	return nil, nil
+	return &p, nil
 }
 
-func (r *AccountPostgres) GetTrustedDevices() {
-	//TODO implement me
+func (r *AccountPostgres) GetTrustedDevices(userID *int) ([]entities.TrustedDevices, error) {
+	var devices []entities.TrustedDevices
+	fmt.Println(devices)
+
+	deviceRows, err := r.db.Query(constants.GetTrustedDevices, userID)
+	defer deviceRows.Close()
+
+	if err != nil {
+		log.Println(err, constants.GetTrustedDevicesError)
+
+	}
+
+	for deviceRows.Next() {
+		var deviceInstance entities.TrustedDevices
+
+		err := deviceRows.Scan(
+			&deviceInstance.UserID,
+			&deviceInstance.DeviceID,
+			&deviceInstance.DeviceName,
+			&deviceInstance.DeviceIpAddress,
+			&deviceInstance.DeviceIdentifier,
+		)
+
+		if err != nil {
+			log.Printf("%s: %s", err, "GetTrustedDevices Repository - Error During Scanning Rows")
+		}
+
+		devices = append(devices, deviceInstance)
+	}
+
+	return devices, nil
 }
 
 func (r *AccountPostgres) GetUserById() {
