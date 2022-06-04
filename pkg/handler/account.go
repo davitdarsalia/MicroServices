@@ -93,6 +93,17 @@ func (h *Handler) GetUserInfo(c *gin.Context) {
 
 }
 func (h *Handler) GetTrustedDevices(c *gin.Context) {
+	p, err := h.services.GetTrustedDevices()
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, constants.GetTrustedDevicesError)
+		return
+	}
+
+	c.JSON(http.StatusOK, entities.GetTrustedDevices{
+		Message:    constants.GetTrustedDevicesSuccess,
+		DeviceList: p,
+	})
 }
 
 // AddTrustedDevice TODO - Make Ip Unique For DBMS
@@ -107,12 +118,12 @@ func (h *Handler) AddTrustedDevice(c *gin.Context) {
 	id, err := h.services.Account.AddTrustedDevice(&d)
 
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, constants.UpdateTrustedDevicesError)
+		newErrorResponse(c, http.StatusInternalServerError, constants.AddTrustedDeviceError)
 		return
 	}
 
 	c.JSON(http.StatusResetContent, entities.TrustedDevicesResponse{
-		Message: constants.UpdateTrustedDevicesSuccess,
+		Message: constants.AddTrustedDeviceSuccess,
 		UserID:  fmt.Sprintf("%d", id),
 	})
 
