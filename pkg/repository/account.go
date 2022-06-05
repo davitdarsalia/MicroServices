@@ -50,6 +50,8 @@ func (r *AccountPostgres) GetUserInfo(userID *int) (*entities.UserInfo, error) {
 		&p.Education,
 	)
 
+	p.Password = ""
+
 	return &p, nil
 }
 
@@ -86,16 +88,16 @@ func (r *AccountPostgres) GetTrustedDevices(userID *int) ([]entities.TrustedDevi
 	return devices, nil
 }
 
-func (r *AccountPostgres) GetUserById() {
-	//TODO implement me
+func (r *AccountPostgres) BlockUser(userID *int, u *entities.BlockingUser) error {
+	_, err := r.db.Exec(constants.BlockUserQuery, userID, u.BlockedUserID, u.BlockedAt)
+
+	return err
 }
 
-func (r *AccountPostgres) BlockUser() {
-	//TODO implement me
-}
+func (r *AccountPostgres) UnblockUser(userID *int, u *entities.UnblockingUser) error {
+	_, err := r.db.Exec(constants.UnblockUserQuery, userID, u.UnblockedUserID)
 
-func (r *AccountPostgres) UnblockUser() {
-	//TODO implement me
+	return err
 }
 
 func (r *AccountPostgres) BlockedUsersList() {

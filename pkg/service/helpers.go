@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"errors"
 	"fmt"
+	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
 	"github.com/dgrijalva/jwt-go"
@@ -14,6 +15,7 @@ import (
 	"math/rand"
 	"net/smtp"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -132,4 +134,23 @@ func generateOTP() (otp string) {
 	otp = fmt.Sprintf("%d", s)
 
 	return
+}
+
+func formatNowDate() string {
+	return time.Now().Format(entities.RegularFormat)
+}
+
+func (a *AccountService) getRedisUserID() int {
+	id, err := a.redisConn.Get(localContext, constants.RedisID).Result()
+
+	if err != nil {
+		log.Printf("%s : %s", err, "RedisGetError")
+	}
+	intID, err := strconv.Atoi(id)
+
+	if err != nil {
+		log.Printf("%s : %s", err, "[Redis] - ParseInt Error")
+	}
+
+	return intID
 }

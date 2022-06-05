@@ -32,3 +32,12 @@ type TrustedDevices struct {
 	DeviceIpAddress  string `json:"device_ip_address"`
 	DeviceIdentifier string `json:"device_identifier"`
 }
+
+type BlockingUser struct {
+	BlockedUserID int    `json:"blocked_user_id" binding:"required"`
+	BlockedAt     string `json:"blocked_at"`
+}
+
+type UnblockingUser struct {
+	UnblockedUserID int `json:"unblocked_user_id" binding:"required"`
+}

@@ -27,4 +27,10 @@ const (
 								   VALUES($1, $2, $3 , $4, $5)`
 	GetTrustedDevices = `select userid, device_id, device_name, device_ip_address,device_identifier
     							   from trusteddevices where userid = $1`
+	BlockUserQuery = `INSERT INTO blockedusers (userid, blocked_user_id, blocked_at) VALUES
+						(
+							$1, $2, $3
+						)`
+	UnblockUserQuery = `DELETE  from blockedusers
+    							   where blocked_user_id = $1 and userid = $2`
 )

@@ -129,13 +129,46 @@ func (h *Handler) AddTrustedDevice(c *gin.Context) {
 
 }
 
-func (h *Handler) GetUserById(c *gin.Context) {
-
-}
 func (h *Handler) BlockUser(c *gin.Context) {
+	var b entities.BlockingUser
+
+	if err := c.BindJSON(&b); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	err := h.services.BlockUser(&b)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, constants.BlockUserError)
+		return
+	}
+
+	c.JSON(http.StatusOK, entities.BlockUserResponse{
+		Message:       constants.BlockUserSuccess,
+		BlockedUserID: b.BlockedUserID,
+	})
 
 }
 func (h *Handler) UnblockUser(c *gin.Context) {
+	var b entities.UnblockingUser
+
+	if err := c.BindJSON(&b); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	err := h.services.UnblockUser(&b)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, constants.UnblockUserError)
+		return
+	}
+
+	c.JSON(http.StatusOK, entities.BlockUserResponse{
+		Message:       constants.UnblockUserSuccess,
+		BlockedUserID: b.UnblockedUserID,
+	})
 
 }
 func (h *Handler) BlockedUsersList(c *gin.Context) {

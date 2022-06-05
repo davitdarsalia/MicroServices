@@ -19,10 +19,9 @@ type Account interface {
 	GetProfileDetails(userID *int) (*entities.ProfileDetails, error)
 	GetUserInfo(userID *int) (*entities.UserInfo, error)
 	GetTrustedDevices(userID *int) ([]entities.TrustedDevices, error)
-	GetUserById()
 
-	BlockUser()
-	UnblockUser()
+	BlockUser(userID *int, u *entities.BlockingUser) error
+	UnblockUser(userID *int, u *entities.UnblockingUser) error
 	BlockedUsersList()
 	UploadProfileImage()
 	LogoutSession()

@@ -1,9 +1,10 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
-	"time"
 )
 
 func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
