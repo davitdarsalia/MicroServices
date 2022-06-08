@@ -32,7 +32,7 @@ type Account interface {
 
 	BlockUser(b *entities.BlockingUser) error
 	UnblockUser(b *entities.UnblockingUser) error
-	BlockedUsersList()
+	BlockedUsersList() ([]entities.BlockedUsersList, error)
 	UploadProfileImage()
 	LogoutSession()
 
