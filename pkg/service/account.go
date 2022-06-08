@@ -36,14 +36,15 @@ func (a *AccountService) BlockUser(b *entities.BlockingUser) error {
 func (a *AccountService) UnblockUser(b *entities.UnblockingUser) error {
 	id := a.getRedisUserID()
 
-	fmt.Println(id)
-
 	return a.repo.UnblockUser(&id, b)
 
 }
 
-func (a *AccountService) BlockedUsersList() {
-	//TODO implement me
+func (a *AccountService) BlockedUsersList() ([]entities.BlockedUsersList, error) {
+	id := a.getRedisUserID()
+	fmt.Println(id)
+
+	return a.repo.BlockedUsersList(&id)
 }
 
 func (a *AccountService) UploadProfileImage() {

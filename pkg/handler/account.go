@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func (h *Handler) UploadProfilePicture(c *gin.Context) {
@@ -172,6 +173,18 @@ func (h *Handler) UnblockUser(c *gin.Context) {
 
 }
 func (h *Handler) BlockedUsersList(c *gin.Context) {
+	userList, err := h.services.BlockedUsersList()
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, constants.GetBlockedUserListError)
+		return
+	}
+
+	c.JSON(http.StatusOK, entities.BlockedUsersListResponse{
+		Message:          constants.GetBlockedUserListSuccess,
+		BlockedUsersList: userList,
+		FetchedAt:        time.Now().Format(entities.RegularFormat),
+	})
 
 }
 func (h *Handler) UploadProfileImage(c *gin.Context) {

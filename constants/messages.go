@@ -14,6 +14,7 @@ const (
 	GetTrustedDevicesError     = "[Get Trusted Devices Handler] - Failed To Fetch Trusted Devices List"
 	BlockUserError             = "[Block User Handler] - Failed To Block User"
 	UnblockUserError           = "[Unblock User Handler] - Failed To Unblock User"
+	GetBlockedUserListError    = "[Blocked Users List Handler] - Failed To Fetch Blocked Users List"
 )
 
 // Success
@@ -28,4 +29,5 @@ const (
 	GetTrustedDevicesSuccess     = "[Get Trusted Devices Handler] - UserInfo Fetched Successfully"
 	BlockUserSuccess             = "[Block User Handler] - User Blocked Successfully"
 	UnblockUserSuccess           = "[Unblock User Handler] - User Unblocked Successfully"
+	GetBlockedUserListSuccess    = "[Blocked Users List Handler] - Blocked Users List Fetched Successfully"
 )

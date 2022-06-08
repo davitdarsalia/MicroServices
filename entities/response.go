@@ -68,3 +68,9 @@ type BlockUserResponse struct {
 	Message       string `json:"message"`
 	BlockedUserID int    `json:"unblocked_user_id"`
 }
+
+type BlockedUsersListResponse struct {
+	Message          string             `json:"Message"`
+	BlockedUsersList []BlockedUsersList `json:"blocked_users_list"`
+	FetchedAt        string             `json:"fetched_at"`
+}
