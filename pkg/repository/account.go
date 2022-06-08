@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"log"
@@ -57,19 +56,16 @@ func (r *AccountPostgres) GetUserInfo(userID *int) (*entities.UserInfo, error) {
 
 func (r *AccountPostgres) GetTrustedDevices(userID *int) ([]entities.TrustedDevices, error) {
 	var devices []entities.TrustedDevices
-	fmt.Println(devices)
 
 	deviceRows, err := r.db.Query(constants.GetTrustedDevices, userID)
 	defer deviceRows.Close()
 
 	if err != nil {
 		log.Println(err, constants.GetTrustedDevicesError)
-
 	}
 
 	for deviceRows.Next() {
 		var deviceInstance entities.TrustedDevices
-
 		err := deviceRows.Scan(
 			&deviceInstance.UserID,
 			&deviceInstance.DeviceID,
@@ -77,11 +73,9 @@ func (r *AccountPostgres) GetTrustedDevices(userID *int) ([]entities.TrustedDevi
 			&deviceInstance.DeviceIpAddress,
 			&deviceInstance.DeviceIdentifier,
 		)
-
 		if err != nil {
-			log.Printf("%s: %s", err, "GetTrustedDevices Repository - Error During Scanning Rows")
+			log.Printf("%s: %s", err, "Get Trusted Devices List Repository - Error During Scanning Rows")
 		}
-
 		devices = append(devices, deviceInstance)
 	}
 
@@ -100,8 +94,33 @@ func (r *AccountPostgres) UnblockUser(userID *int, u *entities.UnblockingUser) e
 	return err
 }
 
-func (r *AccountPostgres) BlockedUsersList() {
-	//TODO implement me
+func (r *AccountPostgres) BlockedUsersList(userID *int) ([]entities.BlockedUsersList, error) {
+	var l []entities.BlockedUsersList
+
+	blockedUsersRows, err := r.db.Query(constants.GetBlockedUsersList, userID)
+	defer blockedUsersRows.Close()
+
+	if err != nil {
+		log.Println(err, constants.GetBlockedUserListError)
+	}
+
+	for blockedUsersRows.Next() {
+		var u entities.BlockedUsersList
+
+		err := blockedUsersRows.Scan(
+			&u.UserID,
+			&u.BlockedUserID,
+			&u.BlockedAt,
+		)
+
+		if err != nil {
+			log.Printf("%s: %s", err, "Get Blocked Users List Repository - Error During Scanning Rows")
+		}
+
+		l = append(l, u)
+	}
+
+	return l, nil
 }
 
 func (r *AccountPostgres) UploadProfileImage() {
