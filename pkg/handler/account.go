@@ -5,36 +5,12 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
 )
-
-func (h *Handler) UploadProfilePicture(c *gin.Context) {
-	//file, handler, err := c.Request.FormFile("profilePic")
-	//
-	//if err != nil {
-	//	log.Fatal(err)
-	//	return
-	//}
-	//
-	//defer file.Close()
-	//
-	//fmt.Printf("Uploaded File: %+v\n", handler.Filename)
-	//fmt.Printf("Size: %+v\n", handler.Size)
-	//fmt.Printf("Mime Header: %+v\n", handler.Header)
-	//
-	//tempFile, err := ioutil.TempFile("temp-images", "upload-*.png")
-	//
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//
-	//defer tempFile.Close()
-	//
-	////fileBytes, err := ioutil.ReadAll(file)
-
-}
 
 func (h *Handler) GetProfileDetails(c *gin.Context) {
 	p, err := h.services.GetProfileDetails()
@@ -188,7 +164,28 @@ func (h *Handler) BlockedUsersList(c *gin.Context) {
 
 }
 func (h *Handler) UploadProfileImage(c *gin.Context) {
+	file, handler, err := c.Request.FormFile("profilePic")
 
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	defer file.Close()
+
+	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
+	fmt.Printf("Size: %+v\n", handler.Size)
+	fmt.Printf("Mime Header: %+v\n", handler.Header)
+
+	tempFile, err := ioutil.TempFile("temp-images", "upload-*.png")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer tempFile.Close()
+
+	//fileBytes, err := ioutil.ReadAll(file)
 }
 func (h *Handler) LogoutSession(c *gin.Context) {
 

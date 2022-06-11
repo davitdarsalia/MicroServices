@@ -1,5 +1,6 @@
 package constants
 
 var (
-	RedisID = "UserID"
+	RedisID   = "UserID"
+	SessionID = "SessionID"
 )
