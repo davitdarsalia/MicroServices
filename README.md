@@ -1,12 +1,3 @@
-# B_MicroServices
+API Documentation
 
-$BaseURL$/api/auth/sign-up
-
-$BaseURL$/api/auth/sign-in 
-
-$BaseURL$/api/auth/reset-password
-
-$BaseURL$/api/auth/verify-reset-email
-
-
-
+https://app.swaggerhub.com/apis-docs/davitdarsalia/ECommerceMicroservices/0.1#/
