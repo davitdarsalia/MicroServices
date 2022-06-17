@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-contrib/sessions"
@@ -23,11 +24,10 @@ func (h *Handler) checkAuth(c *gin.Context) {
 		return
 	}
 
-	// Replace username with UserID
 	userId, err := h.services.ParseToken(headerSlice[1])
 
 	if err != nil {
-		newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		newErrorResponse(c, http.StatusMovedPermanently, fmt.Sprintf("%s : \n %s", constants.InvalidAuthError, err.Error()))
 		return
 	}
 
