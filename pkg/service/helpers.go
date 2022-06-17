@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"crypto/sha1"
 	"crypto/sha256"
 	"errors"
 	"fmt"
@@ -51,9 +52,11 @@ func NewSettingsService(r repository.Settings, redisConn *redis.Client) *Setting
 // Non Interface Methods
 
 func (s *AuthService) GenerateToken(userID int) (string, error) {
+	e, _ := strconv.Atoi(os.Getenv("ACCESS_TOKEN_EXP"))
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, entities.CustomToken{
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute * 2).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * time.Duration(e)).Unix(),
 			Id:        fmt.Sprintf("%d", userID),
 			IssuedAt:  time.Now().Unix(),
 			Issuer:    os.Getenv("ISSUER"),
@@ -85,6 +88,15 @@ func (s *AuthService) ParseToken(token string) (int, error) {
 	}
 
 	return claims.UserID, nil
+}
+
+func (s *AuthService) GenerateSessionID() string {
+	userID, _ := s.redisConn.Get(localContext, constants.RedisID).Result()
+	i := sha1.New()
+	i.Write([]byte(userID))
+
+	return fmt.Sprintf("%x", i.Sum([]byte(generateUniqueSalt(20))))
+
 }
 
 func generateHash(password string, salt string) string {
