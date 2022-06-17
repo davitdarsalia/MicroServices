@@ -15,6 +15,7 @@ const (
 	BlockUserError             = "[Block User Handler] - Failed To Block User"
 	UnblockUserError           = "[Unblock User Handler] - Failed To Unblock User"
 	GetBlockedUserListError    = "[Blocked Users List Handler] - Failed To Fetch Blocked Users List"
+	GetSessionIDError          = "[Session Manager || Middleware ||] - Unauthorized"
 )
 
 // Success

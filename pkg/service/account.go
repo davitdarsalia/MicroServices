@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"log"
 	"strconv"
@@ -51,8 +52,12 @@ func (a *AccountService) UploadProfileImage() {
 	//TODO implement me
 }
 
-func (a *AccountService) LogoutSession() {
-	//TODO implement me
+func (a *AccountService) LogoutSession() error {
+	a.redisConn.Append(localContext, constants.SessionID, constants.NotValidMark)
+	s, _ := a.redisConn.Get(localContext, constants.SessionID).Result()
+
+	fmt.Println(s)
+	return nil
 }
 
 func (a *AccountService) UpdateProfileDetails() {
