@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"log"
 	"strconv"
@@ -28,10 +29,18 @@ func (s *AuthService) CheckUser(username, password string) (string, error) {
 	salt, _ := s.redisConn.Get(localContext, "UniqueSalt").Result()
 	user, err := s.repo.CheckUser(username, generateHash(password, salt))
 
-	s.redisConn.Set(localContext, "UserID", user.UserID, 0)
+	// TODO - Clear all previous redis keys
+
+	s.redisConn.Set(localContext, constants.RedisID, user.UserID, 0)
+
+	// TODO - Ensure, that redis key can be appendable only one time with InvalidID constant
 
 	if err != nil {
 		return "", err
+	}
+
+	if err == nil {
+		s.redisConn.Set(localContext, constants.SessionID, s.GenerateSessionID(), 0)
 	}
 
 	return entities.GenerateToken(user.UserID)
