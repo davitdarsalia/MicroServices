@@ -26,8 +26,17 @@ func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 }
 
 func (s *AuthService) CheckUser(username, password string) (string, error) {
-	salt, _ := s.redisConn.Get(localContext, "UniqueSalt").Result()
-	user, err := s.repo.CheckUser(username, generateHash(password, salt))
+	c := make(chan string)
+	defer func() {
+		close(c)
+	}()
+
+	go func() {
+		salt, _ := s.redisConn.Get(localContext, "UniqueSalt").Result()
+		c <- salt
+	}()
+
+	user, err := s.repo.CheckUser(username, generateHash(password, <-c))
 
 	// TODO - Clear all previous redis keys
 
@@ -40,7 +49,7 @@ func (s *AuthService) CheckUser(username, password string) (string, error) {
 	}
 
 	if err == nil {
-		s.redisConn.Set(localContext, constants.SessionID, s.GenerateSessionID(), 0)
+		go s.redisConn.Set(localContext, constants.SessionID, s.GenerateSessionID(), 0)
 	}
 
 	return entities.GenerateToken(user.UserID)
@@ -72,8 +81,18 @@ func (s *AuthService) ValidateResetEmail(e *entities.ValidateResetEmail) error {
 }
 
 func (s *AuthService) ResetPasswordProfile(e *entities.ResetPasswordInput) error {
-	salt, _ := s.redisConn.Get(localContext, "UniqueSalt").Result()
-	e.NewPassword = generateHash(e.NewPassword, salt)
+	c := make(chan string, 1)
+	defer func() {
+		close(c)
+	}()
+
+	go func() {
+		salt, _ := s.redisConn.Get(localContext, "UniqueSalt").Result()
+		c <- salt
+	}()
+
+	e.NewPassword = generateHash(e.NewPassword, <-c)
+
 	err := s.repo.ResetPasswordProfile(e)
 
 	return err
@@ -81,13 +100,23 @@ func (s *AuthService) ResetPasswordProfile(e *entities.ResetPasswordInput) error
 }
 
 func (s *AuthService) RefreshLogin() int {
-	id, err := s.redisConn.Get(localContext, "UserID").Result()
+	c := make(chan string, 1)
+	defer func() {
+		close(c)
+	}()
 
-	if err != nil {
-		log.Fatal("Redis Get UserID Error")
-	}
+	go func() {
+		id, err := s.redisConn.Get(localContext, constants.RedisID).Result()
 
-	intID, err := strconv.Atoi(id)
+		c <- id
+
+		if err != nil {
+			log.Fatal("Redis Get UserID Error")
+		}
+
+	}()
+
+	intID, err := strconv.Atoi(<-c)
 
 	if err != nil {
 		log.Fatal("ParseInt Error")

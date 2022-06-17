@@ -2,6 +2,7 @@ package constants
 
 // Errors
 const (
+	InvalidAuthError           = "[Auth Checking Middleware] - Invalid Auth Internals"
 	UserNotFoundError          = "[LogIn Handler] - User Not Found"
 	BadRequest                 = "[All Handlers] - Some Of Your Credentials Are Missing"
 	InternalServerError        = "[All Handlers] - Internal Server Error"

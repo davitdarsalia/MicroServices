@@ -15,18 +15,27 @@ func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 }
 
 func (r *AuthPostgres) CheckUser(username, password string) (entities.User, error) {
+	c := make(chan error, 1)
 	var u entities.User
-	err := r.db.Get(&u, constants.CheckUserQuery, username, password)
 
-	return u, err
+	go func() {
+		c <- r.db.Get(&u, constants.CheckUserQuery, username, password)
+	}()
+
+	defer close(c)
+	return u, <-c
 }
 
 func (r *AuthPostgres) ResetPassword(p *entities.ResetPassword) (string, error) {
 	var userID string
-	err := r.db.Get(&userID, constants.CheckUserByEmail, p.Email, p.UserName, p.PersonalNumber)
+	c := make(chan error, 1)
 
-	if err != nil {
-		return "", err
+	go func() {
+		c <- r.db.Get(&userID, constants.CheckUserByEmail, p.Email, p.UserName, p.PersonalNumber)
+	}()
+
+	if <-c != nil {
+		return "", <-c
 	}
 
 	return userID, nil
@@ -46,8 +55,4 @@ func (r *AuthPostgres) ResetPasswordProfile(e *entities.ResetPasswordInput) erro
 	_, err = r.db.Exec(constants.UpdatePasswordFromProfile, e.NewPassword, e.UserName)
 
 	return err
-}
-
-func (r *AuthPostgres) RefreshLogin() {
-
 }

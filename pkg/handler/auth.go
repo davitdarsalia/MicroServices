@@ -97,7 +97,6 @@ func (h *Handler) validateResetEmail(c *gin.Context) {
 	})
 }
 
-// Start Here
 func (h *Handler) resetPasswordProfile(c *gin.Context) {
 	var refreshInput entities.ResetPasswordInput
 
