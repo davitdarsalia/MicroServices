@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -30,4 +32,16 @@ func (h *Handler) checkAuth(c *gin.Context) {
 	}
 
 	c.Set(entities.UserCtx, userId)
+}
+
+func (h *Handler) SessionManager(c *gin.Context) {
+	s := sessions.Default(c)
+	sID := s.Get(constants.SessionID)
+
+	if sID == nil {
+		newErrorResponse(c, http.StatusNotFound, constants.GetSessionIDError)
+		c.Abort()
+		return
+	}
+
 }

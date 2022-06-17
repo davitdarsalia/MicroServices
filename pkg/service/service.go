@@ -34,7 +34,7 @@ type Account interface {
 	UnblockUser(b *entities.UnblockingUser) error
 	BlockedUsersList() ([]entities.BlockedUsersList, error)
 	UploadProfileImage()
-	LogoutSession()
+	LogoutSession() error
 
 	UpdateProfileDetails()
 	AddTrustedDevice(d *entities.TrustedDevices) (int, error)
