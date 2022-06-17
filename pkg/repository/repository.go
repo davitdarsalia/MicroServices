@@ -11,7 +11,6 @@ type Authorization interface {
 	ResetPassword(p *entities.ResetPassword) (string, error)
 	ValidateResetEmail(p *entities.ValidateResetEmail) error
 	ResetPasswordProfile(p *entities.ResetPasswordInput) error
-	RefreshLogin()
 }
 
 // Account - TODO // Implement These Methods
