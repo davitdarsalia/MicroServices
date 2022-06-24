@@ -64,6 +64,12 @@ func (a *AccountService) UploadProfileImage(c *gin.Context, f multipart.File, up
 	return a.repo.UploadProfileImage(encodedProfileImage, id, uploadTime)
 }
 
+func (a *AccountService) GetImages() ([]entities.Image, error) {
+	id := a.getRedisUserID()
+
+	return a.repo.GetImages(&id)
+}
+
 func (a *AccountService) LogoutSession() error {
 	a.redisConn.Append(localContext, constants.SessionID, constants.NotValidMark)
 	s, _ := a.redisConn.Get(localContext, constants.SessionID).Result()

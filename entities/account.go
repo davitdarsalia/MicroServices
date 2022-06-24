@@ -41,8 +41,16 @@ type BlockingUser struct {
 type UnblockingUser struct {
 	UnblockedUserID int `json:"unblocked_user_id" binding:"required"`
 }
+
 type BlockedUsersList struct {
 	UserID        string `json:"userid""`
 	BlockedUserID string `json:"blocked_user_id"`
 	BlockedAt     string `json:"blocked_at"`
+}
+
+type Image struct {
+	Image          string `json:"profileimage"`
+	UploadedAt     string `json:"uploadedat"`
+	ImageID        string `json:"imageid"`
+	IsProfileImage bool   `json:"isprofileimage"`
 }

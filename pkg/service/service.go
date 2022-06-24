@@ -31,6 +31,7 @@ type Account interface {
 	GetProfileDetails() (*entities.ProfileDetails, error)
 	GetUserInfo() (*entities.UserInfo, error)
 	GetTrustedDevices() ([]entities.TrustedDevices, error)
+	GetImages() ([]entities.Image, error)
 
 	BlockUser(b *entities.BlockingUser) error
 	UnblockUser(b *entities.UnblockingUser) error

@@ -30,6 +30,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			account.GET("/profile-details", h.GetProfileDetails)
 			account.GET("/user-info", h.GetUserInfo)
 			account.GET("/trusted-devices-list", h.GetTrustedDevices)
+			account.GET("/get-images", h.GetImages)
 			account.PUT("/add-trusted-device", h.AddTrustedDevice)
 			account.POST("/block-user", h.BlockUser)
 			account.POST("/unblock-user", h.UnblockUser)
