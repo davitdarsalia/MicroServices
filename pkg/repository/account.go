@@ -123,8 +123,8 @@ func (r *AccountPostgres) BlockedUsersList(userID *int) ([]entities.BlockedUsers
 	return l, nil
 }
 
-func (r *AccountPostgres) UploadProfileImage(f string, userID int) error {
-	_, err := r.db.Exec(constants.AddProfileImage, userID, f)
+func (r *AccountPostgres) UploadProfileImage(f string, userID int, uploadTime *string) error {
+	_, err := r.db.Exec(constants.AddProfileImage, userID, f, *uploadTime)
 
 	return err
 }

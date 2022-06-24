@@ -35,7 +35,7 @@ type Account interface {
 	BlockUser(b *entities.BlockingUser) error
 	UnblockUser(b *entities.UnblockingUser) error
 	BlockedUsersList() ([]entities.BlockedUsersList, error)
-	UploadProfileImage(c *gin.Context, f multipart.File) error
+	UploadProfileImage(c *gin.Context, f multipart.File, uploadTime *string) error
 	LogoutSession() error
 
 	UpdateProfileDetails()

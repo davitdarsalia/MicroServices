@@ -53,7 +53,7 @@ func (a *AccountService) BlockedUsersList() ([]entities.BlockedUsersList, error)
 	return a.repo.BlockedUsersList(&id)
 }
 
-func (a *AccountService) UploadProfileImage(c *gin.Context, f multipart.File) error {
+func (a *AccountService) UploadProfileImage(c *gin.Context, f multipart.File, uploadTime *string) error {
 	id := a.getRedisUserID()
 
 	reader := bufio.NewReader(f)
@@ -61,7 +61,7 @@ func (a *AccountService) UploadProfileImage(c *gin.Context, f multipart.File) er
 
 	encodedProfileImage := base64.StdEncoding.EncodeToString(contentBytes)
 
-	return a.repo.UploadProfileImage(encodedProfileImage, id)
+	return a.repo.UploadProfileImage(encodedProfileImage, id, uploadTime)
 }
 
 func (a *AccountService) LogoutSession() error {
