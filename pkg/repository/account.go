@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"log"
@@ -127,6 +128,35 @@ func (r *AccountPostgres) UploadProfileImage(f string, userID int, uploadTime *s
 	_, err := r.db.Exec(constants.AddProfileImage, userID, f, *uploadTime)
 
 	return err
+}
+
+func (r *AccountPostgres) GetImages(userID *int) ([]entities.Image, error) {
+	var images []entities.Image
+
+	imageRows, err := r.db.Query(constants.GetImages, userID)
+	fmt.Println(imageRows, err)
+	defer imageRows.Close()
+
+	if err != nil {
+		log.Println(err, constants.GetImageErrors)
+	}
+
+	for imageRows.Next() {
+		var imageInstance entities.Image
+		err := imageRows.Scan(
+			&imageInstance.Image,
+			&imageInstance.UploadedAt,
+			&imageInstance.ImageID,
+			&imageInstance.IsProfileImage,
+		)
+
+		if err != nil {
+			log.Printf("%s: %s", err, "Get Images List Repository - Error During Scanning Rows")
+		}
+		images = append(images, imageInstance)
+	}
+
+	return images, nil
 }
 
 func (r *AccountPostgres) LogoutSession() {

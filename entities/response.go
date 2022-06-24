@@ -79,3 +79,8 @@ type UploadProfileImageResponse struct {
 	Message    string `json:"message"`
 	UploadedAt string `json:"uploaded_at"`
 }
+
+type GetImagesResponse struct {
+	Message string  `json:"message"`
+	Images  []Image `json:"images"`
+}

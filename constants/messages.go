@@ -18,6 +18,7 @@ const (
 	GetBlockedUserListError      = "[Blocked Users List Handler] - Failed To Fetch Blocked Users List"
 	GetSessionIDError            = "[Session Manager || Middleware ||] - Unauthorized"
 	ProfileImageWithoutFileError = "[Profile Image Handler] - File Is Missing. Please, Upload  A File"
+	GetImageErrors               = "[Image Getter Handler] - Failed To Fetch User Images"
 )
 
 // Success
@@ -34,4 +35,5 @@ const (
 	UnblockUserSuccess           = "[Unblock User Handler] - User Unblocked Successfully"
 	GetBlockedUserListSuccess    = "[Blocked Users List Handler] - Blocked Users List Fetched Successfully"
 	ProfileImageUploadSuccess    = "[Profile Image Handler] - Profile Image Uploaded Successfully"
+	GetImageSuccess              = "[Image Getter Handler] - Images Fetched Successfully"
 )

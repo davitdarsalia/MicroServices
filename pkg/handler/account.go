@@ -184,6 +184,22 @@ func (h *Handler) UploadProfileImage(c *gin.Context) {
 	})
 
 }
+
+func (h *Handler) GetImages(c *gin.Context) {
+	images, err := h.services.GetImages()
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, constants.GetImageErrors)
+		return
+	}
+
+	c.JSON(http.StatusOK, entities.GetImagesResponse{
+		Message: constants.GetImageSuccess,
+		Images:  images,
+	})
+
+}
+
 func (h *Handler) LogoutSession(c *gin.Context) {
 	err := h.services.LogoutSession()
 	fmt.Println(err)

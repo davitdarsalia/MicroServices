@@ -35,4 +35,5 @@ const (
     							   where blocked_user_id = $1 and userid = $2`
 	GetBlockedUsersList = `SELECT * FROM blockedusers WHERE userid = $1`
 	AddProfileImage     = `INSERT INTO image (userid, profileimage, uploadedat) VALUES ($1, $2, $3)`
+	GetImages           = `SELECT profileimage, uploadedat, imageid, isprofileimage FROM image WHERE userid = $1 `
 )
