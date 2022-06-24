@@ -22,7 +22,7 @@ type Account interface {
 	BlockUser(userID *int, u *entities.BlockingUser) error
 	UnblockUser(userID *int, u *entities.UnblockingUser) error
 	BlockedUsersList(userID *int) ([]entities.BlockedUsersList, error)
-	UploadProfileImage()
+	UploadProfileImage(f string, userID int) error
 	LogoutSession()
 
 	UpdateProfileDetails()

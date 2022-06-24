@@ -3,7 +3,9 @@ package service
 import (
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
+	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+	"mime/multipart"
 )
 
 type Service struct {
@@ -33,7 +35,7 @@ type Account interface {
 	BlockUser(b *entities.BlockingUser) error
 	UnblockUser(b *entities.UnblockingUser) error
 	BlockedUsersList() ([]entities.BlockedUsersList, error)
-	UploadProfileImage()
+	UploadProfileImage(c *gin.Context, f multipart.File) error
 	LogoutSession() error
 
 	UpdateProfileDetails()

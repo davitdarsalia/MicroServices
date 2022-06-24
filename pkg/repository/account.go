@@ -123,8 +123,10 @@ func (r *AccountPostgres) BlockedUsersList(userID *int) ([]entities.BlockedUsers
 	return l, nil
 }
 
-func (r *AccountPostgres) UploadProfileImage() {
-	//TODO implement me
+func (r *AccountPostgres) UploadProfileImage(f string, userID int) error {
+	_, err := r.db.Exec(constants.AddProfileImage, userID, f)
+
+	return err
 }
 
 func (r *AccountPostgres) LogoutSession() {

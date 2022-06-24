@@ -1,10 +1,15 @@
 package service
 
 import (
+	"bufio"
+	"encoding/base64"
 	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
+	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"strconv"
 )
 
@@ -48,8 +53,15 @@ func (a *AccountService) BlockedUsersList() ([]entities.BlockedUsersList, error)
 	return a.repo.BlockedUsersList(&id)
 }
 
-func (a *AccountService) UploadProfileImage() {
-	//TODO implement me
+func (a *AccountService) UploadProfileImage(c *gin.Context, f multipart.File) error {
+	id := a.getRedisUserID()
+
+	reader := bufio.NewReader(f)
+	contentBytes, _ := ioutil.ReadAll(reader)
+
+	encodedProfileImage := base64.StdEncoding.EncodeToString(contentBytes)
+
+	return a.repo.UploadProfileImage(encodedProfileImage, id)
 }
 
 func (a *AccountService) LogoutSession() error {

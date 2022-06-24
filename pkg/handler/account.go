@@ -162,6 +162,28 @@ func (h *Handler) BlockedUsersList(c *gin.Context) {
 
 }
 func (h *Handler) UploadProfileImage(c *gin.Context) {
+	file, header, err := c.Request.FormFile(constants.ProfileImageFormFileHeader)
+
+	// Checking For Nullable Header - File Size
+	if header.Size == 0 || err != nil {
+		newErrorResponse(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+	err = h.services.UploadProfileImage(c, file)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, constants.ProfileImageWithoutFileError)
+		return
+	}
+
+	fmt.Println(file)
+
+	uploadTime := time.Now().Format(entities.RegularFormat)
+
+	c.JSON(http.StatusResetContent, entities.UploadProfileImageResponse{
+		Message:    constants.ProfileImageUploadSuccess,
+		UploadedAt: uploadTime,
+	})
 
 }
 func (h *Handler) LogoutSession(c *gin.Context) {

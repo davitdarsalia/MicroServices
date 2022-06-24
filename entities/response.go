@@ -74,3 +74,8 @@ type BlockedUsersListResponse struct {
 	BlockedUsersList []BlockedUsersList `json:"blocked_users_list"`
 	FetchedAt        string             `json:"fetched_at"`
 }
+
+type UploadProfileImageResponse struct {
+	Message    string `json:"message"`
+	UploadedAt string `json:"uploaded_at"`
+}
