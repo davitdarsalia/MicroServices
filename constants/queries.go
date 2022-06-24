@@ -34,4 +34,5 @@ const (
 	UnblockUserQuery = `DELETE  from blockedusers
     							   where blocked_user_id = $1 and userid = $2`
 	GetBlockedUsersList = `SELECT * FROM blockedusers WHERE userid = $1`
+	AddProfileImage     = `INSERT INTO image (userid, profileimage) VALUES ($1, $2)`
 )
