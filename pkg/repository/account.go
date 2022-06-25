@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"log"
@@ -134,7 +133,7 @@ func (r *AccountPostgres) GetImages(userID *int) ([]entities.Image, error) {
 	var images []entities.Image
 
 	imageRows, err := r.db.Query(constants.GetImages, userID)
-	fmt.Println(imageRows, err)
+
 	defer imageRows.Close()
 
 	if err != nil {
