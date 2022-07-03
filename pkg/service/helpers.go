@@ -99,13 +99,6 @@ func (s *AuthService) GenerateSessionID() string {
 
 }
 
-func generateHash(password string, salt string) string {
-	hash := sha256.New()
-	hash.Write([]byte(password))
-
-	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
-}
-
 func generateUniqueSalt(bytesAmount int) string {
 	var saltBytes []byte
 
@@ -115,6 +108,12 @@ func generateUniqueSalt(bytesAmount int) string {
 	return string(saltBytes)
 }
 
+func generateHash(password string, salt string) string {
+	hash := sha256.New()
+	hash.Write([]byte(password))
+
+	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
+}
 func generateRandNumber(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 
