@@ -8,17 +8,18 @@ import (
 
 var authServiceInstance = NewAuthService(nil, nil)
 
+var randInstance = rand.Intn(150000)
+
 func TestTokenGenerator(t *testing.T) {
 	rand.Seed(time.Now().Unix())
 
 	for i := 0; i < 100; i++ {
-		randIdInstance := rand.Intn(150000)
-		token, err := authServiceInstance.GenerateToken(randIdInstance)
+		token, err := authServiceInstance.GenerateToken(randInstance)
 
 		if len(token) < 273 && len(token) > 321 && err != nil {
 			t.Errorf("Incorrect Type Of Token")
 		} else {
-			t.Logf("Input %v, Result Is: %v", randIdInstance, "Positive")
+			t.Logf("Input %v, Result Is: %v", randInstance, "Positive")
 		}
 	}
 
@@ -66,5 +67,19 @@ func TestTokenParser(t *testing.T) {
 			t.Logf("Result %v, Token Is Correct", res)
 		}
 
+	}
+}
+
+func TestGenerateUniqueSalt(t *testing.T) {
+	rand.Seed(time.Now().Unix())
+
+	for i := 0; i < 200; i++ {
+		n := rand.Intn(randInstance)
+		res := generateUniqueSalt(n)
+
+		if len(res) < n || len(res) > n {
+			t.Errorf("Incorrect Byte Generation")
+			t.Fail()
+		}
 	}
 }
