@@ -16,14 +16,24 @@ require (
 )
 
 require (
+	github.com/BurntSushi/toml v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
+	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.2 // indirect
 	github.com/rs/xid v1.4.0 // indirect
+	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/stretchr/testify v1.8.0 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
+	golang.org/x/exp/typeparams v0.0.0-20220613132600-b0d781184e0d // indirect
 	golang.org/x/net v0.0.0-20220607020251-c690dde0001d // indirect
-	golang.org/x/sys v0.0.0-20220610221304-9f5ed59c137d // indirect
+	golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f // indirect
+	golang.org/x/sys v0.0.0-20220702020025-31831981b65f // indirect
+	golang.org/x/tools v0.1.11 // indirect
+	golang.org/x/tools/gopls v0.8.4 // indirect
+	golang.org/x/vuln v0.0.0-20220701175437-1cec1460acbd // indirect
+	honnef.co/go/tools v0.3.2 // indirect
+	mvdan.cc/gofumpt v0.3.1 // indirect
 )
