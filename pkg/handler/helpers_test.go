@@ -10,9 +10,8 @@ func TestRefreshToken(t *testing.T) {
 
 	assert := assert.New(t)
 
-	res := newRefreshToken()
-
 	for i := 0; i < 150; i++ {
+		res := newRefreshToken()
 		t.Logf("Result: %v ", res)
 
 		if len(res) != tokenLength {
