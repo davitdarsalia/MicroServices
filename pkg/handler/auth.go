@@ -24,7 +24,7 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, entities.RegisteredUserResponse{
+	c.SecureJSON(http.StatusCreated, entities.RegisteredUserResponse{
 		UserId:    id,
 		Message:   constants.CreatedUserSuccess,
 		CreatedAt: time.Now().Format(entities.RegularFormat),
@@ -46,7 +46,7 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, entities.SignedInUserResponse{
+	c.SecureJSON(http.StatusOK, entities.SignedInUserResponse{
 		Message:         constants.SuccessfulSignIn,
 		AccessToken:     token,
 		AccessTokenExp:  os.Getenv("ACCESS_TOKEN_EXP"),
