@@ -10,7 +10,7 @@ type Handler struct {
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
-	r := gin.New()
+	r := gin.Default()
 
 	auth := r.Group("/api/auth")
 	{
