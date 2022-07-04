@@ -67,6 +67,7 @@ func TestSessionIDManager(t *testing.T) {
 
 		if n := assert.NotNil(res); !n {
 			t.Errorf("Incorrect: Expected %v, But Got: %v", "Session ID", "Empty String")
+			t.Fail()
 		}
 
 	}
