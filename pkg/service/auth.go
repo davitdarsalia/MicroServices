@@ -23,6 +23,7 @@ func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 	}
 
 	return s.repo.RegisterUser(u)
+
 }
 
 func (s *AuthService) CheckUser(username, password string) (string, error) {
