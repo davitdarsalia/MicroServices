@@ -17,6 +17,17 @@ import (
 	"syscall"
 )
 
+// @title E_Commerce Microservices
+// @version 0.1
+// @description Endpoints for Authorization, Account, Settings, Payments
+
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+
 func main() {
 	go logrus.SetFormatter(new(logrus.JSONFormatter))
 
