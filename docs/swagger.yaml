@@ -287,6 +287,41 @@ paths:
       summary: SignUp Handler
       tags:
       - Auth
+  /api/auth/verify-reset-email:
+    post:
+      consumes:
+      - application/json
+      description: Validation Of Reset Password (Code Is Sent To Gmail)
+      operationId: validate-reset-password
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ValidateResetEmail'
+      produces:
+      - application/json
+      responses:
+        "205":
+          description: Reset Content
+          schema:
+            $ref: '#/definitions/entities.ValidateResetPasswordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Validate Reset Password Mail Handler (Code)
+      tags:
+      - Auth
 securityDefinitions:
   ApiKeyAuth:
     in: header
