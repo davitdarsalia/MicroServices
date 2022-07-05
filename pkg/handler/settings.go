@@ -2,30 +2,30 @@ package handler
 
 import "github.com/gin-gonic/gin"
 
-func (h *Handler) GetProfileSettings(c *gin.Context) {
+func (h *Handler) getProfileSettings(c *gin.Context) {
 
 }
-func (h *Handler) GetNotificationSettings(c *gin.Context) {
+func (h *Handler) getNotificationSettings(c *gin.Context) {
 
 }
-func (h *Handler) GetPaymentOptions(c *gin.Context) {
+func (h *Handler) getPaymentOptions(c *gin.Context) {
 
 }
-func (h *Handler) GetPrivacySettings(c *gin.Context) {
+func (h *Handler) getPrivacySettings(c *gin.Context) {
 
 }
-func (h *Handler) GetSecuritySettings(c *gin.Context) {
+func (h *Handler) getSecuritySettings(c *gin.Context) {
 
 }
-func (h *Handler) UpdateNotificationSettings(c *gin.Context) {
+func (h *Handler) updateNotificationSettings(c *gin.Context) {
 
 }
-func (h *Handler) UpdatePaymentOptions(c *gin.Context) {
+func (h *Handler) updatePaymentOptions(c *gin.Context) {
 
 }
-func (h *Handler) UpdatePrivacySettings(c *gin.Context) {
+func (h *Handler) updatePrivacySettings(c *gin.Context) {
 
 }
-func (h *Handler) UpdateSecuritySettings(c *gin.Context) {
+func (h *Handler) updateSecuritySettings(c *gin.Context) {
 
 }
