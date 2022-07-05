@@ -20,8 +20,24 @@ type User struct {
 	Salt           []byte `json:"salt"`
 }
 
+type UserRegInput struct {
+	PersonalNumber string `json:"personal_number" binding:"required"`
+	PhoneNumber    string `json:"phonenum" binding:"required"`
+	UserName       string `json:"user_name" binding:"required"`
+	Email          string `json:"email" binding:"required"`
+	FirstName      string `json:"first_name" binding:"required"`
+	LastName       string `json:"last_name" binding:"required"`
+	IpAddress      string `json:"ip_address" binding:"required"`
+	Password       string `json:"password" binding:"required"`
+}
+
 type UserInput struct {
 	UserId   string `json:"user_id" db:"user_id"`
+	UserName string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+type UserInputWithoutID struct {
 	UserName string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }

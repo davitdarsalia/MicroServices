@@ -1,8 +1,13 @@
 package handler
 
 import (
+	_ "github.com/davitdarsalia/LendAppBackend/docs"
 	"github.com/davitdarsalia/LendAppBackend/pkg/service"
 	"github.com/gin-gonic/gin"
+	_ "github.com/swaggo/files"
+	swaggerFiles "github.com/swaggo/files"
+	_ "github.com/swaggo/gin-swagger"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Handler struct {
@@ -11,6 +16,11 @@ type Handler struct {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	r := gin.Default()
+
+	swaggerDocs := r.Group("/swagger")
+	{
+		swaggerDocs.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	auth := r.Group("/api/auth")
 	{
@@ -27,31 +37,31 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		account := protected.Group("/account", h.checkAuth)
 		{
-			account.GET("/profile-details", h.GetProfileDetails)
-			account.GET("/user-info", h.GetUserInfo)
-			account.GET("/trusted-devices-list", h.GetTrustedDevices)
-			account.GET("/get-images", h.GetImages)
-			account.PUT("/add-trusted-device", h.AddTrustedDevice)
-			account.POST("/block-user", h.BlockUser)
-			account.POST("/unblock-user", h.UnblockUser)
-			account.GET("/blocked-user-list", h.BlockedUsersList)
-			account.POST("/upload-profile-image", h.UploadProfileImage)
-			account.POST("/logout", h.LogoutSession)
-			account.PUT("/update-profile-details", h.UpdateProfileDetails)
-			account.POST("/set-passcode", h.SetPasscode)
+			account.GET("/profile-details", h.getProfileDetails)
+			account.GET("/user-info", h.getUserInfo)
+			account.GET("/trusted-devices-list", h.getTrustedDevices)
+			account.GET("/get-images", h.getImages)
+			account.PUT("/add-trusted-device", h.addTrustedDevice)
+			account.POST("/block-user", h.blockUser)
+			account.POST("/unblock-user", h.unblockUser)
+			account.GET("/blocked-user-list", h.blockedUsersList)
+			account.POST("/upload-profile-image", h.uploadProfileImage)
+			account.POST("/logout", h.logoutSession)
+			account.PUT("/update-profile-details", h.updateProfileDetails)
+			account.POST("/set-passcode", h.setPasscode)
 		}
 
 		settings := protected.Group("/settings", h.checkAuth, h.SessionManager)
 		{
-			settings.GET("/profile-settings", h.GetProfileSettings)
-			settings.GET("/notification-settings", h.GetNotificationSettings)
-			settings.GET("/payment-options", h.GetPaymentOptions)
-			settings.GET("/privacy-settings", h.GetPrivacySettings)
-			settings.GET("/security-settings", h.GetSecuritySettings)
-			settings.GET("/update-notification-settings", h.UpdateNotificationSettings)
-			settings.GET("/update-payment-options", h.UpdatePaymentOptions)
-			settings.GET("/update-privacy-settings", h.UpdatePrivacySettings)
-			settings.GET("/update-security-settings", h.UpdateSecuritySettings)
+			settings.GET("/profile-settings", h.getProfileSettings)
+			settings.GET("/notification-settings", h.getNotificationSettings)
+			settings.GET("/payment-options", h.getPaymentOptions)
+			settings.GET("/privacy-settings", h.getPrivacySettings)
+			settings.GET("/security-settings", h.getSecuritySettings)
+			settings.GET("/update-notification-settings", h.updateNotificationSettings)
+			settings.GET("/update-payment-options", h.updatePaymentOptions)
+			settings.GET("/update-privacy-settings", h.updatePrivacySettings)
+			settings.GET("/update-security-settings", h.updateSecuritySettings)
 		}
 
 	}

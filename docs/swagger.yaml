@@ -1,0 +1,330 @@
+basePath: /
+definitions:
+  entities.RegisteredUserResponse:
+    properties:
+      created_at:
+        type: string
+      message:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  entities.ResetPassword:
+    properties:
+      email:
+        type: string
+      personal_number:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - personal_number
+    - username
+    type: object
+  entities.ResetPasswordResponse:
+    properties:
+      message:
+        type: string
+      user_id:
+        type: string
+    type: object
+  entities.SignedInUserResponse:
+    properties:
+      access_token:
+        type: string
+      access_token_exp:
+        type: string
+      message:
+        type: string
+      refresh_token:
+        type: string
+      refresh_token_exp:
+        type: string
+    type: object
+  entities.UserInputWithoutID:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  entities.UserRegInput:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      ip_address:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      personal_number:
+        type: string
+      phonenum:
+        type: string
+      user_name:
+        type: string
+    required:
+    - email
+    - first_name
+    - ip_address
+    - last_name
+    - password
+    - personal_number
+    - phonenum
+    - user_name
+    type: object
+  entities.ValidateResetEmail:
+    properties:
+      password:
+        type: string
+      personal_number:
+        type: string
+      validation_code:
+        type: string
+    required:
+    - password
+    - personal_number
+    - validation_code
+    type: object
+  entities.ValidateResetPasswordResponse:
+    properties:
+      message:
+        type: string
+      reset_date:
+        type: string
+    type: object
+  handler.localError:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Endpoints for Authorization, Account, Settings, Payments
+  title: E_Commerce Microservices
+  version: "0.1"
+paths:
+  /api/auth/refresh-login:
+    post:
+      consumes:
+      - application/json
+      description: Refresh Login - Refreshes AccessToken
+      operationId: refresh-login
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.SignedInUserResponse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ValidateResetPasswordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      security:
+      - ApiKeyAuth: []
+      summary: Refresh Login Handler
+      tags:
+      - Auth
+  /api/auth/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset Password Outside From Account
+      operationId: reset-password
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ResetPassword'
+      produces:
+      - application/json
+      responses:
+        "205":
+          description: Reset Content
+          schema:
+            $ref: '#/definitions/entities.ResetPasswordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Reset Password Handler
+      tags:
+      - Auth
+  /api/auth/reset-password-profile:
+    post:
+      consumes:
+      - application/json
+      description: Reset Password From The Account
+      operationId: reset-password-profile
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ValidateResetEmail'
+      produces:
+      - application/json
+      responses:
+        "205":
+          description: Reset Content
+          schema:
+            $ref: '#/definitions/entities.ValidateResetPasswordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      security:
+      - ApiKeyAuth: []
+      summary: Reset Password Profile Handler
+      tags:
+      - Auth
+  /api/auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Login An User
+      operationId: login-user
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UserInputWithoutID'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.SignedInUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: SignIn Handler
+      tags:
+      - Auth
+  /api/auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Create An User
+      operationId: create-user
+      parameters:
+      - description: User Info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UserRegInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.RegisteredUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: SignUp Handler
+      tags:
+      - Auth
+  /api/auth/verify-reset-email:
+    post:
+      consumes:
+      - application/json
+      description: Validation Of Reset Password (Code Is Sent To Gmail)
+      operationId: validate-reset-password
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ValidateResetEmail'
+      produces:
+      - application/json
+      responses:
+        "205":
+          description: Reset Content
+          schema:
+            $ref: '#/definitions/entities.ValidateResetPasswordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Validate Reset Password Mail Handler (Code)
+      tags:
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

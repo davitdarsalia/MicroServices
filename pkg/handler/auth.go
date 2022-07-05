@@ -9,6 +9,18 @@ import (
 	"time"
 )
 
+// @Summary SignUp Handler
+// @Tags Auth
+// @Description Create An User
+// @ID create-user
+// @Accept json
+// @Produce json
+// @Param input body entities.UserRegInput true "User Info"
+// @Success 201 {object} entities.RegisteredUserResponse
+// @Failure 409 {object} localError
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	var u entities.User
 
@@ -31,6 +43,18 @@ func (h *Handler) signUp(c *gin.Context) {
 	})
 }
 
+// @Summary SignIn Handler
+// @Tags Auth
+// @Description Login An User
+// @ID login-user
+// @Accept json
+// @Produce json
+// @Param input body entities.UserInputWithoutID true "Credentials"
+// @Success 200 {object} entities.SignedInUserResponse
+// @Failure 404 {object} localError
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/sign-in [post]
 func (h *Handler) signIn(c *gin.Context) {
 	var u entities.UserInput
 
@@ -55,6 +79,19 @@ func (h *Handler) signIn(c *gin.Context) {
 	})
 
 }
+
+// @Summary Reset Password Handler
+// @Tags Auth
+// @Description Reset Password Outside From Account
+// @ID reset-password
+// @Accept json
+// @Produce json
+// @Param input body entities.ResetPassword true "Credentials"
+// @Success 205 {object} entities.ResetPasswordResponse
+// @Failure 406 {object} localError
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/reset-password [post]
 func (h *Handler) resetPassword(c *gin.Context) {
 	var r entities.ResetPassword
 
@@ -70,12 +107,24 @@ func (h *Handler) resetPassword(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, entities.ResetPasswordResponse{
+	c.JSON(http.StatusResetContent, entities.ResetPasswordResponse{
 		UserID:  userId,
 		Message: constants.ResetPasswordSuccess,
 	})
 }
 
+// @Summary Validate Reset Password Mail Handler (Code)
+// @Tags Auth
+// @Description Validation Of Reset Password (Code Is Sent To Gmail)
+// @ID validate-reset-password
+// @Accept json
+// @Produce json
+// @Param input body entities.ValidateResetEmail true "Credentials"
+// @Success 205 {object} entities.ValidateResetPasswordResponse
+// @Failure 406 {object} localError
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/verify-reset-email [post]
 func (h *Handler) validateResetEmail(c *gin.Context) {
 	var e entities.ValidateResetEmail
 
@@ -97,6 +146,19 @@ func (h *Handler) validateResetEmail(c *gin.Context) {
 	})
 }
 
+// @Summary Reset Password Profile Handler
+// @Security ApiKeyAuth
+// @Tags Auth
+// @Description Reset Password From The Account
+// @ID reset-password-profile
+// @Accept json
+// @Produce json
+// @Param input body entities.ValidateResetEmail true "Credentials"
+// @Success 205 {object} entities.ValidateResetPasswordResponse
+// @Failure 406 {object} localError
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/reset-password-profile [post]n.Context)
 func (h *Handler) resetPasswordProfile(c *gin.Context) {
 	var refreshInput entities.ResetPasswordInput
 
@@ -118,6 +180,18 @@ func (h *Handler) resetPasswordProfile(c *gin.Context) {
 	})
 }
 
+// @Summary Refresh Login Handler
+// @Security ApiKeyAuth
+// @Tags Auth
+// @Description Refresh Login - Refreshes AccessToken
+// @ID refresh-login
+// @Accept json
+// @Produce json
+// @Param input body entities.SignedInUserResponse true "Credentials"
+// @Success 200 {object} entities.ValidateResetPasswordResponse
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/refresh-login [post]
 func (h *Handler) refreshLogin(c *gin.Context) {
 	var r entities.RefreshLoginInput
 
