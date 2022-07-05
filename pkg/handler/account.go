@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func (h *Handler) GetProfileDetails(c *gin.Context) {
+func (h *Handler) getProfileDetails(c *gin.Context) {
 	p, err := h.services.GetProfileDetails()
 
 	if err != nil {
@@ -32,7 +32,7 @@ func (h *Handler) GetProfileDetails(c *gin.Context) {
 	})
 
 }
-func (h *Handler) GetUserInfo(c *gin.Context) {
+func (h *Handler) getUserInfo(c *gin.Context) {
 	p, err := h.services.GetUserInfo()
 
 	if err != nil {
@@ -67,7 +67,7 @@ func (h *Handler) GetUserInfo(c *gin.Context) {
 	})
 
 }
-func (h *Handler) GetTrustedDevices(c *gin.Context) {
+func (h *Handler) getTrustedDevices(c *gin.Context) {
 	p, err := h.services.GetTrustedDevices()
 
 	if err != nil {
@@ -82,7 +82,7 @@ func (h *Handler) GetTrustedDevices(c *gin.Context) {
 }
 
 // AddTrustedDevice TODO - Make Ip Unique For DBMS
-func (h *Handler) AddTrustedDevice(c *gin.Context) {
+func (h *Handler) addTrustedDevice(c *gin.Context) {
 	var d entities.TrustedDevices
 
 	if err := c.BindJSON(&d); err != nil {
@@ -104,7 +104,7 @@ func (h *Handler) AddTrustedDevice(c *gin.Context) {
 
 }
 
-func (h *Handler) BlockUser(c *gin.Context) {
+func (h *Handler) blockUser(c *gin.Context) {
 	var b entities.BlockingUser
 
 	if err := c.BindJSON(&b); err != nil {
@@ -125,7 +125,7 @@ func (h *Handler) BlockUser(c *gin.Context) {
 	})
 
 }
-func (h *Handler) UnblockUser(c *gin.Context) {
+func (h *Handler) unblockUser(c *gin.Context) {
 	var b entities.UnblockingUser
 
 	if err := c.BindJSON(&b); err != nil {
@@ -146,7 +146,7 @@ func (h *Handler) UnblockUser(c *gin.Context) {
 	})
 
 }
-func (h *Handler) BlockedUsersList(c *gin.Context) {
+func (h *Handler) blockedUsersList(c *gin.Context) {
 	userList, err := h.services.BlockedUsersList()
 
 	if err != nil {
@@ -161,7 +161,7 @@ func (h *Handler) BlockedUsersList(c *gin.Context) {
 	})
 
 }
-func (h *Handler) UploadProfileImage(c *gin.Context) {
+func (h *Handler) uploadProfileImage(c *gin.Context) {
 	file, header, err := c.Request.FormFile(constants.ProfileImageFormFileHeader)
 
 	if header.Size == 0 || err != nil {
@@ -185,7 +185,7 @@ func (h *Handler) UploadProfileImage(c *gin.Context) {
 
 }
 
-func (h *Handler) GetImages(c *gin.Context) {
+func (h *Handler) getImages(c *gin.Context) {
 	images, err := h.services.GetImages()
 
 	if err != nil {
@@ -200,15 +200,15 @@ func (h *Handler) GetImages(c *gin.Context) {
 
 }
 
-func (h *Handler) LogoutSession(c *gin.Context) {
+func (h *Handler) logoutSession(c *gin.Context) {
 	err := h.services.LogoutSession()
 	fmt.Println(err)
 
 }
-func (h *Handler) UpdateProfileDetails(c *gin.Context) {
+func (h *Handler) updateProfileDetails(c *gin.Context) {
 
 }
 
-func (h *Handler) SetPasscode(c *gin.Context) {
+func (h *Handler) setPasscode(c *gin.Context) {
 
 }
