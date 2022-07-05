@@ -284,6 +284,59 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/auth/verify-reset-email": {
+            "post": {
+                "description": "Validation Of Reset Password (Code Is Sent To Gmail)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Validate Reset Password Mail Handler (Code)",
+                "operationId": "validate-reset-password",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.ValidateResetEmail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "205": {
+                        "description": "Reset Content",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ValidateResetPasswordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
