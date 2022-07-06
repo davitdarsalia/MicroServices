@@ -330,9 +330,290 @@
                     }
                 }
             }
+        },
+        "/api/protected/account/get-images": {
+            "get": {
+                "description": "Get Uploaded Images",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts - Protected"
+                ],
+                "summary": "Get Images",
+                "operationId": "uploaded-images",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.GetImagesResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/account/profile-details": {
+            "get": {
+                "description": "Gets User Profile Details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts - Protected"
+                ],
+                "summary": "Get Profile Details",
+                "operationId": "user-profile-details",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.GetProfileDetailsResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/account/trusted-devices-list": {
+            "get": {
+                "description": "Get Trusted Devices List",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts - Protected"
+                ],
+                "summary": "Get Trusted Devices",
+                "operationId": "trusted-device",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.GetTrustedDevices"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/account/user-info": {
+            "get": {
+                "description": "Get User Info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts - Protected"
+                ],
+                "summary": "Get User Info",
+                "operationId": "user-info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.GetUserInfoResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "entities.GetImagesResponse": {
+            "type": "object",
+            "properties": {
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.Image"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.GetProfileDetailsResponse": {
+            "type": "object",
+            "properties": {
+                "additional_email": {
+                    "type": "string"
+                },
+                "blocked_users_amount": {
+                    "type": "integer"
+                },
+                "education": {
+                    "type": "string"
+                },
+                "followers": {
+                    "type": "integer"
+                },
+                "following": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "origin": {
+                    "type": "string"
+                },
+                "profileimage": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "userid": {
+                    "type": "string"
+                },
+                "working_place": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.GetTrustedDevices": {
+            "type": "object",
+            "properties": {
+                "device_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.TrustedDevices"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.GetUserInfoResponse": {
+            "type": "object",
+            "required": [
+                "email",
+                "first_name",
+                "ip_address",
+                "last_name",
+                "password",
+                "personal_number",
+                "phonenum",
+                "user_name"
+            ],
+            "properties": {
+                "additional_email": {
+                    "type": "string"
+                },
+                "blocked_users_amount": {
+                    "type": "integer"
+                },
+                "education": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "followers": {
+                    "type": "integer"
+                },
+                "following": {
+                    "type": "integer"
+                },
+                "ip_address": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "origin": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "personal_number": {
+                    "type": "string"
+                },
+                "phonenum": {
+                    "type": "string"
+                },
+                "profileimage": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "salt": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_name": {
+                    "type": "string"
+                },
+                "working_place": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.Image": {
+            "type": "object",
+            "properties": {
+                "imageid": {
+                    "type": "string"
+                },
+                "isprofileimage": {
+                    "type": "boolean"
+                },
+                "profileimage": {
+                    "type": "string"
+                },
+                "uploadedat": {
+                    "type": "string"
+                }
+            }
+        },
         "entities.RegisteredUserResponse": {
             "type": "object",
             "properties": {
@@ -393,6 +674,29 @@
                     "type": "string"
                 },
                 "refresh_token_exp": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.TrustedDevices": {
+            "type": "object",
+            "required": [
+                "device_name"
+            ],
+            "properties": {
+                "device_id": {
+                    "type": "integer"
+                },
+                "device_identifier": {
+                    "type": "string"
+                },
+                "device_ip_address": {
+                    "type": "string"
+                },
+                "device_name": {
+                    "type": "string"
+                },
+                "userid": {
                     "type": "string"
                 }
             }

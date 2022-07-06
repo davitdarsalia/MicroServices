@@ -17,7 +17,7 @@ type Handler struct {
 func (h *Handler) InitRoutes() *gin.Engine {
 	r := gin.Default()
 
-	swaggerDocs := r.Group("/swagger")
+	swaggerDocs := r.Group("/docs")
 	{
 		swaggerDocs.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
