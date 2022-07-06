@@ -2,3 +2,10 @@ run:
 	swag init
 	go run main.go
 
+lint:
+	golangci-lint run ./...
+
+runLint:
+	golangci-lint run ./...
+	swag init
+	go run main.go
