@@ -534,7 +534,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Accounts - Protected"
+                    "Account - Protected"
                 ],
                 "summary": "Get Images",
                 "operationId": "uploaded-images",

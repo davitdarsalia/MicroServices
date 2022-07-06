@@ -647,7 +647,7 @@ paths:
             type: default
       summary: Get Images
       tags:
-      - Accounts - Protected
+      - Account - Protected
   /api/protected/account/profile-details:
     get:
       consumes:
