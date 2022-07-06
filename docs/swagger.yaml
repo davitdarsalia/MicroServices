@@ -1,5 +1,41 @@
 basePath: /
 definitions:
+  entities.BlockUserResponse:
+    properties:
+      message:
+        type: string
+      unblocked_user_id:
+        type: integer
+    type: object
+  entities.BlockedUsersList:
+    properties:
+      blocked_at:
+        type: string
+      blocked_user_id:
+        type: string
+      userid:
+        type: string
+    type: object
+  entities.BlockedUsersListResponse:
+    properties:
+      Message:
+        type: string
+      blocked_users_list:
+        items:
+          $ref: '#/definitions/entities.BlockedUsersList'
+        type: array
+      fetched_at:
+        type: string
+    type: object
+  entities.BlockingUser:
+    properties:
+      blocked_at:
+        type: string
+      blocked_user_id:
+        type: integer
+    required:
+    - blocked_user_id
+    type: object
   entities.GetImagesResponse:
     properties:
       images:
@@ -165,6 +201,34 @@ definitions:
     required:
     - device_name
     type: object
+  entities.TrustedDevicesResponse:
+    properties:
+      message:
+        type: string
+      userid:
+        type: string
+    type: object
+  entities.UnblockUserResponse:
+    properties:
+      message:
+        type: string
+      unblocked_user_id:
+        type: integer
+    type: object
+  entities.UnblockingUser:
+    properties:
+      unblocked_user_id:
+        type: integer
+    required:
+    - unblocked_user_id
+    type: object
+  entities.UploadProfileImageResponse:
+    properties:
+      message:
+        type: string
+      uploaded_at:
+        type: string
+    type: object
   entities.UserInputWithoutID:
     properties:
       password:
@@ -235,6 +299,72 @@ info:
   title: E_Commerce Microservices
   version: "0.1"
 paths:
+  /api/auth/add-trusted-device:
+    post:
+      consumes:
+      - application/json
+      description: Adds Trusted Devices (Device IP)
+      operationId: add-trusted-device
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.TrustedDevices'
+      produces:
+      - application/json
+      responses:
+        "205":
+          description: Reset Content
+          schema:
+            $ref: '#/definitions/entities.TrustedDevicesResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      security:
+      - ApiKeyAuth: []
+      summary: Add Trusted Device
+      tags:
+      - Account - Protected
+  /api/auth/block-user:
+    post:
+      consumes:
+      - application/json
+      description: Block User By ID
+      operationId: block-user
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.BlockingUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.BlockUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      security:
+      - ApiKeyAuth: []
+      summary: Block User
+      tags:
+      - Account - Protected
   /api/auth/refresh-login:
     post:
       consumes:
@@ -410,6 +540,39 @@ paths:
       summary: SignUp Handler
       tags:
       - Auth
+  /api/auth/unblock-user:
+    post:
+      consumes:
+      - application/json
+      description: Add Profile Image (Uploading Multiple Times Is Acceptable)
+      operationId: upload-profile-image
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UploadProfileImageResponse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UploadProfileImageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      security:
+      - ApiKeyAuth: []
+      summary: Upload Profile Image
+      tags:
+      - Account - Protected
   /api/auth/verify-reset-email:
     post:
       consumes:
@@ -445,6 +608,26 @@ paths:
       summary: Validate Reset Password Mail Handler (Code)
       tags:
       - Auth
+  /api/protected/account/blocked-user-list:
+    get:
+      consumes:
+      - application/json
+      description: Gets Blocked Users List
+      operationId: blocked-users-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.BlockedUsersListResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Get Blocked Users List
+      tags:
+      - Account - Protected
   /api/protected/account/get-images:
     get:
       consumes:
@@ -484,7 +667,7 @@ paths:
             type: default
       summary: Get Profile Details
       tags:
-      - Accounts - Protected
+      - Account - Protected
   /api/protected/account/trusted-devices-list:
     get:
       consumes:
@@ -504,7 +687,7 @@ paths:
             type: default
       summary: Get Trusted Devices
       tags:
-      - Accounts - Protected
+      - Account - Protected
   /api/protected/account/user-info:
     get:
       consumes:
@@ -524,7 +707,7 @@ paths:
             type: default
       summary: Get User Info
       tags:
-      - Accounts - Protected
+      - Account - Protected
 securityDefinitions:
   ApiKeyAuth:
     in: header

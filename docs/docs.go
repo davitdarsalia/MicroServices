@@ -16,6 +16,110 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/auth/add-trusted-device": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Adds Trusted Devices (Device IP)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account - Protected"
+                ],
+                "summary": "Add Trusted Device",
+                "operationId": "add-trusted-device",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.TrustedDevices"
+                        }
+                    }
+                ],
+                "responses": {
+                    "205": {
+                        "description": "Reset Content",
+                        "schema": {
+                            "$ref": "#/definitions/entities.TrustedDevicesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/block-user": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Block User By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account - Protected"
+                ],
+                "summary": "Block User",
+                "operationId": "block-user",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.BlockingUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.BlockUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
         "/api/auth/refresh-login": {
             "post": {
                 "security": [
@@ -285,6 +389,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/auth/unblock-user": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Add Profile Image (Uploading Multiple Times Is Acceptable)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account - Protected"
+                ],
+                "summary": "Upload Profile Image",
+                "operationId": "upload-profile-image",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UploadProfileImageResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UploadProfileImageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
         "/api/auth/verify-reset-email": {
             "post": {
                 "description": "Validation Of Reset Password (Code Is Sent To Gmail)",
@@ -338,6 +494,36 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/protected/account/blocked-user-list": {
+            "get": {
+                "description": "Gets Blocked Users List",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account - Protected"
+                ],
+                "summary": "Get Blocked Users List",
+                "operationId": "blocked-users-list",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.BlockedUsersListResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
         "/api/protected/account/get-images": {
             "get": {
                 "description": "Get Uploaded Images",
@@ -378,7 +564,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Accounts - Protected"
+                    "Account - Protected"
                 ],
                 "summary": "Get Profile Details",
                 "operationId": "user-profile-details",
@@ -408,7 +594,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Accounts - Protected"
+                    "Account - Protected"
                 ],
                 "summary": "Get Trusted Devices",
                 "operationId": "trusted-device",
@@ -438,7 +624,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Accounts - Protected"
+                    "Account - Protected"
                 ],
                 "summary": "Get User Info",
                 "operationId": "user-info",
@@ -460,6 +646,62 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entities.BlockUserResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "unblocked_user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.BlockedUsersList": {
+            "type": "object",
+            "properties": {
+                "blocked_at": {
+                    "type": "string"
+                },
+                "blocked_user_id": {
+                    "type": "string"
+                },
+                "userid": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.BlockedUsersListResponse": {
+            "type": "object",
+            "properties": {
+                "Message": {
+                    "type": "string"
+                },
+                "blocked_users_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.BlockedUsersList"
+                    }
+                },
+                "fetched_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.BlockingUser": {
+            "type": "object",
+            "required": [
+                "blocked_user_id"
+            ],
+            "properties": {
+                "blocked_at": {
+                    "type": "string"
+                },
+                "blocked_user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "entities.GetImagesResponse": {
             "type": "object",
             "properties": {
@@ -704,6 +946,50 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "userid": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.TrustedDevicesResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "userid": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.UnblockUserResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "unblocked_user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.UnblockingUser": {
+            "type": "object",
+            "required": [
+                "unblocked_user_id"
+            ],
+            "properties": {
+                "unblocked_user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.UploadProfileImageResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "uploaded_at": {
                     "type": "string"
                 }
             }
