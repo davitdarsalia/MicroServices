@@ -1,5 +1,113 @@
 basePath: /
 definitions:
+  entities.GetImagesResponse:
+    properties:
+      images:
+        items:
+          $ref: '#/definitions/entities.Image'
+        type: array
+      message:
+        type: string
+    type: object
+  entities.GetProfileDetailsResponse:
+    properties:
+      additional_email:
+        type: string
+      blocked_users_amount:
+        type: integer
+      education:
+        type: string
+      followers:
+        type: integer
+      following:
+        type: integer
+      message:
+        type: string
+      origin:
+        type: string
+      profileimage:
+        items:
+          type: integer
+        type: array
+      userid:
+        type: string
+      working_place:
+        type: string
+    type: object
+  entities.GetTrustedDevices:
+    properties:
+      device_list:
+        items:
+          $ref: '#/definitions/entities.TrustedDevices'
+        type: array
+      message:
+        type: string
+    type: object
+  entities.GetUserInfoResponse:
+    properties:
+      additional_email:
+        type: string
+      blocked_users_amount:
+        type: integer
+      education:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      followers:
+        type: integer
+      following:
+        type: integer
+      ip_address:
+        type: string
+      last_name:
+        type: string
+      message:
+        type: string
+      origin:
+        type: string
+      password:
+        type: string
+      personal_number:
+        type: string
+      phonenum:
+        type: string
+      profileimage:
+        items:
+          type: integer
+        type: array
+      salt:
+        items:
+          type: integer
+        type: array
+      user_id:
+        type: integer
+      user_name:
+        type: string
+      working_place:
+        type: string
+    required:
+    - email
+    - first_name
+    - ip_address
+    - last_name
+    - password
+    - personal_number
+    - phonenum
+    - user_name
+    type: object
+  entities.Image:
+    properties:
+      imageid:
+        type: string
+      isprofileimage:
+        type: boolean
+      profileimage:
+        type: string
+      uploadedat:
+        type: string
+    type: object
   entities.RegisteredUserResponse:
     properties:
       created_at:
@@ -41,6 +149,21 @@ definitions:
         type: string
       refresh_token_exp:
         type: string
+    type: object
+  entities.TrustedDevices:
+    properties:
+      device_id:
+        type: integer
+      device_identifier:
+        type: string
+      device_ip_address:
+        type: string
+      device_name:
+        type: string
+      userid:
+        type: string
+    required:
+    - device_name
     type: object
   entities.UserInputWithoutID:
     properties:
@@ -322,6 +445,86 @@ paths:
       summary: Validate Reset Password Mail Handler (Code)
       tags:
       - Auth
+  /api/protected/account/get-images:
+    get:
+      consumes:
+      - application/json
+      description: Get Uploaded Images
+      operationId: uploaded-images
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.GetImagesResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Get Images
+      tags:
+      - Accounts - Protected
+  /api/protected/account/profile-details:
+    get:
+      consumes:
+      - application/json
+      description: Gets User Profile Details
+      operationId: user-profile-details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.GetProfileDetailsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Get Profile Details
+      tags:
+      - Accounts - Protected
+  /api/protected/account/trusted-devices-list:
+    get:
+      consumes:
+      - application/json
+      description: Get Trusted Devices List
+      operationId: trusted-device
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.GetTrustedDevices'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Get Trusted Devices
+      tags:
+      - Accounts - Protected
+  /api/protected/account/user-info:
+    get:
+      consumes:
+      - application/json
+      description: Get User Info
+      operationId: user-info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.GetUserInfoResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Get User Info
+      tags:
+      - Accounts - Protected
 securityDefinitions:
   ApiKeyAuth:
     in: header
