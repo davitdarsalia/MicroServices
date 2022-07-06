@@ -10,6 +10,15 @@ import (
 	"time"
 )
 
+// @Summary Get Profile Details
+// @Tags Accounts - Protected
+// @Description Gets User Profile Details
+// @ID user-profile-details
+// @Accept json
+// @Produce json
+// @Success 200 {object} entities.GetProfileDetailsResponse
+// @Failure 500 default {object} localError
+// @Router /api/protected/account/profile-details [get]
 func (h *Handler) getProfileDetails(c *gin.Context) {
 	p, err := h.services.GetProfileDetails()
 
@@ -32,6 +41,16 @@ func (h *Handler) getProfileDetails(c *gin.Context) {
 	})
 
 }
+
+// @Summary Get User Info
+// @Tags Accounts - Protected
+// @Description Get User Info
+// @ID user-info
+// @Accept json
+// @Produce json
+// @Success 200 {object} entities.GetUserInfoResponse
+// @Failure 500 default {object} localError
+// @Router /api/protected/account/user-info [get]
 func (h *Handler) getUserInfo(c *gin.Context) {
 	p, err := h.services.GetUserInfo()
 
@@ -67,6 +86,16 @@ func (h *Handler) getUserInfo(c *gin.Context) {
 	})
 
 }
+
+// @Summary Get Trusted Devices
+// @Tags Accounts - Protected
+// @Description Get Trusted Devices List
+// @ID trusted-device
+// @Accept json
+// @Produce json
+// @Success 200 {object} entities.GetTrustedDevices
+// @Failure 500 default {object} localError
+// @Router /api/protected/account/trusted-devices-list [get]
 func (h *Handler) getTrustedDevices(c *gin.Context) {
 	p, err := h.services.GetTrustedDevices()
 
@@ -82,6 +111,7 @@ func (h *Handler) getTrustedDevices(c *gin.Context) {
 }
 
 // AddTrustedDevice TODO - Make Ip Unique For DBMS
+
 func (h *Handler) addTrustedDevice(c *gin.Context) {
 	var d entities.TrustedDevices
 
@@ -185,6 +215,15 @@ func (h *Handler) uploadProfileImage(c *gin.Context) {
 
 }
 
+// @Summary Get Images
+// @Tags Accounts - Protected
+// @Description Get Uploaded Images
+// @ID uploaded-images
+// @Accept json
+// @Produce json
+// @Success 200 {object} entities.GetImagesResponse
+// @Failure 500 default {object} localError
+// @Router /api/protected/account/get-images [get]
 func (h *Handler) getImages(c *gin.Context) {
 	images, err := h.services.GetImages()
 
