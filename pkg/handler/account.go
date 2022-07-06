@@ -11,7 +11,7 @@ import (
 )
 
 // @Summary Get Profile Details
-// @Tags Accounts - Protected
+// @Tags Account - Protected
 // @Description Gets User Profile Details
 // @ID user-profile-details
 // @Accept json
@@ -43,7 +43,7 @@ func (h *Handler) getProfileDetails(c *gin.Context) {
 }
 
 // @Summary Get User Info
-// @Tags Accounts - Protected
+// @Tags Account - Protected
 // @Description Get User Info
 // @ID user-info
 // @Accept json
@@ -88,7 +88,7 @@ func (h *Handler) getUserInfo(c *gin.Context) {
 }
 
 // @Summary Get Trusted Devices
-// @Tags Accounts - Protected
+// @Tags Account - Protected
 // @Description Get Trusted Devices List
 // @ID trusted-device
 // @Accept json
@@ -110,9 +110,20 @@ func (h *Handler) getTrustedDevices(c *gin.Context) {
 	})
 }
 
-// AddTrustedDevice TODO - Make Ip Unique For DBMS
-
+// @Summary Add Trusted Device
+// @Security ApiKeyAuth
+// @Tags Account - Protected
+// @Description Adds Trusted Devices (Device IP)
+// @ID add-trusted-device
+// @Accept json
+// @Produce json
+// @Param input body entities.TrustedDevices true "Credentials"
+// @Success 205 {object} entities.TrustedDevicesResponse
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/add-trusted-device [post]
 func (h *Handler) addTrustedDevice(c *gin.Context) {
+	// TODO - Make Ip Unique For DBMS
 	var d entities.TrustedDevices
 
 	if err := c.BindJSON(&d); err != nil {
@@ -134,6 +145,18 @@ func (h *Handler) addTrustedDevice(c *gin.Context) {
 
 }
 
+// @Summary Block User
+// @Security ApiKeyAuth
+// @Tags Account - Protected
+// @Description Block User By ID
+// @ID block-user
+// @Accept json
+// @Produce json
+// @Param input body entities.BlockingUser true "Credentials"
+// @Success 200 {object} entities.BlockUserResponse
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/block-user [post]
 func (h *Handler) blockUser(c *gin.Context) {
 	var b entities.BlockingUser
 
@@ -155,6 +178,19 @@ func (h *Handler) blockUser(c *gin.Context) {
 	})
 
 }
+
+// @Summary Unblock User
+// @Security ApiKeyAuth
+// @Tags Account - Protected
+// @Description Unblock Blocked User By ID
+// @ID unblock-user
+// @Accept json
+// @Produce json
+// @Param input body entities.UnblockingUser true "Credentials"
+// @Success 200 {object} entities.UnblockUserResponse
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/unblock-user [post]
 func (h *Handler) unblockUser(c *gin.Context) {
 	var b entities.UnblockingUser
 
@@ -170,12 +206,22 @@ func (h *Handler) unblockUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, entities.BlockUserResponse{
-		Message:       constants.UnblockUserSuccess,
-		BlockedUserID: b.UnblockedUserID,
+	c.JSON(http.StatusOK, entities.UnblockUserResponse{
+		Message:         constants.UnblockUserSuccess,
+		UnblockedUserID: b.UnblockedUserID,
 	})
 
 }
+
+// @Summary Get Blocked Users List
+// @Tags Account - Protected
+// @Description Gets Blocked Users List
+// @ID blocked-users-list
+// @Accept json
+// @Produce json
+// @Success 200 {object} entities.BlockedUsersListResponse
+// @Failure 500 default {object} localError
+// @Router /api/protected/account/blocked-user-list [get]
 func (h *Handler) blockedUsersList(c *gin.Context) {
 	userList, err := h.services.BlockedUsersList()
 
@@ -191,6 +237,19 @@ func (h *Handler) blockedUsersList(c *gin.Context) {
 	})
 
 }
+
+// @Summary Upload Profile Image
+// @Security ApiKeyAuth
+// @Tags Account - Protected
+// @Description Add Profile Image (Uploading Multiple Times Is Acceptable)
+// @ID upload-profile-image
+// @Accept json
+// @Produce json
+// @Param input body entities.UploadProfileImageResponse true "Credentials"
+// @Success 200 {object} entities.UploadProfileImageResponse
+// @Failure 400 {object} localError
+// @Failure 500 default {object} localError
+// @Router /api/auth/unblock-user [post]
 func (h *Handler) uploadProfileImage(c *gin.Context) {
 	file, header, err := c.Request.FormFile(constants.ProfileImageFormFileHeader)
 
