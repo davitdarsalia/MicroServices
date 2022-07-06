@@ -275,7 +275,7 @@ func (h *Handler) uploadProfileImage(c *gin.Context) {
 }
 
 // @Summary Get Images
-// @Tags Accounts - Protected
+// @Tags Account - Protected
 // @Description Get Uploaded Images
 // @ID uploaded-images
 // @Accept json
