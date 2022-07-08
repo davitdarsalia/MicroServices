@@ -43,7 +43,7 @@ type UnblockingUser struct {
 }
 
 type BlockedUsersList struct {
-	UserID        string `json:"userid""`
+	UserID        string `json:"userid"`
 	BlockedUserID string `json:"blocked_user_id"`
 	BlockedAt     string `json:"blocked_at"`
 }
