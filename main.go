@@ -11,7 +11,6 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"os"
 	"os/signal"
 	"syscall"
@@ -30,10 +29,6 @@ import (
 
 func main() {
 	go logrus.SetFormatter(new(logrus.JSONFormatter))
-
-	if err := initConfig(); err != nil {
-		logrus.Fatalf("RootConfig Initialization Error: %s", err.Error())
-	}
 
 	db, err := repository.NewPostgresDB()
 
@@ -84,10 +79,4 @@ func loadEnv() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-}
-
-func initConfig() error {
-	viper.AddConfigPath("configs")
-	viper.SetConfigName("config")
-	return viper.ReadInConfig()
 }

@@ -181,7 +181,6 @@ func validateRegFields(u *entities.User) bool {
 		}
 
 		match := r.MatchString(values[i])
-		fmt.Println(match, "Match")
 
 		if match == false {
 			res = false

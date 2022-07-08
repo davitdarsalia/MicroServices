@@ -1,3 +1,6 @@
-API Documentation
+-swag init 
 
-https://app.swaggerhub.com/apis-docs/davitdarsalia/ECommerceMicroservices/0.1#/
+-go run main.go
+
+
+http://localhost:8080/docs/index.html
