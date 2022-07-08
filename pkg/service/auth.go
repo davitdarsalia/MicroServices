@@ -9,24 +9,37 @@ import (
 )
 
 func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
-	amountOfBytes := generateRandNumber(5, 20)
-	salt := generateUniqueSalt(amountOfBytes)
-	hash := generateHash(u.Password, salt)
+	validFields := validateRegFields(u)
 
-	u.Password = hash
-	u.Salt = []byte(salt)
+	if validFields == true {
+		ipReceiverChan := make(chan string, 1)
 
-	userID, err := s.repo.RegisterUser(u)
+		go func() {
+			ipReceiverChan <- entities.GetIp()
+		}()
 
-	if err == nil {
-		// Auth Bugfix - If User IS Already Registered Salt Will Not Stored In Redis. This Prevents 404 Error At CheckUser Method
-		redisWriteErr := s.redisConn.Set(localContext, "UniqueSalt", salt, 0).Err()
-		if redisWriteErr != nil {
-			log.Printf("RedisWriterError: %v", err.Error())
+		amountOfBytes := generateRandNumber(5, 20)
+		salt := generateUniqueSalt(amountOfBytes)
+		hash := generateHash(u.Password, salt)
+
+		u.Password = hash
+		u.Salt = []byte(salt)
+		u.IpAddress = <-ipReceiverChan
+
+		userID, err := s.repo.RegisterUser(u)
+
+		if err == nil {
+			// Auth Bugfix - If User IS Already Registered Salt Will Not Stored In Redis. This Prevents 404 Error At CheckUser Method
+			redisWriteErr := s.redisConn.Set(localContext, "UniqueSalt", salt, 0).Err()
+			if redisWriteErr != nil {
+				log.Printf("RedisWriterError: %v", err.Error())
+			}
 		}
-	}
 
-	return userID, err
+		return userID, err
+	} else {
+		return -1, errors.New(constants.ValidateRegistrationFieldsError)
+	}
 
 }
 

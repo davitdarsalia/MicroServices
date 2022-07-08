@@ -31,6 +31,11 @@ func (h *Handler) signUp(c *gin.Context) {
 
 	id, err := h.services.Authorization.RegisterUser(&u)
 
+	if id < 0 {
+		newErrorResponse(c, http.StatusBadRequest, constants.ValidateRegistrationFieldsError)
+		return
+	}
+
 	if err != nil {
 		newErrorResponse(c, http.StatusConflict, constants.UserAlreadyRegistered)
 		return
@@ -158,7 +163,7 @@ func (h *Handler) validateResetEmail(c *gin.Context) {
 // @Failure 406 {object} localError
 // @Failure 400 {object} localError
 // @Failure 500 default {object} localError
-// @Router /api/auth/reset-password-profile [post]n.Context)
+// @Router /api/auth/reset-password-profile [post]
 func (h *Handler) resetPasswordProfile(c *gin.Context) {
 	var refreshInput entities.ResetPasswordInput
 

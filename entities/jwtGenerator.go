@@ -37,7 +37,7 @@ func GetIp() string {
 	address, _ := net.LookupIP(host)
 	for _, a := range address {
 		if ipv4 := a.To4(); ipv4 != nil {
-			result = fmt.Sprintf("IPv4: %s ", ipv4)
+			result = fmt.Sprintf("%s ", ipv4)
 		}
 	}
 
