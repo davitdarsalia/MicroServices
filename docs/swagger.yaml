@@ -331,7 +331,7 @@ paths:
       - ApiKeyAuth: []
       summary: Add Trusted Device
       tags:
-      - Account - Protected
+      - Protected - Account
   /api/auth/block-user:
     post:
       consumes:
@@ -364,7 +364,7 @@ paths:
       - ApiKeyAuth: []
       summary: Block User
       tags:
-      - Account - Protected
+      - Protected - Account
   /api/auth/refresh-login:
     post:
       consumes:
@@ -572,7 +572,7 @@ paths:
       - ApiKeyAuth: []
       summary: Upload Profile Image
       tags:
-      - Account - Protected
+      - Protected - Account
   /api/auth/verify-reset-email:
     post:
       consumes:
@@ -627,7 +627,7 @@ paths:
             type: default
       summary: Get Blocked Users List
       tags:
-      - Account - Protected
+      - Protected - Account
   /api/protected/account/get-images:
     get:
       consumes:
@@ -647,7 +647,7 @@ paths:
             type: default
       summary: Get Images
       tags:
-      - Account - Protected
+      - Protected - Account
   /api/protected/account/profile-details:
     get:
       consumes:
@@ -667,7 +667,7 @@ paths:
             type: default
       summary: Get Profile Details
       tags:
-      - Account - Protected
+      - Protected - Account
   /api/protected/account/trusted-devices-list:
     get:
       consumes:
@@ -687,7 +687,7 @@ paths:
             type: default
       summary: Get Trusted Devices
       tags:
-      - Account - Protected
+      - Protected - Account
   /api/protected/account/user-info:
     get:
       consumes:
@@ -707,7 +707,7 @@ paths:
             type: default
       summary: Get User Info
       tags:
-      - Account - Protected
+      - Protected - Account
 securityDefinitions:
   ApiKeyAuth:
     in: header

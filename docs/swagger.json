@@ -24,7 +24,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Add Trusted Device",
                 "operationId": "add-trusted-device",
@@ -76,7 +76,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Block User",
                 "operationId": "block-user",
@@ -397,7 +397,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Upload Profile Image",
                 "operationId": "upload-profile-image",
@@ -497,7 +497,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get Blocked Users List",
                 "operationId": "blocked-users-list",
@@ -527,7 +527,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get Images",
                 "operationId": "uploaded-images",
@@ -557,7 +557,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get Profile Details",
                 "operationId": "user-profile-details",
@@ -587,7 +587,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get Trusted Devices",
                 "operationId": "trusted-device",
@@ -617,7 +617,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get User Info",
                 "operationId": "user-info",

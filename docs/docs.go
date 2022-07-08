@@ -31,7 +31,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Add Trusted Device",
                 "operationId": "add-trusted-device",
@@ -83,7 +83,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Block User",
                 "operationId": "block-user",
@@ -404,7 +404,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Upload Profile Image",
                 "operationId": "upload-profile-image",
@@ -504,7 +504,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get Blocked Users List",
                 "operationId": "blocked-users-list",
@@ -534,7 +534,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get Images",
                 "operationId": "uploaded-images",
@@ -564,7 +564,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get Profile Details",
                 "operationId": "user-profile-details",
@@ -594,7 +594,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get Trusted Devices",
                 "operationId": "trusted-device",
@@ -624,7 +624,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Account - Protected"
+                    "Protected - Account"
                 ],
                 "summary": "Get User Info",
                 "operationId": "user-info",
