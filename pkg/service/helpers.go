@@ -16,6 +16,7 @@ import (
 	"math/rand"
 	"net/smtp"
 	"os"
+	"regexp"
 	"strconv"
 	"time"
 )
@@ -164,4 +165,30 @@ func (a *AccountService) getRedisUserID() int {
 	}
 
 	return intID
+}
+
+func validateRegFields(u *entities.User) bool {
+	checks := []string{emailRegex, usernameRegex, nameRegex, passwordRegex, ipAddressRegex, mobileNumberRegex, personalNumberRegex}
+	values := []string{u.Email, u.UserName, fmt.Sprintf("%s %s", u.FirstName, u.LastName), u.Password, u.IpAddress, u.PhoneNumber, u.PersonalNumber}
+
+	var res bool
+
+	for i, v := range checks {
+		r, err := regexp.Compile(v)
+
+		if err != nil {
+			log.Printf("Regex Compile Error: %s", err.Error())
+		}
+
+		match := r.MatchString(values[i])
+		fmt.Println(match, "Match")
+
+		if match == false {
+			res = false
+			break
+		} else {
+			res = true
+		}
+	}
+	return res
 }
