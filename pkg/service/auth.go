@@ -16,13 +16,17 @@ func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 	u.Password = hash
 	u.Salt = []byte(salt)
 
-	redisWriteErr := s.redisConn.Set(localContext, "UniqueSalt", salt, 0).Err()
+	userID, err := s.repo.RegisterUser(u)
 
-	if redisWriteErr != nil {
-		log.Fatal(redisWriteErr)
+	if err == nil {
+		// Auth Bugfix - If User IS Already Registered Salt Will Not Stored In Redis. This Prevents 404 Error At CheckUser Method
+		redisWriteErr := s.redisConn.Set(localContext, "UniqueSalt", salt, 0).Err()
+		if redisWriteErr != nil {
+			log.Fatal(redisWriteErr)
+		}
 	}
 
-	return s.repo.RegisterUser(u)
+	return userID, err
 
 }
 
