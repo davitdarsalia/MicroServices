@@ -22,7 +22,7 @@ func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 		// Auth Bugfix - If User IS Already Registered Salt Will Not Stored In Redis. This Prevents 404 Error At CheckUser Method
 		redisWriteErr := s.redisConn.Set(localContext, "UniqueSalt", salt, 0).Err()
 		if redisWriteErr != nil {
-			log.Fatal(redisWriteErr)
+			log.Printf("RedisWriterError: %v", err.Error())
 		}
 	}
 
