@@ -11,7 +11,7 @@ import (
 )
 
 // @Summary Get Profile Details
-// @Tags Account - Protected
+// @Tags Protected - Account
 // @Description Gets User Profile Details
 // @ID user-profile-details
 // @Accept json
@@ -43,7 +43,7 @@ func (h *Handler) getProfileDetails(c *gin.Context) {
 }
 
 // @Summary Get User Info
-// @Tags Account - Protected
+// @Tags Protected - Account
 // @Description Get User Info
 // @ID user-info
 // @Accept json
@@ -88,7 +88,7 @@ func (h *Handler) getUserInfo(c *gin.Context) {
 }
 
 // @Summary Get Trusted Devices
-// @Tags Account - Protected
+// @Tags Protected - Account
 // @Description Get Trusted Devices List
 // @ID trusted-device
 // @Accept json
@@ -112,7 +112,7 @@ func (h *Handler) getTrustedDevices(c *gin.Context) {
 
 // @Summary Add Trusted Device
 // @Security ApiKeyAuth
-// @Tags Account - Protected
+// @Tags Protected - Account
 // @Description Adds Trusted Devices (Device IP)
 // @ID add-trusted-device
 // @Accept json
@@ -147,7 +147,7 @@ func (h *Handler) addTrustedDevice(c *gin.Context) {
 
 // @Summary Block User
 // @Security ApiKeyAuth
-// @Tags Account - Protected
+// @Tags Protected - Account
 // @Description Block User By ID
 // @ID block-user
 // @Accept json
@@ -181,7 +181,7 @@ func (h *Handler) blockUser(c *gin.Context) {
 
 // @Summary Unblock User
 // @Security ApiKeyAuth
-// @Tags Account - Protected
+// @Tags Protected - Account
 // @Description Unblock Blocked User By ID
 // @ID unblock-user
 // @Accept json
@@ -214,7 +214,7 @@ func (h *Handler) unblockUser(c *gin.Context) {
 }
 
 // @Summary Get Blocked Users List
-// @Tags Account - Protected
+// @Tags Protected - Account
 // @Description Gets Blocked Users List
 // @ID blocked-users-list
 // @Accept json
@@ -240,7 +240,7 @@ func (h *Handler) blockedUsersList(c *gin.Context) {
 
 // @Summary Upload Profile Image
 // @Security ApiKeyAuth
-// @Tags Account - Protected
+// @Tags Protected - Account
 // @Description Add Profile Image (Uploading Multiple Times Is Acceptable)
 // @ID upload-profile-image
 // @Accept json
@@ -275,7 +275,7 @@ func (h *Handler) uploadProfileImage(c *gin.Context) {
 }
 
 // @Summary Get Images
-// @Tags Account - Protected
+// @Tags Protected - Account
 // @Description Get Uploaded Images
 // @ID uploaded-images
 // @Accept json
