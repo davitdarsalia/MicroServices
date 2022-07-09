@@ -163,6 +163,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/handler.localError"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -206,6 +212,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/handler.localError"
                         }
@@ -268,6 +280,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/handler.localError"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
                     "406": {
                         "description": "Not Acceptable",
                         "schema": {
@@ -321,6 +339,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/handler.localError"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
                     "404": {
                         "description": "Not Found",
                         "schema": {
@@ -370,6 +394,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/handler.localError"
                         }
@@ -479,6 +509,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/handler.localError"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
                     "406": {
                         "description": "Not Acceptable",
                         "schema": {
@@ -526,6 +562,11 @@ const docTemplate = `{
         },
         "/api/protected/account/get-images": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get Uploaded Images",
                 "consumes": [
                     "application/json"
@@ -556,6 +597,11 @@ const docTemplate = `{
         },
         "/api/protected/account/profile-details": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Gets User Profile Details",
                 "consumes": [
                     "application/json"
@@ -586,6 +632,11 @@ const docTemplate = `{
         },
         "/api/protected/account/trusted-devices-list": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get Trusted Devices List",
                 "consumes": [
                     "application/json"
@@ -616,6 +667,11 @@ const docTemplate = `{
         },
         "/api/protected/account/user-info": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get User Info",
                 "consumes": [
                     "application/json"
@@ -633,6 +689,180 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entities.GetUserInfoResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/settings/update-notification-settings": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Updates Notification Settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Protected - Settings"
+                ],
+                "summary": "Update Notification Settings",
+                "operationId": "update-notification-settings",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.NotificationSettings"
+                        }
+                    }
+                ],
+                "responses": {
+                    "205": {
+                        "description": "Reset Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/settings/update-payment-settings": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Updates Payment Settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Protected - Settings"
+                ],
+                "summary": "Update Payment Settings",
+                "operationId": "update-payment-settings",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.PaymentSettings"
+                        }
+                    }
+                ],
+                "responses": {
+                    "205": {
+                        "description": "Reset Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/settings/update-security-settings": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Updates Security Settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Protected - Settings"
+                ],
+                "summary": "Update Security Settings",
+                "operationId": "update-security-settings",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.SecuritySettings"
+                        }
+                    }
+                ],
+                "responses": {
+                    "205": {
+                        "description": "Reset Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
                         }
                     },
                     "500": {
@@ -773,7 +1003,6 @@ const docTemplate = `{
             "required": [
                 "email",
                 "first_name",
-                "ip_address",
                 "last_name",
                 "password",
                 "personal_number",
@@ -863,6 +1092,46 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.NotificationSettings": {
+            "type": "object",
+            "required": [
+                "email_notifications",
+                "promotions",
+                "sms_notifications"
+            ],
+            "properties": {
+                "email_notifications": {
+                    "type": "boolean"
+                },
+                "promotions": {
+                    "type": "boolean"
+                },
+                "sms_notifications": {
+                    "type": "boolean"
+                },
+                "userid": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.PaymentSettings": {
+            "type": "object",
+            "required": [
+                "primary_payment_method",
+                "tip_per_payment"
+            ],
+            "properties": {
+                "primary_payment_method": {
+                    "type": "boolean"
+                },
+                "tip_per_payment": {
+                    "type": "integer"
+                },
+                "userid": {
+                    "type": "integer"
+                }
+            }
+        },
         "entities.RegisteredUserResponse": {
             "type": "object",
             "properties": {
@@ -904,6 +1173,32 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "string"
+                }
+            }
+        },
+        "entities.SecuritySettings": {
+            "type": "object",
+            "required": [
+                "contacts",
+                "hide_activity",
+                "hide_email",
+                "hide_mobile"
+            ],
+            "properties": {
+                "contacts": {
+                    "type": "boolean"
+                },
+                "hide_activity": {
+                    "type": "boolean"
+                },
+                "hide_email": {
+                    "type": "boolean"
+                },
+                "hide_mobile": {
+                    "type": "boolean"
+                },
+                "userid": {
+                    "type": "integer"
                 }
             }
         },

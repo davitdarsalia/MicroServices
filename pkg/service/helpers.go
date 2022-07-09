@@ -158,6 +158,24 @@ func (a *AccountService) getRedisUserID() int {
 	if err != nil {
 		log.Printf("%s : %s", err, "RedisGetError")
 	}
+
+	intID, err := strconv.Atoi(id)
+
+	if err != nil {
+		log.Printf("%s : %s", err, "[Redis] - ParseInt Error")
+	}
+
+	return intID
+
+}
+
+func (s *SettingsService) getRedisID() int {
+	id, err := s.redisConn.Get(localContext, constants.RedisID).Result()
+
+	if err != nil {
+		log.Printf("%s : %s", err, "RedisGetError")
+	}
+
 	intID, err := strconv.Atoi(id)
 
 	if err != nil {

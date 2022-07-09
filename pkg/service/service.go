@@ -55,10 +55,12 @@ type Settings interface {
 	GetPrivacySettings()
 	GetSecuritySettings()
 
-	UpdateNotificationSettings()
-	UpdatePaymentOptions()
+	UpdateNotificationSettings(*entities.NotificationSettings) error
+	UpdatePaymentSettings(*entities.PaymentSettings) error
+	UpdateSecuritySettings(*entities.SecuritySettings) error
+
+	// UpdatePrivacySettings - TODO - Create DB For This Method + Structs
 	UpdatePrivacySettings()
-	UpdateSecuritySettings()
 }
 
 type Transactions interface {

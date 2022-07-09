@@ -17,6 +17,7 @@ import (
 // @Produce json
 // @Param input body entities.UserRegInput true "User Info"
 // @Success 201 {object} entities.RegisteredUserResponse
+// @Failure 401 {object} localError
 // @Failure 409 {object} localError
 // @Failure 400 {object} localError
 // @Failure 500 default {object} localError
@@ -56,6 +57,7 @@ func (h *Handler) signUp(c *gin.Context) {
 // @Produce json
 // @Param input body entities.UserInputWithoutID true "Credentials"
 // @Success 200 {object} entities.SignedInUserResponse
+// @Failure 401 {object} localError
 // @Failure 404 {object} localError
 // @Failure 400 {object} localError
 // @Failure 500 default {object} localError
@@ -93,6 +95,7 @@ func (h *Handler) signIn(c *gin.Context) {
 // @Produce json
 // @Param input body entities.ResetPassword true "Credentials"
 // @Success 205 {object} entities.ResetPasswordResponse
+// @Failure 401 {object} localError
 // @Failure 406 {object} localError
 // @Failure 400 {object} localError
 // @Failure 500 default {object} localError
@@ -126,6 +129,7 @@ func (h *Handler) resetPassword(c *gin.Context) {
 // @Produce json
 // @Param input body entities.ValidateResetEmail true "Credentials"
 // @Success 205 {object} entities.ValidateResetPasswordResponse
+// @Failure 401 {object} localError
 // @Failure 406 {object} localError
 // @Failure 400 {object} localError
 // @Failure 500 default {object} localError
@@ -160,6 +164,7 @@ func (h *Handler) validateResetEmail(c *gin.Context) {
 // @Produce json
 // @Param input body entities.ValidateResetEmail true "Credentials"
 // @Success 205 {object} entities.ValidateResetPasswordResponse
+// @Failure 401 {object} localError
 // @Failure 406 {object} localError
 // @Failure 400 {object} localError
 // @Failure 500 default {object} localError
@@ -194,6 +199,7 @@ func (h *Handler) resetPasswordProfile(c *gin.Context) {
 // @Produce json
 // @Param input body entities.SignedInUserResponse true "Credentials"
 // @Success 200 {object} entities.ValidateResetPasswordResponse
+// @Failure 401 {object} localError
 // @Failure 400 {object} localError
 // @Failure 500 default {object} localError
 // @Router /api/auth/refresh-login [post]
