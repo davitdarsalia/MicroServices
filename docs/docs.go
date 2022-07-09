@@ -643,6 +643,147 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/protected/settings/update-notification-settings": {
+            "post": {
+                "description": "Updates Notification Settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Protected - Settings"
+                ],
+                "summary": "Update Notification Settings",
+                "operationId": "update-notification-settings",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.NotificationSettings"
+                        }
+                    }
+                ],
+                "responses": {
+                    "205": {
+                        "description": "Reset Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/settings/update-payment-settings": {
+            "post": {
+                "description": "Updates Payment Settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Protected - Settings"
+                ],
+                "summary": "Update Payment Settings",
+                "operationId": "update-payment-settings",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.PaymentSettings"
+                        }
+                    }
+                ],
+                "responses": {
+                    "205": {
+                        "description": "Reset Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/settings/update-security-settings": {
+            "post": {
+                "description": "Updates Security Settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Protected - Settings"
+                ],
+                "summary": "Update Security Settings",
+                "operationId": "update-security-settings",
+                "parameters": [
+                    {
+                        "description": "Credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.SecuritySettings"
+                        }
+                    }
+                ],
+                "responses": {
+                    "205": {
+                        "description": "Reset Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.localError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "default"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -773,7 +914,6 @@ const docTemplate = `{
             "required": [
                 "email",
                 "first_name",
-                "ip_address",
                 "last_name",
                 "password",
                 "personal_number",
@@ -863,6 +1003,40 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.NotificationSettings": {
+            "type": "object",
+            "required": [
+                "email_notifications",
+                "promotions",
+                "sms_notifications"
+            ],
+            "properties": {
+                "email_notifications": {
+                    "type": "boolean"
+                },
+                "promotions": {
+                    "type": "boolean"
+                },
+                "sms_notifications": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "entities.PaymentSettings": {
+            "type": "object",
+            "required": [
+                "primary_payment_method",
+                "tip_per_payment"
+            ],
+            "properties": {
+                "primary_payment_method": {
+                    "type": "boolean"
+                },
+                "tip_per_payment": {
+                    "type": "integer"
+                }
+            }
+        },
         "entities.RegisteredUserResponse": {
             "type": "object",
             "properties": {
@@ -904,6 +1078,25 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "string"
+                }
+            }
+        },
+        "entities.SecuritySettings": {
+            "type": "object",
+            "required": [
+                "email_notifications",
+                "promotions",
+                "sms_notifications"
+            ],
+            "properties": {
+                "email_notifications": {
+                    "type": "boolean"
+                },
+                "promotions": {
+                    "type": "boolean"
+                },
+                "sms_notifications": {
+                    "type": "boolean"
                 }
             }
         },

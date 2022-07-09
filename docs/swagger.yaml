@@ -126,7 +126,6 @@ definitions:
     required:
     - email
     - first_name
-    - ip_address
     - last_name
     - password
     - personal_number
@@ -143,6 +142,29 @@ definitions:
         type: string
       uploadedat:
         type: string
+    type: object
+  entities.NotificationSettings:
+    properties:
+      email_notifications:
+        type: boolean
+      promotions:
+        type: boolean
+      sms_notifications:
+        type: boolean
+    required:
+    - email_notifications
+    - promotions
+    - sms_notifications
+    type: object
+  entities.PaymentSettings:
+    properties:
+      primary_payment_method:
+        type: boolean
+      tip_per_payment:
+        type: integer
+    required:
+    - primary_payment_method
+    - tip_per_payment
     type: object
   entities.RegisteredUserResponse:
     properties:
@@ -172,6 +194,19 @@ definitions:
         type: string
       user_id:
         type: string
+    type: object
+  entities.SecuritySettings:
+    properties:
+      email_notifications:
+        type: boolean
+      promotions:
+        type: boolean
+      sms_notifications:
+        type: boolean
+    required:
+    - email_notifications
+    - promotions
+    - sms_notifications
     type: object
   entities.SignedInUserResponse:
     properties:
@@ -708,6 +743,99 @@ paths:
       summary: Get User Info
       tags:
       - Protected - Account
+  /api/protected/settings/update-notification-settings:
+    post:
+      consumes:
+      - application/json
+      description: Updates Notification Settings
+      operationId: update-notification-settings
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.NotificationSettings'
+      produces:
+      - application/json
+      responses:
+        "205":
+          description: Reset Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Update Notification Settings
+      tags:
+      - Protected - Settings
+  /api/protected/settings/update-payment-settings:
+    post:
+      consumes:
+      - application/json
+      description: Updates Payment Settings
+      operationId: update-payment-settings
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.PaymentSettings'
+      produces:
+      - application/json
+      responses:
+        "205":
+          description: Reset Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Update Payment Settings
+      tags:
+      - Protected - Settings
+  /api/protected/settings/update-security-settings:
+    post:
+      consumes:
+      - application/json
+      description: Updates Security Settings
+      operationId: update-security-settings
+      parameters:
+      - description: Credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.SecuritySettings'
+      produces:
+      - application/json
+      responses:
+        "205":
+          description: Reset Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: default
+      summary: Update Security Settings
+      tags:
+      - Protected - Settings
 securityDefinitions:
   ApiKeyAuth:
     in: header
