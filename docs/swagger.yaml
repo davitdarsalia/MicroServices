@@ -151,6 +151,8 @@ definitions:
         type: boolean
       sms_notifications:
         type: boolean
+      userid:
+        type: integer
     required:
     - email_notifications
     - promotions
@@ -161,6 +163,8 @@ definitions:
       primary_payment_method:
         type: boolean
       tip_per_payment:
+        type: integer
+      userid:
         type: integer
     required:
     - primary_payment_method
@@ -197,16 +201,21 @@ definitions:
     type: object
   entities.SecuritySettings:
     properties:
-      email_notifications:
+      contacts:
         type: boolean
-      promotions:
+      hide_activity:
         type: boolean
-      sms_notifications:
+      hide_email:
         type: boolean
+      hide_mobile:
+        type: boolean
+      userid:
+        type: integer
     required:
-    - email_notifications
-    - promotions
-    - sms_notifications
+    - contacts
+    - hide_activity
+    - hide_email
+    - hide_mobile
     type: object
   entities.SignedInUserResponse:
     properties:
@@ -424,6 +433,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handler.localError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.localError'
         "500":
           description: Internal Server Error
           schema:
@@ -455,6 +468,10 @@ paths:
             $ref: '#/definitions/entities.ResetPasswordResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/handler.localError'
         "406":
@@ -490,6 +507,10 @@ paths:
             $ref: '#/definitions/entities.ValidateResetPasswordResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/handler.localError'
         "406":
@@ -529,6 +550,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handler.localError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.localError'
         "404":
           description: Not Found
           schema:
@@ -562,6 +587,10 @@ paths:
             $ref: '#/definitions/entities.RegisteredUserResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.localError'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/handler.localError'
         "409":
@@ -632,6 +661,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handler.localError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.localError'
         "406":
           description: Not Acceptable
           schema:
@@ -680,6 +713,8 @@ paths:
           description: Internal Server Error
           schema:
             type: default
+      security:
+      - ApiKeyAuth: []
       summary: Get Images
       tags:
       - Protected - Account
@@ -700,6 +735,8 @@ paths:
           description: Internal Server Error
           schema:
             type: default
+      security:
+      - ApiKeyAuth: []
       summary: Get Profile Details
       tags:
       - Protected - Account
@@ -720,6 +757,8 @@ paths:
           description: Internal Server Error
           schema:
             type: default
+      security:
+      - ApiKeyAuth: []
       summary: Get Trusted Devices
       tags:
       - Protected - Account
@@ -740,11 +779,13 @@ paths:
           description: Internal Server Error
           schema:
             type: default
+      security:
+      - ApiKeyAuth: []
       summary: Get User Info
       tags:
       - Protected - Account
   /api/protected/settings/update-notification-settings:
-    post:
+    put:
       consumes:
       - application/json
       description: Updates Notification Settings
@@ -767,15 +808,21 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handler.localError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.localError'
         "500":
           description: Internal Server Error
           schema:
             type: default
+      security:
+      - ApiKeyAuth: []
       summary: Update Notification Settings
       tags:
       - Protected - Settings
   /api/protected/settings/update-payment-settings:
-    post:
+    put:
       consumes:
       - application/json
       description: Updates Payment Settings
@@ -798,15 +845,21 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handler.localError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.localError'
         "500":
           description: Internal Server Error
           schema:
             type: default
+      security:
+      - ApiKeyAuth: []
       summary: Update Payment Settings
       tags:
       - Protected - Settings
   /api/protected/settings/update-security-settings:
-    post:
+    put:
       consumes:
       - application/json
       description: Updates Security Settings
@@ -829,10 +882,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handler.localError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.localError'
         "500":
           description: Internal Server Error
           schema:
             type: default
+      security:
+      - ApiKeyAuth: []
       summary: Update Security Settings
       tags:
       - Protected - Settings
