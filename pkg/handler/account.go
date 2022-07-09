@@ -11,6 +11,7 @@ import (
 )
 
 // @Summary Get Profile Details
+// @Security ApiKeyAuth
 // @Tags Protected - Account
 // @Description Gets User Profile Details
 // @ID user-profile-details
@@ -43,6 +44,7 @@ func (h *Handler) getProfileDetails(c *gin.Context) {
 }
 
 // @Summary Get User Info
+// @Security ApiKeyAuth
 // @Tags Protected - Account
 // @Description Get User Info
 // @ID user-info
@@ -89,6 +91,7 @@ func (h *Handler) getUserInfo(c *gin.Context) {
 
 // @Summary Get Trusted Devices
 // @Tags Protected - Account
+// @Security ApiKeyAuth
 // @Description Get Trusted Devices List
 // @ID trusted-device
 // @Accept json
@@ -275,6 +278,7 @@ func (h *Handler) uploadProfileImage(c *gin.Context) {
 }
 
 // @Summary Get Images
+// @Security ApiKeyAuth
 // @Tags Protected - Account
 // @Description Get Uploaded Images
 // @ID uploaded-images
