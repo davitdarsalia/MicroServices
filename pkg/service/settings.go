@@ -1,6 +1,8 @@
 package service
 
-import "github.com/davitdarsalia/LendAppBackend/entities"
+import (
+	"github.com/davitdarsalia/LendAppBackend/entities"
+)
 
 func (s *SettingsService) GetProfileSettings() {
 	//TODO implement me
