@@ -11,6 +11,25 @@ func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 	var userId int
 	err := r.db.QueryRow(constants.RegisterUserQuery, u.PersonalNumber, u.PhoneNumber, u.UserName, u.Email, u.FirstName, u.LastName, u.IpAddress, u.Password, u.Salt).Scan(&userId)
 
+	// Setting Default Values For Some Tables In Order To Update Them Later (Or Not)
+
+	if err == nil {
+		// If We've Successfully Registered An User, Then Default Values In Settings Will Be Applied
+		go func() {
+			r.db.Query(constants.InitNotificationSettings, userId)
+		}()
+
+		go func() {
+			r.db.Query(constants.InitPaymentSettings, userId)
+		}()
+
+		go func() {
+			r.db.Query(constants.InitSecuritySettings, userId)
+		}()
+
+		// TODO - Add Privacy Settings Query
+	}
+
 	return userId, err
 }
 
