@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"sync"
 	"time"
 
 	"github.com/davitdarsalia/LendAppBackend/constants"
@@ -13,19 +14,33 @@ func (r *AuthPostgres) RegisterUser(u *entities.User) (int, error) {
 
 	// Setting Default Values For Some Tables In Order To Update Them Later (Or Not)
 
+	var wg sync.WaitGroup
+
 	if err == nil {
 		// If We've Successfully Registered An User, Then Default Values In Settings Will Be Applied
 		go func() {
+			wg.Add(1)
 			r.db.Query(constants.InitNotificationSettings, userId)
+
+			defer wg.Done()
+
 		}()
 
 		go func() {
+			wg.Add(1)
 			r.db.Query(constants.InitPaymentSettings, userId)
+
+			defer wg.Done()
 		}()
 
 		go func() {
+			wg.Add(1)
 			r.db.Query(constants.InitSecuritySettings, userId)
+
+			defer wg.Done()
 		}()
+
+		wg.Wait()
 
 		// TODO - Add Privacy Settings Query
 	}

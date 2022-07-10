@@ -58,10 +58,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			settings.GET("/payment-options", h.getPaymentOptions)
 			settings.GET("/privacy-settings", h.getPrivacySettings)
 			settings.GET("/security-settings", h.getSecuritySettings)
-			settings.GET("/update-notification-settings", h.updateNotificationSettings)
-			settings.GET("/update-payment-options", h.updatePaymentOptions)
-			settings.GET("/update-privacy-settings", h.updatePrivacySettings)
-			settings.GET("/update-security-settings", h.updateSecuritySettings)
+			settings.PUT("/update-notification-settings", h.updateNotificationSettings)
+			settings.PUT("/update-payment-options", h.updatePaymentOptions)
+			settings.PUT("/update-privacy-settings", h.updatePrivacySettings)
+			settings.PUT("/update-security-settings", h.updateSecuritySettings)
 		}
 
 	}
