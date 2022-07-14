@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"log"
@@ -80,6 +81,8 @@ func (s *AuthService) ResetPassword(r *entities.ResetPassword) (string, error) {
 
 	s.redisConn.Set(localContext, "OTP", otp, entities.OtpExpireDate)
 
+	fmt.Println(otp)
+
 	return id, err
 }
 
@@ -94,6 +97,11 @@ func (s *AuthService) ValidateResetEmail(e *entities.ValidateResetEmail) error {
 	}
 
 	err := s.repo.ValidateResetEmail(e)
+
+	defer func() {
+		// OTP Destructor
+		s.redisConn.Del(localContext, "OTP")
+	}()
 	return err
 
 }

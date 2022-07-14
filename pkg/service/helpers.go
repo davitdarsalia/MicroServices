@@ -11,10 +11,11 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/pkg/repository"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis/v8"
+	"github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"github.com/thanhpk/randstr"
 	"log"
 	"math/rand"
-	"net/smtp"
 	"os"
 	"regexp"
 	"strconv"
@@ -121,16 +122,36 @@ func generateRandNumber(min, max int) int {
 	return rand.Intn((max - min + 1) + min)
 }
 
-func generateResetEmail(sendTo ...string) string {
+func generateResetEmail(sendTo string) string {
 	otp := generateOTP()
+	//
+	//address := fmt.Sprintf("%s:%s", entities.MailHost, entities.MailPort)
+	//auth := smtp.PlainAuth("", entities.SendMailFrom, entities.MailAuthPassword, entities.MailHost)
+	//err := smtp.SendMail(address, auth, entities.SendMailFrom, sendTo, []byte(otp))
+	//
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 
-	address := fmt.Sprintf("%s:%s", entities.MailHost, entities.MailPort)
-	auth := smtp.PlainAuth("", entities.SendMailFrom, entities.MailAuthPassword, entities.MailHost)
-	err := smtp.SendMail(address, auth, entities.SendMailFrom, sendTo, []byte(otp))
+	// SendGrid Stuff
+	from := mail.NewEmail("Bene Store", os.Getenv("MAIL_FROM"))
+	to := mail.NewEmail("Receiver", sendTo)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	subject := "Bene Store Reset Password"
+	text := "Verification Code:"
+
+	html := fmt.Sprintf("<strong>%s</strong>", otp)
+
+	mail := mail.NewSingleEmail(from, subject, to, text, html)
+
+	// Client
+
+	client := sendgrid.NewSendClient(os.Getenv("MAIL_API_KEY"))
+	res, _ := client.Send(mail)
+
+	fmt.Println()
+
+	fmt.Println(res.StatusCode, res.Body, res.Headers)
 
 	return otp
 }

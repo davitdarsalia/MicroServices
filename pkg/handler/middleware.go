@@ -31,6 +31,9 @@ func (h *Handler) checkAuth(c *gin.Context) {
 		return
 	}
 
+	// TODO - Send UserID As Context Value
+	//ctx := context.WithValue(context.Background(), "ID", "ID")
+
 	c.Set(entities.UserCtx, userId)
 }
 
