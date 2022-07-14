@@ -11,41 +11,28 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.5
 	github.com/sirupsen/logrus v1.8.1
-	github.com/spf13/viper v1.11.0
 	github.com/thanhpk/randstr v1.0.4
 )
 
 require (
-	github.com/BurntSushi/toml v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
-	github.com/gima/govalid v0.0.0-20170508202833-5e9183219fa1 // indirect
 	github.com/go-openapi/spec v0.20.6 // indirect
 	github.com/go-openapi/swag v0.21.1 // indirect
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
 	github.com/goccy/go-json v0.9.8 // indirect
-	github.com/golang/mock v1.6.0 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/pelletier/go-toml v1.9.5 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/pelletier/go-toml/v2 v2.0.2 // indirect
-	github.com/rs/xid v1.4.0 // indirect
+	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/sendgrid/rest v2.6.9+incompatible // indirect
-	github.com/sendgrid/sendgrid-go v3.11.1+incompatible // indirect
-	github.com/sergi/go-diff v1.2.0 // indirect
-	github.com/stretchr/testify v1.8.0 // indirect
-	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe // indirect
-	github.com/swaggo/gin-swagger v1.5.0 // indirect
-	github.com/swaggo/swag v1.8.3 // indirect
-	github.com/urfave/cli/v2 v2.10.3 // indirect
+	github.com/sendgrid/sendgrid-go v3.11.1+incompatible
+	github.com/stretchr/testify v1.8.0
+	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe
+	github.com/swaggo/gin-swagger v1.5.0
+	github.com/swaggo/swag v1.8.3
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
-	golang.org/x/exp/typeparams v0.0.0-20220613132600-b0d781184e0d // indirect
 	golang.org/x/net v0.0.0-20220708220712-1185a9018129 // indirect
-	golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f // indirect
 	golang.org/x/sys v0.0.0-20220708085239-5a0f0661e09d // indirect
 	golang.org/x/tools v0.1.11 // indirect
-	golang.org/x/tools/gopls v0.8.4 // indirect
-	golang.org/x/vuln v0.0.0-20220701175437-1cec1460acbd // indirect
-	honnef.co/go/tools v0.3.2 // indirect
-	mvdan.cc/gofumpt v0.3.1 // indirect
 )
