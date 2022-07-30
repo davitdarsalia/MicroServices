@@ -58,7 +58,7 @@ func (h *Handler) WriteSettingsIpToDB(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, "Ip Has Been Written Successfully")
+	c.JSON(200, constants.IpWriterSuccess)
 }
 
 func (h *Handler) WriteAccountIpToDB(c *gin.Context) {
@@ -69,5 +69,5 @@ func (h *Handler) WriteAccountIpToDB(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, "Ip Has Been Written Successfully")
+	c.JSON(200, constants.IpWriterSuccess)
 }
