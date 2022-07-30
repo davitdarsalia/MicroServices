@@ -43,4 +43,5 @@ const (
 	UpdateNotificationSettingsSuccess = "[Update Notification Settings Handler] - Notification Settings Updated Successfully"
 	UpdatePaymentSettingsSuccess      = "[Update Payment Settings Handler] - Payment Settings Updated Successfully"
 	UpdateSecuritySettingsSuccess     = "[Update Security Settings Handler] - Security Settings Updated Successfully"
+	IpWriterSuccess                   = "[Ip Writer Middleware Handler] - Ip Has Been Written Successfully"
 )
