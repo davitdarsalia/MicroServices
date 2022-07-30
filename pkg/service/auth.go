@@ -12,12 +12,14 @@ import (
 func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 	validFields := validateRegFields(u)
 
-	if validFields == true {
-		ipReceiverChan := make(chan string, 1)
+	ipReceiverChan := make(chan string, 1)
+	go func() {
+		ipReceiverChan <- entities.GetIp()
+	}()
 
-		go func() {
-			ipReceiverChan <- entities.GetIp()
-		}()
+	if validFields == true {
+
+		regCompleteChan := make(chan bool, 1)
 
 		amountOfBytes := generateRandNumber(5, 20)
 		salt := generateUniqueSalt(amountOfBytes)
@@ -30,11 +32,15 @@ func (s *AuthService) RegisterUser(u *entities.User) (int, error) {
 		userID, err := s.repo.RegisterUser(u)
 
 		if err == nil {
-			// Auth Bugfix - If User IS Already Registered Salt Will Not Stored In Redis. This Prevents 404 Error At CheckUser Method
 			redisWriteErr := s.redisConn.Set(localContext, "UniqueSalt", salt, 0).Err()
 			if redisWriteErr != nil {
 				log.Printf("RedisWriterError: %v", err.Error())
 			}
+			regCompleteChan <- true
+		}
+
+		if <-regCompleteChan == true {
+			generateEmail(&u.Email, "Welcome! You've Been Successfully Signed Up", "Sign Up", "")
 		}
 
 		return userID, err
