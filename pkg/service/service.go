@@ -44,6 +44,7 @@ type Account interface {
 
 	// SetPasscode - Public/Private Keys
 	SetPasscode()
+	WriteAccountIpToDB() error
 }
 
 // Settings TODO - Settings - Get, Put
@@ -61,6 +62,8 @@ type Settings interface {
 
 	// UpdatePrivacySettings - TODO - Create DB For This Method + Structs
 	UpdatePrivacySettings()
+
+	WriteSettingsIpToDB() error
 }
 
 type Transactions interface {

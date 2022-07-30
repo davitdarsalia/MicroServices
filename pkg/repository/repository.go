@@ -31,6 +31,8 @@ type Account interface {
 
 	// SetPasscode - Public/Private Keys
 	SetPasscode()
+
+	WriteAccountIpToDB(userID string) error
 }
 
 // Settings - TODO // Implement These Methods
@@ -48,6 +50,8 @@ type Settings interface {
 
 	// UpdatePrivacySettings - TODO - Implement DB And Method
 	UpdatePrivacySettings() error
+
+	WriteSettingsIpToDB(userID string) error
 }
 
 type Transactions interface {
