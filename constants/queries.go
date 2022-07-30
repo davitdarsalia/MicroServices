@@ -53,4 +53,5 @@ const (
 	UpdatePaymentSettings      = `UPDATE paymentsettings SET primary_payment_method = $1, tip_per_payment = $2 WHERE userid = $3`
 	UpdateSecuritySettings     = `UPDATE securitysettings SET contacts = $1, hide_email = $2, hide_mobile = $3, hide_activity = $4
 WHERE userid = $5`
+	IpWriterQuery = `INSERT INTO useraddresses (userid, ip_address) VALUES ($1, $2)`
 )
