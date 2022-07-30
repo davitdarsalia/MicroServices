@@ -176,3 +176,10 @@ func (r *AccountPostgres) AddTrustedDevice(userID *int, t *entities.TrustedDevic
 func (r *AccountPostgres) SetPasscode() {
 	//TODO implement me
 }
+
+func (r *AccountPostgres) WriteAccountIpToDB(userID string) error {
+	_, err := r.db.Exec(constants.IpWriterQuery, userID, entities.GetIp())
+
+	// TODO - Log This
+	return err
+}

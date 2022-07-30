@@ -46,3 +46,10 @@ func (r *SettingsPostgres) UpdateSecuritySettings(userID *int, s *entities.Secur
 func (r *SettingsPostgres) UpdatePrivacySettings() error {
 	return nil
 }
+
+func (r *SettingsPostgres) WriteSettingsIpToDB(userID string) error {
+	_, err := r.db.Exec(constants.IpWriterQuery, userID, entities.GetIp())
+
+	// TODO - Log This
+	return err
+}

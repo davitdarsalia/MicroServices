@@ -6,6 +6,7 @@ import (
 	"github.com/davitdarsalia/LendAppBackend/entities"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -47,4 +48,26 @@ func (h *Handler) SessionManager(c *gin.Context) {
 		return
 	}
 
+}
+
+func (h *Handler) WriteSettingsIpToDB(c *gin.Context) {
+	err := h.services.WriteSettingsIpToDB()
+
+	if err != nil {
+		log.Printf("Ip Writer Error: %s", err.Error())
+		return
+	}
+
+	c.JSON(200, "Ip Has Been Written Successfully")
+}
+
+func (h *Handler) WriteAccountIpToDB(c *gin.Context) {
+	err := h.services.WriteAccountIpToDB()
+
+	if err != nil {
+		log.Printf("Ip Writer Error: %s", err.Error())
+		return
+	}
+
+	c.JSON(200, "Ip Has Been Written Successfully")
 }

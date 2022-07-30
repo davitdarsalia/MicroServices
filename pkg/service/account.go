@@ -83,7 +83,7 @@ func (a *AccountService) UpdateProfileDetails() {
 }
 
 func (a *AccountService) AddTrustedDevice(r *entities.TrustedDevices) (int, error) {
-	id, err := a.redisConn.Get(localContext, "UserID").Result()
+	id, err := a.redisConn.Get(localContext, constants.RedisID).Result()
 
 	r.DeviceID = generateRandNumber(1, 1000000)
 	r.DeviceIpAddress = entities.GetIp()
@@ -102,4 +102,17 @@ func (a *AccountService) AddTrustedDevice(r *entities.TrustedDevices) (int, erro
 
 func (a *AccountService) SetPasscode() {
 	//TODO implement me
+}
+
+func (a *AccountService) WriteAccountIpToDB() error {
+	id, err := a.redisConn.Get(localContext, constants.RedisID).Result()
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	dbErr := a.repo.WriteAccountIpToDB(id)
+
+	return dbErr
+
 }

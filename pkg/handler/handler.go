@@ -35,7 +35,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	protected := r.Group("api/protected")
 	{
-		account := protected.Group("/account", h.checkAuth)
+		account := protected.Group("/account", h.checkAuth, h.WriteAccountIpToDB)
 		{
 			account.GET("/profile-details", h.getProfileDetails)
 			account.GET("/user-info", h.getUserInfo)
@@ -51,7 +51,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			account.POST("/set-passcode", h.setPasscode)
 		}
 
-		settings := protected.Group("/settings", h.checkAuth, h.SessionManager)
+		settings := protected.Group("/settings", h.checkAuth, h.SessionManager, h.WriteSettingsIpToDB)
 		{
 			settings.GET("/profile-settings", h.getProfileSettings)
 			settings.GET("/notification-settings", h.getNotificationSettings)

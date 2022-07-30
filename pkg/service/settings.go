@@ -1,7 +1,9 @@
 package service
 
 import (
+	"github.com/davitdarsalia/LendAppBackend/constants"
 	"github.com/davitdarsalia/LendAppBackend/entities"
+	"log"
 )
 
 func (s *SettingsService) GetProfileSettings() {
@@ -44,4 +46,16 @@ func (s *SettingsService) UpdateSecuritySettings(p *entities.SecuritySettings) e
 
 func (s *SettingsService) UpdatePrivacySettings() {
 	//TODO implement me
+}
+
+func (s *SettingsService) WriteSettingsIpToDB() error {
+	id, err := s.redisConn.Get(localContext, constants.RedisID).Result()
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	dbErr := s.repo.WriteSettingsIpToDB(id)
+
+	return dbErr
 }
