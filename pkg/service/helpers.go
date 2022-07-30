@@ -23,6 +23,7 @@ import (
 )
 
 var localContext = context.Background()
+var localSendgridClient = sendgrid.NewSendClient(os.Getenv("MAIL_API_KEY"))
 
 type AuthService struct {
 	repo      repository.Authorization
@@ -122,16 +123,30 @@ func generateRandNumber(min, max int) int {
 	return rand.Intn((max - min + 1) + min)
 }
 
+func generateEmail(sendTo *string, message, subject, plainText string) {
+	from := mail.NewEmail(os.Getenv("MAIL_SENDER"), os.Getenv("MAIL_FROM"))
+
+	to := mail.NewEmail("Receiver", *sendTo)
+
+	html := fmt.Sprintf(
+		"<strong>%s</strong>",
+		message,
+	)
+
+	mail := mail.NewSingleEmail(from, subject, to, plainText, html)
+
+	res, emailWriterErr := localSendgridClient.Send(mail)
+
+	if emailWriterErr != nil {
+		log.Printf("Email Helper Method: %s", emailWriterErr.Error())
+	}
+
+	log.Printf("Email Logger: %d, %s, %s", res.StatusCode, res.Body, res.Headers)
+
+}
+
 func generateResetEmail(sendTo string) string {
 	otp := generateOTP()
-	//
-	//address := fmt.Sprintf("%s:%s", entities.MailHost, entities.MailPort)
-	//auth := smtp.PlainAuth("", entities.SendMailFrom, entities.MailAuthPassword, entities.MailHost)
-	//err := smtp.SendMail(address, auth, entities.SendMailFrom, sendTo, []byte(otp))
-	//
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
 
 	// SendGrid Stuff
 	from := mail.NewEmail("Bene Store", os.Getenv("MAIL_FROM"))
@@ -144,14 +159,13 @@ func generateResetEmail(sendTo string) string {
 
 	mail := mail.NewSingleEmail(from, subject, to, text, html)
 
-	// Client
+	res, emailWriterErr := localSendgridClient.Send(mail)
 
-	client := sendgrid.NewSendClient(os.Getenv("MAIL_API_KEY"))
-	res, _ := client.Send(mail)
+	if emailWriterErr != nil {
+		log.Printf("Email Helper Method: %s", emailWriterErr.Error())
+	}
 
-	fmt.Println()
-
-	fmt.Println(res.StatusCode, res.Body, res.Headers)
+	log.Printf("Email Logger: %d, %s, %s", res.StatusCode, res.Body, res.Headers)
 
 	return otp
 }
@@ -228,5 +242,6 @@ func validateRegFields(u *entities.User) bool {
 			res = true
 		}
 	}
+
 	return res
 }
