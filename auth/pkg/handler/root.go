@@ -21,19 +21,19 @@ func (h *Handler) Routes() *gin.Engine {
 
 	auth := r.Group("api/auth")
 	{
-		auth.POST("/create-user", h.createUser)
-		auth.POST("/login", h.createUser)
-		auth.POST("/refresh-login", h.createUser)
+		auth.POST("/create-user", h.create)
+		auth.POST("/login", h.login)
+		auth.POST("/refresh-login", h.refresh)
 
-		auth.POST("/reset-password", h.createUser)
+		auth.POST("/reset-password", h.reset)
 
-		auth.POST("/verify-reset-email", h.createUser)
+		auth.POST("/verify-reset-email", h.verify)
 	}
 
 	return r
 }
 
-// NewHandler - Returns New And Only Instance Of Handler
+// New - Returns New And Only Instance Of Handler
 func New(s *service.Service) *Handler {
 	return &Handler{services: s}
 }
