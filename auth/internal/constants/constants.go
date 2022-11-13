@@ -2,15 +2,19 @@ package constants
 
 /* Success Messages */
 
-const ()
+const (
+	CreatedUserSuccess = "[Register Handler] - User Created Successfully"
+)
 
 /* Error Messages */
 
-const ()
+const (
+	UserAlreadyRegistered = "[Create User Handler] - User Already Registered"
+)
 
 /* Generic Errors */
 
 const (
-	InternalServerError = "[All Handlers] - Internal Server Error"
-	BadRequest          = "[All Handlers] - Some Of Your Credentials Are Missing"
+	InternalServerError = "[Generic Handler] - Internal Server Error"
+	BadRequest          = "[Generic Handler] - Some Of Your Credentials Are Missing"
 )
