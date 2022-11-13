@@ -1,6 +1,8 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	"github.com/jackc/pgx/v5"
+)
 
 /* Database Related Types */
 
@@ -15,10 +17,10 @@ type Repository struct {
 }
 
 type DBInstance struct {
-	db *sqlx.DB
+	db *pgx.Conn
 }
 
-func New(db *sqlx.DB) *Repository {
+func New(db *pgx.Conn) *Repository {
 	return &Repository{Persistor: &DBInstance{db: db}}
 }
 
