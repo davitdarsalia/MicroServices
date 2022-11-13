@@ -6,6 +6,7 @@ import (
 	"github.com/davitdarsalia/auth/internal/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 func (h *Handler) Create(c *gin.Context) {
@@ -15,7 +16,18 @@ func (h *Handler) Create(c *gin.Context) {
 		utils.Error(c, http.StatusBadRequest, constants.BadRequest)
 	}
 
-	//id, err := h.services.ProviderService.
+	id, err := h.services.ProviderService.Create(u)
+
+	if err != nil {
+		utils.Error(c, http.StatusConflict, constants.UserAlreadyRegistered)
+		return
+	}
+
+	c.SecureJSON(http.StatusCreated, entities.RegisteredUserResponse{
+		UserId:    id,
+		Message:   constants.CreatedUserSuccess,
+		CreatedAt: time.Now().Format(constants.RegularFormat),
+	})
 }
 
 func (h *Handler) Login(c *gin.Context) {
