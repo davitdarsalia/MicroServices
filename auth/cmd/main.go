@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/davitdarsalia/auth/internal"
 	"github.com/davitdarsalia/auth/pkg/handler"
@@ -42,11 +45,29 @@ func main() {
 
 	// Server Runs In Separate GoRoutine
 
-	go func() {
-		if err := new(internal.AuthServer).Run(os.Getenv("PORT"), handlers.Routes()); err != nil {
+	s := new(internal.AuthServer)
 
+	go func() {
+		if err := s.Run(os.Getenv("PORT"), handlers.Routes()); err != nil {
+			logrus.Fatalf("Error While Running Server On Port %s", os.Getenv("PORT"))
 		}
 	}()
+
+	quitSignal := make(chan os.Signal, 1)
+
+	signal.Notify(quitSignal, syscall.SIGTERM, syscall.SIGINT)
+
+	<-quitSignal
+
+	/* Graceful Shutdown */
+
+	if err := s.Kill(context.Background()); err != nil {
+		logrus.Errorf("Failed To Shut Down Server: \n %s", err.Error())
+	}
+
+	if err := db.Close(context.Background()); err != nil {
+		logrus.Errorf("Failed To Close DB: \n %s", err.Error())
+	}
 
 }
 
