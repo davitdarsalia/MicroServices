@@ -3,11 +3,11 @@ package service
 import "github.com/davitdarsalia/auth/pkg/repository"
 
 type ProviderService interface {
-	create()
-	login()
-	refresh()
-	verify()
-	reset()
+	Create()
+	Login()
+	Refresh()
+	Verify()
+	Reset()
 }
 
 type Service struct {

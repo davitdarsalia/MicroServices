@@ -21,13 +21,13 @@ func (h *Handler) Routes() *gin.Engine {
 
 	auth := r.Group("api/auth")
 	{
-		auth.POST("/create-user", h.create)
-		auth.POST("/login", h.login)
-		auth.POST("/refresh-login", h.refresh)
+		auth.POST("/create-user", h.Create)
+		auth.POST("/login", h.Login)
+		auth.POST("/refresh-login", h.Refresh)
 
-		auth.POST("/reset-password", h.reset)
+		auth.POST("/reset-password", h.Reset)
 
-		auth.POST("/verify-reset-email", h.verify)
+		auth.POST("/verify-reset-email", h.Verify)
 	}
 
 	return r
