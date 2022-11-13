@@ -1,26 +1,26 @@
 package repository
 
-func (D DBInstance) login() {
+func (D DBInstance) Create() {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (D DBInstance) refresh() {
+func (D DBInstance) Login() {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (D DBInstance) verify() {
+func (D DBInstance) Refresh() {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (D DBInstance) reset() {
+func (D DBInstance) Verify() {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (D DBInstance) create() {
+func (D DBInstance) Reset() {
 	//TODO implement me
 	panic("implement me")
 }

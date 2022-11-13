@@ -27,15 +27,15 @@ func New(db *pgx.Conn) *Repository {
 /* Root Interfaces */
 
 type Authorizer interface {
-	create()
-	login()
-	refresh()
+	Create()
+	Login()
+	Refresh()
 }
 
 type Verifier interface {
-	verify()
+	Verify()
 }
 
 type Reset interface {
-	reset()
+	Reset()
 }

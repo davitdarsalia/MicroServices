@@ -1,26 +1,26 @@
 package service
 
-func (r RootService) create() {
+func (r RootService) Create() {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r RootService) login() {
+func (r RootService) Login() {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r RootService) refresh() {
+func (r RootService) Refresh() {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r RootService) verify() {
+func (r RootService) Verify() {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r RootService) reset() {
+func (r RootService) Reset() {
 	//TODO implement me
 	panic("implement me")
 }

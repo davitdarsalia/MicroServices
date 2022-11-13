@@ -1,13 +1,16 @@
 package service
 
-import "github.com/davitdarsalia/auth/pkg/repository"
+import (
+	"github.com/davitdarsalia/auth/internal/entities"
+	"github.com/davitdarsalia/auth/pkg/repository"
+)
 
 type ProviderService interface {
-	create()
-	login()
-	refresh()
-	verify()
-	reset()
+	Create(u entities.User) (uintptr, error)
+	Login()
+	Refresh()
+	Verify()
+	Reset()
 }
 
 type Service struct {
