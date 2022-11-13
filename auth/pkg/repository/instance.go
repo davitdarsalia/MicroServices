@@ -1,17 +1,31 @@
 package repository
 
 import (
-	"github.com/jmoiron/sqlx"
+	"context"
+	"github.com/jackc/pgx/v5"
+	"github.com/sirupsen/logrus"
 	"log"
+	"os"
 )
 
-func NewDatabaseInstance() (*sqlx.DB, error) {
-	db, err := sqlx.Open("postgres", "host=localhost port=5433 user=postgres sslmode=disable")
+func NewDatabaseInstance() (*pgx.Conn, error) {
+	conn, err := pgx.Connect(context.Background(), os.Getenv("CONNECTION"))
+	defer func(conn *pgx.Conn, ctx context.Context) {
+		closeErr := conn.Close(ctx)
+		if err != nil {
+			logrus.Fatal(closeErr)
+		}
+	}(conn, context.Background())
+
 	if err != nil {
-		log.Fatalf("\nFailed To Connect To The Database. \nOriginal Error: %s\n", err.Error())
+		logrus.Fatal(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
 	}
-	if err = db.Ping(); err != nil {
+
+	if err = conn.Ping(context.Background()); err != nil {
 		log.Fatalf("\nPing Error. Connection Lost\n. \n Original Error: %s", err.Error())
 	}
-	return db, nil
+
+	return conn, nil
+
 }
