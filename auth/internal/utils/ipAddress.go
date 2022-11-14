@@ -2,11 +2,12 @@ package utils
 
 import (
 	"fmt"
+	"github.com/davitdarsalia/auth/internal/types"
 	"net"
 	"os"
 )
 
-func IpAddress() (result string) {
+func IpAddress() (result types.IpV16) {
 	host, _ := os.Hostname()
 	address, _ := net.LookupIP(host)
 
