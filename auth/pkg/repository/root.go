@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/davitdarsalia/auth/internal/entities"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -27,7 +28,7 @@ func New(db *pgx.Conn) *Repository {
 /* Root Interfaces */
 
 type Authorizer interface {
-	Create()
+	Create(u *entities.User) (string, error)
 	Login()
 	Refresh()
 }

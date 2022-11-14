@@ -6,7 +6,7 @@ import (
 )
 
 type ProviderService interface {
-	Create(u entities.User) (uintptr, error)
+	Create(u *entities.User) (string, error)
 	Login()
 	Refresh()
 	Verify()
