@@ -2,14 +2,12 @@ package repository
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"github.com/davitdarsalia/auth/internal/entities"
 	"github.com/davitdarsalia/auth/internal/queries"
-	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/davitdarsalia/auth/internal/utils"
 )
 
-func (d DBInstance) Create(u *entities.User) (string, error) {
+func (d *DBInstance) Create(u *entities.User) (string, error) {
 	var userID string
 
 	err := d.db.QueryRow(context.Background(), queries.RegisterUserQuery,
@@ -17,34 +15,29 @@ func (d DBInstance) Create(u *entities.User) (string, error) {
 		u.Country, u.Email, u.Gender, u.City, u.CreatedAt, u.IpAddress,
 	).Scan(&userID)
 
-	if err != nil {
-		var pgErr *pgconn.PgError
-
-		if errors.As(err, &pgErr) {
-			fmt.Println(pgErr.Message) // => syntax error at end of input
-			fmt.Println(pgErr.Code)    // => 42601
-		}
-	}
+	utils.PgxErrorHandler(err)
 
 	return userID, err
 }
 
-func (d DBInstance) Login() {
-	//TODO implement me
-	panic("implement me")
+func (d *DBInstance) Login(email, password string) (string, error) {
+	var userID string
+
+	err := d.db.QueryRow(context.Background(), queries.CheckUserQuery, email, password).Scan(&userID)
+
+	utils.PgxErrorHandler(err)
+
+	return userID, err
 }
 
-func (d DBInstance) Refresh() {
+func (d *DBInstance) Refresh() {
 	//TODO implement me
-	panic("implement me")
 }
 
-func (d DBInstance) Verify() {
+func (d *DBInstance) Verify() {
 	//TODO implement me
-	panic("implement me")
 }
 
-func (d DBInstance) Reset() {
+func (d *DBInstance) Reset() {
 	//TODO implement me
-	panic("implement me")
 }

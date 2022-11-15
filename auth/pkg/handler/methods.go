@@ -15,16 +15,17 @@ func (h *Handler) Create(c *gin.Context) {
 
 	if err := c.BindJSON(&u); err != nil {
 		utils.Error(c, http.StatusBadRequest, constants.BadRequest)
+		return
 	}
 
 	id, err := h.services.ProviderService.Create(&u)
 
 	if err != nil {
-		utils.Error(c, http.StatusConflict, constants.UserAlreadyRegistered)
+		utils.Error(c, http.StatusConflict, constants.UserAlreadyRegisteredError)
 		return
 	}
 
-	t, err := utils.TokenPair(id)
+	t := utils.TokenPair(id)
 
 	c.SecureJSON(http.StatusCreated, entities.RegisteredResponse{
 		RegisteredUser: entities.RegisteredUser{
@@ -42,11 +43,55 @@ func (h *Handler) Create(c *gin.Context) {
 }
 
 func (h *Handler) Login(c *gin.Context) {
-	// TODO implement me
+	var u entities.UserInput
+
+	if err := c.BindJSON(&u); err != nil {
+		utils.Error(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	tPair, err := h.services.ProviderService.Login(&u)
+
+	if err != nil {
+		utils.Error(c, http.StatusNotFound, constants.UserNotFoundError)
+		return
+	}
+
+	c.SecureJSON(http.StatusOK, entities.LoggedInUserResponse{
+		Message: constants.LoggedInUserSuccess,
+		Authenticated: entities.Authenticated{
+			AT:    tPair[0],
+			ATExp: os.Getenv("exp"),
+			RT:    tPair[1],
+			RTExp: "5 Days",
+		},
+	})
 }
 
 func (h *Handler) Refresh(c *gin.Context) {
-	// TODO implement me
+	var t entities.RefreshLogin
+
+	if err := c.BindJSON(&t); err != nil {
+		utils.Error(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	tPair, err := h.services.Refresh(t.RT)
+
+	if err != nil {
+		utils.Error(c, http.StatusNotAcceptable, constants.InvalidTokenError)
+		return
+	}
+
+	c.SecureJSON(http.StatusAccepted, entities.LoggedInUserResponse{
+		Message: constants.LoggedInUserSuccess,
+		Authenticated: entities.Authenticated{
+			AT:    tPair[0],
+			ATExp: os.Getenv("exp"),
+			RT:    tPair[1],
+			RTExp: "5 Days",
+		},
+	})
 }
 
 func (h *Handler) Verify(c *gin.Context) {

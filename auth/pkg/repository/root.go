@@ -29,8 +29,7 @@ func New(db *pgx.Conn) *Repository {
 
 type Authorizer interface {
 	Create(u *entities.User) (string, error)
-	Login()
-	Refresh()
+	Login(email, password string) (string, error)
 }
 
 type Verifier interface {

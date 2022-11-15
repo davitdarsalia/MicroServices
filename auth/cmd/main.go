@@ -2,16 +2,17 @@ package main
 
 import (
 	"context"
-	"os"
-	"os/signal"
-	"syscall"
-
 	"github.com/davitdarsalia/auth/internal"
+	"github.com/davitdarsalia/auth/internal/cache"
 	"github.com/davitdarsalia/auth/pkg/handler"
 	"github.com/davitdarsalia/auth/pkg/repository"
 	"github.com/davitdarsalia/auth/pkg/service"
+	"github.com/go-redis/redis/v8"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 var globalFormatter = new(logrus.JSONFormatter)
@@ -29,18 +30,18 @@ var globalFormatter = new(logrus.JSONFormatter)
 func main() {
 	logrus.SetFormatter(globalFormatter)
 
-	defer func() {
-
-	}()
-
 	/* Instances Been Initializing Here */
 	db, err := repository.NewDatabaseInstance()
 	if err != nil {
 		logrus.Fatalf("Error While Initializing DataBase Connection; %s", err.Error())
 	}
 
+	redisCache := cache.New(&redis.Options{
+		Addr: os.Getenv("REDIS_PORT"),
+		DB:   0,
+	})
 	repos := repository.New(db)
-	services := service.New(repos)
+	services := service.New(repos, redisCache)
 	handlers := handler.New(services)
 
 	// Server Runs In Separate GoRoutine
@@ -75,4 +76,5 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		logrus.Fatalf("Failed To Initialize Enviroment Variables: %s", err)
 	}
+
 }
