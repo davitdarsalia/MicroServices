@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
+	"github.com/davitdarsalia/auth/internal/constants"
 	"github.com/davitdarsalia/auth/internal/entities"
 	"github.com/davitdarsalia/auth/internal/types"
 	"github.com/dgrijalva/jwt-go"
@@ -12,7 +14,7 @@ import (
 )
 
 // TokenPair - Returns Token Pair (Access Token + Refresh Token) And Corresponding Error
-func TokenPair(userID types.UserID) ([2]string, error) {
+func TokenPair(userID types.UserID) types.TokenPair {
 	tokenPairChan := make(chan string, 2)
 
 	m, _ := strconv.Atoi(os.Getenv("EXP"))
@@ -31,11 +33,15 @@ func TokenPair(userID types.UserID) ([2]string, error) {
 	})
 
 	rT := jwt.NewWithClaims(jwt.SigningMethodHS256,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(7200).Unix(),
-			Id:        fmt.Sprintf("TokenID: %s", Salt()),
-			IssuedAt:  time.Now().Unix(),
-			Subject:   "Refresh"},
+		entities.RefreshToken{
+			StandardClaims: jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(7200).Unix(),
+				Id:        fmt.Sprintf("TokenID: %s", Salt()),
+				IssuedAt:  time.Now().Unix(),
+				Subject:   "Refresh",
+			},
+			Ip: IpAddress(),
+		},
 	)
 
 	go func() {
@@ -58,5 +64,43 @@ func TokenPair(userID types.UserID) ([2]string, error) {
 		tokenPairChan <- refreshToken
 	}()
 
-	return [2]string{<-tokenPairChan, <-tokenPairChan}, nil
+	return [2]string{<-tokenPairChan, <-tokenPairChan}
+}
+
+func ParseAccessToken(t string) (int, error) {
+	token, err := jwt.ParseWithClaims(t, &entities.RefreshToken{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid Signing Method")
+		}
+		// TODO - Replace Static Sign Key With Custom One For Each User
+		return []byte(os.Getenv("sign_key")), nil
+	})
+	if err != nil {
+		return -1, err
+	}
+	claims, ok := token.Claims.(*entities.RefreshToken)
+	if !ok {
+		return -1, errors.New(constants.InvalidTokenClaims)
+	}
+	userID, _ := strconv.Atoi(claims.Id)
+	return userID, nil
+}
+
+func ParseRefreshToken(t string) (types.TokenPair, error) {
+	token, err := jwt.ParseWithClaims(t, &entities.RefreshToken{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid Signing Method")
+		}
+		// TODO - Replace Static Sign Key With Custom One For Each User
+		return []byte(os.Getenv("sign_key")), nil
+	})
+	if err != nil {
+		return [2]string{"", ""}, err
+	}
+	claims, ok := token.Claims.(*entities.RefreshToken)
+	if !ok {
+		return [2]string{"", ""}, errors.New(constants.InvalidTokenClaims)
+	}
+
+	return TokenPair(claims.Id), nil
 }
