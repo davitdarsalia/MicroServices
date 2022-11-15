@@ -1,0 +1,12 @@
+run:
+	go run cmd/main.go
+build:
+	echo "Build Is Starting"
+	go build cmd/main.go
+	echo "Build Ended"
+
+lint:
+	golangci-lint run
+
+strictLint:
+	golangci-lint run --enable-all
