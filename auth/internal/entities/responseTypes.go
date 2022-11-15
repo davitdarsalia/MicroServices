@@ -17,3 +17,8 @@ type RegisteredResponse struct {
 	RegisteredUser
 	Authenticated
 }
+
+type LoggedInUserResponse struct {
+	Message string `json:"message"`
+	Authenticated
+}
