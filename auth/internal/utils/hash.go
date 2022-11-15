@@ -8,15 +8,15 @@ import (
 	"strings"
 )
 
-func Hash(p types.Password) types.Hash512 {
+func Hash(p types.Password, salt string) types.Hash512 {
 	hash := sha512.New()
 	hash.Write([]byte(p))
-	return fmt.Sprintf("%x", hash.Sum([]byte(Salt())))
+
+	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
 }
 
 func Salt() types.SaltVal {
 	var s strings.Builder
 	s.Write(randstr.Bytes(25))
-
 	return s.String()
 }
