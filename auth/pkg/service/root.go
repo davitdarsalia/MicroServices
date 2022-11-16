@@ -11,8 +11,8 @@ type ProviderService interface {
 	Create(u *entities.User) (string, error)
 	Login(u *entities.UserInput) (types.TokenPair, error)
 	Refresh(refreshToken types.RefreshToken) (types.TokenPair, error)
+	Reset(u *entities.ResetPasswordInput) error
 	Verify()
-	Reset()
 }
 
 type Service struct {

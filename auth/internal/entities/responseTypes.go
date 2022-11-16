@@ -22,3 +22,7 @@ type LoggedInUserResponse struct {
 	Message string `json:"message"`
 	Authenticated
 }
+
+type ResetPasswordResponse struct {
+	Message string `json:"message"`
+}

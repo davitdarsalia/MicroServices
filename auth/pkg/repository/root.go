@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/davitdarsalia/auth/internal/entities"
+	"github.com/davitdarsalia/auth/internal/types"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -37,5 +38,5 @@ type Verifier interface {
 }
 
 type Reset interface {
-	Reset()
+	Reset(email, idNumber string, newPassword types.Hash512) error
 }
