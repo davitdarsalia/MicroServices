@@ -3,8 +3,9 @@ package constants
 /* Success Messages */
 
 const (
-	CreatedUserSuccess  = "[Register Handler] - User Created Successfully"
-	LoggedInUserSuccess = "[Login Handler] - User Logged In Successfully"
+	CreatedUserSuccess   = "[Register Handler] - User Created Successfully"
+	LoggedInUserSuccess  = "[Login Handler] - User Logged In Successfully"
+	ResetPasswordSuccess = "[Reset Password Handler] - Password Reset Been Successful"
 )
 
 /* Error Messages */
