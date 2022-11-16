@@ -2,8 +2,10 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"github.com/davitdarsalia/auth/internal/entities"
 	"github.com/davitdarsalia/auth/internal/queries"
+	"github.com/davitdarsalia/auth/internal/types"
 	"github.com/davitdarsalia/auth/internal/utils"
 )
 
@@ -24,20 +26,32 @@ func (d *DBInstance) Login(email, password string) (string, error) {
 	var userID string
 
 	err := d.db.QueryRow(context.Background(), queries.CheckUserQuery, email, password).Scan(&userID)
-
 	utils.PgxErrorHandler(err)
 
 	return userID, err
 }
 
-func (d *DBInstance) Refresh() {
-	//TODO implement me
+func (d *DBInstance) Reset(email, idNumber string, newPassword types.Hash512) error {
+	var userID string
+
+	fmt.Println(email, idNumber, newPassword, "DDD")
+
+	err := d.db.QueryRow(context.Background(), queries.CheckUserForReset, email, idNumber).Scan(&userID)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = d.db.Exec(context.Background(), queries.RegisterUserQuery, newPassword, userID)
+
+	if err != nil {
+		utils.PgxErrorHandler(err)
+		return err
+	}
+
+	return nil
 }
 
 func (d *DBInstance) Verify() {
-	//TODO implement me
-}
-
-func (d *DBInstance) Reset() {
 	//TODO implement me
 }

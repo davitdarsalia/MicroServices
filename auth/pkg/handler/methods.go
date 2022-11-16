@@ -94,10 +94,25 @@ func (h *Handler) Refresh(c *gin.Context) {
 	})
 }
 
-func (h *Handler) Verify(c *gin.Context) {
-	// TODO implement me
+func (h *Handler) Reset(c *gin.Context) {
+	var r entities.ResetPasswordInput
+
+	if err := c.BindJSON(&r); err != nil {
+		utils.Error(c, http.StatusBadRequest, constants.BadRequest)
+		return
+	}
+
+	err := h.services.Reset(&r)
+
+	if err != nil {
+		utils.Error(c, http.StatusNotFound, constants.UserNotFoundError)
+		return
+	}
+
+	c.SecureJSON(http.StatusResetContent,
+		entities.ResetPasswordResponse{Message: constants.ResetPasswordSuccess},
+	)
 }
 
-func (h *Handler) Reset(c *gin.Context) {
-	// TODO implement me
+func (h *Handler) Verify(c *gin.Context) {
 }

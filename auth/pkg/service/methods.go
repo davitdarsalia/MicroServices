@@ -6,6 +6,7 @@ import (
 	"github.com/davitdarsalia/auth/internal/entities"
 	"github.com/davitdarsalia/auth/internal/types"
 	"github.com/davitdarsalia/auth/internal/utils"
+	"log"
 	"time"
 )
 
@@ -55,10 +56,17 @@ func (r *RootService) Refresh(refreshToken types.RefreshToken) (types.TokenPair,
 	return utils.ParseRefreshToken(refreshToken)
 }
 
-func (r *RootService) Verify() {
-	//TODO implement me
+func (r *RootService) Reset(u *entities.ResetPasswordInput) error {
+	salt, err := r.redis.Get(context.Background(), constants.RedisSalt).Result()
+	if err != nil {
+		log.Println(err, "Redis Get ID Error")
+	}
+
+	err = r.repository.Reset(u.Email, u.IDNumber, utils.Hash(u.NewPassword, salt))
+
+	return err
 }
 
-func (r *RootService) Reset() {
+func (r *RootService) Verify() {
 	//TODO implement me
 }
