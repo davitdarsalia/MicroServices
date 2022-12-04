@@ -19,15 +19,24 @@ func (h *Handler) Routes() *gin.Engine {
 		docs.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
-	auth := r.Group("api/auth")
+	testPayments := r.Group("api/payment/test")
 	{
-		auth.POST("/create-user", h.Create)
-		auth.POST("/login", h.Login)
-		auth.POST("/refresh-login", h.Refresh)
+		testPayments.POST("/create-user", h.FetchPublicKey)
+		testPayments.POST("/login")
+		testPayments.POST("/refresh-login")
 
-		auth.POST("/reset-password", h.Reset)
+		testPayments.POST("/reset-password")
 
-		auth.POST("/verify-reset-email", h.Verify)
+		testPayments.POST("/verify-reset-email")
+	}
+
+	realPayments := r.Group("api/payment")
+	{
+		realPayments.POST("/create-user")
+		realPayments.POST("/login")
+		realPayments.POST("/refresh-login")
+
+		realPayments.POST("/reset-password")
 	}
 
 	return r
