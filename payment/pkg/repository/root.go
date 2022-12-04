@@ -1,21 +1,18 @@
 package repository
 
 import (
-	"github.com/davitdarsalia/payment/internal/entities"
-	"github.com/davitdarsalia/payment/internal/types"
 	"github.com/jackc/pgx/v5"
 )
 
 /* Database Related Types */
 
-type Persistor interface {
-	Authorizer
-	Verifier
-	Reset
+type Payments interface {
+	TestPayments
+	RealPayments
 }
 
 type Repository struct {
-	Persistor
+	Payments
 }
 
 type DBInstance struct {
@@ -23,20 +20,15 @@ type DBInstance struct {
 }
 
 func New(db *pgx.Conn) *Repository {
-	return &Repository{Persistor: &DBInstance{db: db}}
+	return &Repository{Payments: &DBInstance{db: db}}
 }
 
 /* Root Interfaces */
 
-type Authorizer interface {
-	Create(u *entities.User) (string, error)
-	Login(email, password string) (string, error)
+type TestPayments interface {
+	FetchPublicKey() string
 }
 
-type Verifier interface {
-	Verify()
-}
-
-type Reset interface {
-	Reset(email, idNumber string, newPassword types.Hash512) error
+type RealPayments interface {
+	FetchPublicKey() string
 }
