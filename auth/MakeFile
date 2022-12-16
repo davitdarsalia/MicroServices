@@ -10,3 +10,5 @@ lint:
 
 strictLint:
 	golangci-lint run --enable-all
+b:
+	docker-compose up --build

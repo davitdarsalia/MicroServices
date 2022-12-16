@@ -1,0 +1,27 @@
+FROM golang:1.19-alpine
+
+WORKDIR /
+
+COPY go.mod  go.sum ./
+
+RUN go mod download
+
+COPY internal ./
+COPY pkg ./
+
+RUN go build -o auth-service .
+
+EXPOSE 8082
+
+CMD ["./auth"]
+
+# Second stage
+FROM alpine:latest
+WORKDIR /root/
+
+COPY internal ./
+COPY pkg ./
+
+EXPOSE 8080
+
+CMD ["./auth"]

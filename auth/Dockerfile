@@ -2,16 +2,15 @@ FROM golang:1.19-alpine
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
-RUN go mod download
+COPY go.mod go.sum ./
 
+RUN go mod download
 
 COPY internal ./
 COPY pkg ./
 
-RUN go build -o auth-service
+RUN go build -o app .
 
-EXPOSE 8082
+EXPOSE 8080
 
-CMD [ "/auth-service" ]
+CMD ["./app"]

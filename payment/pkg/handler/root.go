@@ -21,22 +21,12 @@ func (h *Handler) Routes() *gin.Engine {
 
 	testPayments := r.Group("api/payment/test")
 	{
-		testPayments.POST("/create-user", h.FetchPublicKey)
-		testPayments.POST("/login")
-		testPayments.POST("/refresh-login")
-
-		testPayments.POST("/reset-password")
-
-		testPayments.POST("/verify-reset-email")
+		testPayments.POST("/fetch-public-key", h.FetchPublicKey)
 	}
 
 	realPayments := r.Group("api/payment")
 	{
-		realPayments.POST("/create-user")
-		realPayments.POST("/login")
-		realPayments.POST("/refresh-login")
-
-		realPayments.POST("/reset-password")
+		realPayments.POST("/fetch-public-key")
 	}
 
 	return r
