@@ -1,0 +1,80 @@
+package service
+
+import (
+	"errors"
+	"log"
+	"menuAPI/internal/entities"
+)
+
+/* Methods */
+
+func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error) {
+	salt, _ := generateSalt()
+
+	u.Salt = salt
+	u.Password = hash(u.Password, u.Salt)
+	u.IPAddress = getIPv6()
+	u.DateCreated = getFormattedDateTime()
+
+	id, err := a.repo.CreateUser(u)
+
+	if err == nil {
+		aT, err := accessToken(id, u.Salt)
+		rT, err := refreshToken(id, u.Salt)
+
+		if err != nil {
+			log.Println("Token Generation Error")
+		}
+
+		return entities.AuthenticatedUserResponse{
+			UserID:                id,
+			AccessToken:           aT,
+			AccessTokenExpiresAt:  "200 Minutes",
+			RefreshToken:          rT,
+			RefreshTokenExpiresAt: "200 Hours",
+		}, nil
+	}
+
+	return entities.AuthenticatedUserResponse{
+		AccessToken: "No access",
+	}, err
+
+}
+
+func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUserResponse, error) {
+	data, err := a.repo.LoginUser(u)
+
+	if data[0] == hash(u.Password, data[1]) {
+		aT, err := accessToken(data[2], data[1])
+		rT, err := refreshToken(data[2], data[1])
+
+		if err != nil {
+			log.Println("Token Generation Error")
+		}
+
+		return entities.AuthenticatedUserResponse{
+			UserID:                data[2],
+			AccessToken:           aT,
+			AccessTokenExpiresAt:  "200 Minutes",
+			RefreshToken:          rT,
+			RefreshTokenExpiresAt: "200 Hours",
+		}, nil
+	}
+
+	err = errors.New("user not found")
+
+	return entities.AuthenticatedUserResponse{}, err
+}
+
+func (a *AuthService) RecoverPassword(u entities.RecoverPasswordInput) error {
+	newSalt, err := generateSalt()
+
+	if err != nil {
+		log.Printf("Salt Generation Error, %s", err.Error())
+	}
+
+	u.NewPassword = hash(u.NewPassword, newSalt)
+
+	// Add code verification
+	return a.repo.RecoverPassword(u)
+}
