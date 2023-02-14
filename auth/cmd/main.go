@@ -5,12 +5,19 @@ import (
 	"auth/pkg/handler"
 	"auth/pkg/repository"
 	"auth/pkg/service"
-	"os"
-
+	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
+	"log"
+	"os"
 )
 
 func main() {
+	err := godotenv.Load()
+
+	if err != nil {
+		log.Printf("Failed To Load Environment Variables: %s", err.Error())
+	}
+
 	logrus.SetFormatter(&logrus.JSONFormatter{
 		TimestampFormat:   "18:08:20",
 		DisableTimestamp:  false,
@@ -36,10 +43,11 @@ func main() {
 
 	repos := repository.New(db)
 	services := service.New(repos)
-	handler := handler.New(services)
+	h := handler.New(services)
 
 	s := new(entities.Server)
-	if err := s.Run(os.Getenv("AUTH_SERVER_PORT"), handler.DefineRoutes()); err != nil {
+
+	if err := s.Run(os.Getenv("AUTH_SERVER_PORT"), h.DefineRoutes()); err != nil {
 		logrus.Fatalf("Error occured while initializing server: %s", err.Error())
 	}
 }
