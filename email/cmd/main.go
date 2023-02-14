@@ -1,13 +1,12 @@
 package main
 
 import (
-	"auth/internal/entities"
-	"auth/pkg/handler"
-	"auth/pkg/repository"
-	"auth/pkg/service"
-	"os"
-
+	"email/internal/entities"
+	"email/pkg/handler"
+	"email/pkg/repository"
+	"email/pkg/service"
 	"github.com/sirupsen/logrus"
+	"os"
 )
 
 func main() {

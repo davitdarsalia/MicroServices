@@ -1,6 +1,6 @@
 package responses
 
-import "menuAPI/internal/entities"
+import "auth/internal/entities"
 
 type CreateUserResponse struct {
 	UserID string `json:"user_id"`

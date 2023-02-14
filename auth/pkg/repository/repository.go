@@ -1,8 +1,9 @@
 package repository
 
 import (
+	"auth/internal/entities"
+
 	"github.com/jmoiron/sqlx"
-	"menuAPI/internal/entities"
 )
 
 type AuthDB interface {

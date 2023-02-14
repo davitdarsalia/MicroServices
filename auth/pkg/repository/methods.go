@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"menuAPI/internal/entities"
-	"menuAPI/internal/queries"
+	"auth/internal/entities"
+	"auth/internal/queries"
 )
 
 func (a *AuthPostgres) CreateUser(u entities.User) (string, error) {
