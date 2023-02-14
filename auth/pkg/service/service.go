@@ -3,6 +3,7 @@ package service
 import (
 	"auth/internal/entities"
 	"auth/pkg/repository"
+	mq "github.com/rabbitmq/amqp091-go"
 )
 
 type Authorizer interface {
@@ -16,13 +17,14 @@ type Service struct {
 }
 
 type AuthService struct {
-	repo repository.AuthDB
+	repo         repository.AuthDB
+	messageQueue *mq.Connection
 }
 
-func newAuthService(repo repository.Repository) *AuthService {
-	return &AuthService{repo: repo}
+func newAuthService(repo repository.Repository, mq *mq.Connection) *AuthService {
+	return &AuthService{repo: repo, messageQueue: mq}
 }
 
-func New(r repository.Repository) *Service {
-	return &Service{Authorizer: newAuthService(r)}
+func New(r repository.Repository, mq *mq.Connection) *Service {
+	return &Service{Authorizer: newAuthService(r, mq)}
 }
