@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"auth/internal/entities"
+	"email/internal/entities"
 	"fmt"
 
 	"github.com/jmoiron/sqlx"

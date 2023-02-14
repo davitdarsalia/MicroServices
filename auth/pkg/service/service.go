@@ -1,8 +1,8 @@
 package service
 
 import (
-	"menuAPI/internal/entities"
-	"menuAPI/pkg/repository"
+	"auth/internal/entities"
+	"auth/pkg/repository"
 )
 
 type Authorizer interface {

@@ -1,9 +1,9 @@
 package service
 
 import (
+	"auth/internal/entities"
 	"errors"
 	"log"
-	"menuAPI/internal/entities"
 )
 
 /* Methods */

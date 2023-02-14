@@ -1,8 +1,9 @@
 package handler
 
 import (
+	"auth/pkg/service"
+
 	"github.com/gin-gonic/gin"
-	"menuAPI/pkg/service"
 )
 
 type Handler struct {
