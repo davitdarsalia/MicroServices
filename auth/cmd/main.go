@@ -2,6 +2,7 @@ package main
 
 import (
 	"auth/internal/entities"
+	"auth/internal/outerServices"
 	"auth/pkg/handler"
 	"auth/pkg/repository"
 	"auth/pkg/service"
@@ -41,10 +42,10 @@ func main() {
 		logrus.Fatalf("Failed to create database: %v", err.Error())
 	}
 
+	mq := outerServices.MqConnection()
 	repos := repository.New(db)
-	services := service.New(repos)
+	services := service.New(repos, mq)
 	h := handler.New(services)
-
 	s := new(entities.Server)
 
 	if err := s.Run(os.Getenv("AUTH_SERVER_PORT"), h.DefineRoutes()); err != nil {
