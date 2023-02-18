@@ -20,6 +20,18 @@ import (
 const expiry = 200
 const notAuthorizedResponse = "Not authorized"
 
+func generateValidationStruct(e error) error {
+	fieldNames := make([]string, 0, 0)
+	re := regexp.MustCompile(`'([^']*)' failed`)
+	matches := re.FindAllStringSubmatch(e.Error(), -1)
+
+	for _, match := range matches {
+		fieldNames = append(fieldNames, match[1])
+	}
+
+	return errors.New(fmt.Sprintf("verifications failed for fields: %v", fieldNames))
+}
+
 func checkToken(authToken, signKey string) (string, error) {
 	tok, err := jwt.ParseWithClaims(authToken, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
