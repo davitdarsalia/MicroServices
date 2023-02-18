@@ -1,17 +1,11 @@
 FROM golang:1.19
 
-WORKDIR /app
+RUN go version
+ENV GOPATH=/
 
-COPY go.mod go.sum ./
+COPY ./ ./
 
 RUN go mod download
+RUN go build -o auth ./cmd/main.go
 
-# Custom steps - Because we have pkg and internal, hey must be copied into workdir app
-COPY internal ./
-COPY pkg ./
-
-RUN go build -o app .
-
-EXPOSE 8080
-
-CMD ["./app"]
+CMD ["./auth"]
