@@ -6,6 +6,7 @@ import (
 	"auth/pkg/handler"
 	"auth/pkg/repository"
 	"auth/pkg/service"
+	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"log"
@@ -42,9 +43,10 @@ func main() {
 		logrus.Fatalf("Failed to create database: %v", err.Error())
 	}
 
+	v := validator.New()
 	mq := outerServices.MqConnection()
 	repos := repository.New(db)
-	services := service.New(repos, mq)
+	services := service.New(repos, mq, v)
 	h := handler.New(services)
 	s := new(entities.Server)
 
