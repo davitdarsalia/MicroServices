@@ -78,3 +78,13 @@ func (a *AuthService) RecoverPassword(u entities.RecoverPasswordInput) error {
 	// Add code verification
 	return a.repo.RecoverPassword(u)
 }
+
+func (a *AuthService) CheckToken(authToken, signKey string) (string, error) {
+	userID, err := checkToken(authToken, signKey)
+
+	if err != nil {
+		return "Not Authorized", err
+	}
+
+	return userID, nil
+}

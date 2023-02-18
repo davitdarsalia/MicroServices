@@ -87,7 +87,9 @@ func (h *Handler) recoverPassword(c *gin.Context) {
 	})
 }
 
-func (h *Handler) logoutUser(c *gin.Context) {}
+func (h *Handler) logoutUser(c *gin.Context) {
+
+}
 
 func (h *Handler) recoverSecretKey(c *gin.Context) {}
 
