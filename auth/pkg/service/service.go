@@ -6,10 +6,15 @@ import (
 	mq "github.com/rabbitmq/amqp091-go"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Authorizer interface {
 	CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error)
 	LoginUser(u entities.UserInput) (entities.AuthenticatedUserResponse, error)
 	RecoverPassword(u entities.RecoverPasswordInput) error
+
+	// CheckToken -  Helper method
+	CheckToken(authToken, signKey string) (string, error)
 }
 
 type Service struct {
