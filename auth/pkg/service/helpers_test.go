@@ -1,11 +1,16 @@
 package service
 
 import (
+	"errors"
 	"strings"
 	"testing"
 )
 
 // TestTokenChecker - Applies for both, access and refresh tokens
+
+func TestValidationStructGenerator(t *testing.T) {
+	generateValidationStruct(errors.New(""))
+}
 func TestTokenChecker(t *testing.T) {
 	t.Run("All inputs are correct", func(t *testing.T) {
 		cases := []struct {

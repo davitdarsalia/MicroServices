@@ -3,9 +3,9 @@ package handler
 import (
 	"auth/internal/entities"
 	"auth/internal/responses"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"strings"
 )
 
 func (h *Handler) createUser(c *gin.Context) {
@@ -17,8 +17,15 @@ func (h *Handler) createUser(c *gin.Context) {
 	}
 	resp, err := h.service.CreateUser(u)
 
-	if err != nil || resp.UserID == "" || resp.RefreshToken == "" {
-		newErrorResponse(c, http.StatusConflict, responses.CreateUserErrorMessage)
+	if err != nil {
+		var statusCode int
+
+		if strings.Contains(err.Error(), "verifications failed for fields") {
+			statusCode = http.StatusNotAcceptable
+		} else {
+			statusCode = http.StatusConflict
+		}
+		newErrorResponse(c, statusCode, err.Error())
 		return
 	}
 

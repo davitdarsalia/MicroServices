@@ -3,6 +3,7 @@ package service
 import (
 	"auth/internal/entities"
 	"auth/pkg/repository"
+	"github.com/go-playground/validator/v10"
 	mq "github.com/rabbitmq/amqp091-go"
 )
 
@@ -24,12 +25,13 @@ type Service struct {
 type AuthService struct {
 	repo         repository.AuthDB
 	messageQueue *mq.Connection
+	validator    *validator.Validate
 }
 
-func newAuthService(repo repository.Repository, mq *mq.Connection) *AuthService {
-	return &AuthService{repo: repo, messageQueue: mq}
+func newAuthService(repo repository.Repository, mq *mq.Connection, v *validator.Validate) *AuthService {
+	return &AuthService{repo: repo, messageQueue: mq, validator: v}
 }
 
-func New(r repository.Repository, mq *mq.Connection) *Service {
-	return &Service{Authorizer: newAuthService(r, mq)}
+func New(r repository.Repository, mq *mq.Connection, v *validator.Validate) *Service {
+	return &Service{Authorizer: newAuthService(r, mq, v)}
 }

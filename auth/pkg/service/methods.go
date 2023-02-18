@@ -9,6 +9,12 @@ import (
 /* Methods */
 
 func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error) {
+	err := a.validator.Struct(u)
+
+	if err != nil {
+		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
+	}
+
 	salt, _ := generateSalt()
 
 	u.Salt = salt
