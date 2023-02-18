@@ -3,6 +3,7 @@ package handler
 import (
 	"auth/internal/entities"
 	"auth/internal/responses"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -17,6 +18,8 @@ func (h *Handler) createUser(c *gin.Context) {
 	}
 	resp, err := h.service.CreateUser(u)
 
+	fmt.Println(err, "DD")
+
 	if err != nil {
 		var statusCode int
 
@@ -25,7 +28,7 @@ func (h *Handler) createUser(c *gin.Context) {
 		} else {
 			statusCode = http.StatusConflict
 		}
-		newErrorResponse(c, statusCode, responses.CreateUserErrorMessage)
+		newErrorResponse(c, statusCode, err.Error())
 		return
 	}
 
