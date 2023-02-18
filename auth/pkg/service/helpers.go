@@ -70,7 +70,6 @@ func checkUUID(uuid string) bool {
 }
 
 func refreshToken(userId, signKey string) (string, error) {
-
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.StandardClaims{
 		ExpiresAt: time.Now().Add(expiry * time.Hour).Unix(),
 		Id:        userId,
@@ -85,6 +84,9 @@ func hash(password, salt string) string {
 	hasher := sha512.New()
 	hasher.Write([]byte(password))
 	b := hasher.Sum([]byte(salt))
+
+	// hasher.Size()
+
 	return hex.EncodeToString(b)
 }
 
