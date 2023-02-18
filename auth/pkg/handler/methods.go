@@ -25,7 +25,7 @@ func (h *Handler) createUser(c *gin.Context) {
 		} else {
 			statusCode = http.StatusConflict
 		}
-		newErrorResponse(c, statusCode, err.Error())
+		newErrorResponse(c, statusCode, responses.CreateUserErrorMessage)
 		return
 	}
 
@@ -73,6 +73,7 @@ func (h *Handler) loginUser(c *gin.Context) {
 		},
 	})
 }
+
 func (h *Handler) recoverPassword(c *gin.Context) {
 	var u entities.RecoverPasswordInput
 

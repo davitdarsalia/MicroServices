@@ -24,9 +24,6 @@ func (h *Handler) DefineRoutes() *gin.Engine {
 		auth.POST("/logout-user", h.logoutUser)
 		auth.POST("/recover-password", h.recoverPassword)
 		auth.POST("/recover-secret-key", h.recoverSecretKey)
-
-		auth.GET("/test", h.authCheck)
-
 		auth.GET("get-user-info", h.getUserInfo)
 	}
 
