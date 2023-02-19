@@ -96,7 +96,14 @@ func (h *Handler) recoverPassword(c *gin.Context) {
 	err := h.service.RecoverPassword(u)
 
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		var statusCode int
+
+		if strings.Contains(err.Error(), responses.ValidationFailedErrorMessage) {
+			statusCode = http.StatusNotAcceptable
+		} else {
+			statusCode = http.StatusNotFound
+		}
+		newErrorResponse(c, statusCode, err.Error())
 		return
 	}
 
@@ -106,11 +113,11 @@ func (h *Handler) recoverPassword(c *gin.Context) {
 	})
 }
 
+func (h *Handler) recoverSecretKey(c *gin.Context) {}
+
 func (h *Handler) logoutUser(c *gin.Context) {
 
 }
-
-func (h *Handler) recoverSecretKey(c *gin.Context) {}
 
 func (h *Handler) getUserInfo(c *gin.Context) {
 	c.JSON(200, "DDD")
