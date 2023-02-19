@@ -18,9 +18,9 @@ type User struct {
 }
 
 type UserInput struct {
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
-	IDNumber string `json:"id_number" binding:"required"`
+	Email    string `json:"email" binding:"required" validate:"required,min=10,max=255,email"`
+	Password string `json:"password" binding:"required" validate:"required" validate:"required,min=7,max=200"`
+	IDNumber string `json:"id_number" binding:"required" validate:"required" validate:"required,min=11,max=11"`
 }
 
 type RecoverPasswordInput struct {

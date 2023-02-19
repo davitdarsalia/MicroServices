@@ -18,12 +18,10 @@ func (h *Handler) createUser(c *gin.Context) {
 	}
 	resp, err := h.service.CreateUser(u)
 
-	fmt.Println(err, "DD")
-
 	if err != nil {
 		var statusCode int
 
-		if strings.Contains(err.Error(), "verifications failed for fields") {
+		if strings.Contains(err.Error(), responses.ValidationFailedErrorMessage) {
 			statusCode = http.StatusNotAcceptable
 		} else {
 			statusCode = http.StatusConflict
@@ -57,8 +55,18 @@ func (h *Handler) loginUser(c *gin.Context) {
 
 	resp, err := h.service.LoginUser(u)
 
+	fmt.Println(resp, "DDDD")
+
 	if err != nil {
-		newErrorResponse(c, http.StatusNotFound, responses.LogInUserErrorMessage)
+		var statusCode int
+
+		if strings.Contains(err.Error(), responses.ValidationFailedErrorMessage) {
+			statusCode = http.StatusNotAcceptable
+		} else {
+			statusCode = http.StatusNotFound
+		}
+
+		newErrorResponse(c, statusCode, err.Error())
 		return
 	}
 

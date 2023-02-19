@@ -9,7 +9,7 @@ import (
 /* Methods */
 
 func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error) {
-	err := a.validator.Struct(u)
+	err := a.validator.Struct(&u)
 
 	if err != nil {
 		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
@@ -48,6 +48,12 @@ func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserRes
 }
 
 func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUserResponse, error) {
+	err := a.validator.Struct(&u)
+
+	if err != nil {
+		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
+	}
+
 	data, err := a.repo.LoginUser(u)
 
 	if data[0] == hash(u.Password, data[1]) {
@@ -73,6 +79,12 @@ func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUse
 }
 
 func (a *AuthService) RecoverPassword(u entities.RecoverPasswordInput) error {
+	err := a.validator.Struct(&u)
+
+	if err != nil {
+		return generateValidationStruct(err)
+	}
+
 	newSalt, err := generateSalt()
 
 	if err != nil {
