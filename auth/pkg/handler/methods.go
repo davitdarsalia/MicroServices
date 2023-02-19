@@ -3,6 +3,7 @@ package handler
 import (
 	"auth/internal/entities"
 	"auth/internal/responses"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -20,12 +21,12 @@ func (h *Handler) createUser(c *gin.Context) {
 	if err != nil {
 		var statusCode int
 
-		if strings.Contains(err.Error(), "verifications failed for fields") {
+		if strings.Contains(err.Error(), responses.ValidationFailedErrorMessage) {
 			statusCode = http.StatusNotAcceptable
 		} else {
 			statusCode = http.StatusConflict
 		}
-		newErrorResponse(c, statusCode, responses.CreateUserErrorMessage)
+		newErrorResponse(c, statusCode, err.Error())
 		return
 	}
 
@@ -54,8 +55,18 @@ func (h *Handler) loginUser(c *gin.Context) {
 
 	resp, err := h.service.LoginUser(u)
 
+	fmt.Println(resp, "DDDD")
+
 	if err != nil {
-		newErrorResponse(c, http.StatusNotFound, responses.LogInUserErrorMessage)
+		var statusCode int
+
+		if strings.Contains(err.Error(), responses.ValidationFailedErrorMessage) {
+			statusCode = http.StatusNotAcceptable
+		} else {
+			statusCode = http.StatusNotFound
+		}
+
+		newErrorResponse(c, statusCode, err.Error())
 		return
 	}
 
@@ -85,7 +96,14 @@ func (h *Handler) recoverPassword(c *gin.Context) {
 	err := h.service.RecoverPassword(u)
 
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		var statusCode int
+
+		if strings.Contains(err.Error(), responses.ValidationFailedErrorMessage) {
+			statusCode = http.StatusNotAcceptable
+		} else {
+			statusCode = http.StatusNotFound
+		}
+		newErrorResponse(c, statusCode, err.Error())
 		return
 	}
 
@@ -95,11 +113,11 @@ func (h *Handler) recoverPassword(c *gin.Context) {
 	})
 }
 
+func (h *Handler) recoverSecretKey(c *gin.Context) {}
+
 func (h *Handler) logoutUser(c *gin.Context) {
 
 }
-
-func (h *Handler) recoverSecretKey(c *gin.Context) {}
 
 func (h *Handler) getUserInfo(c *gin.Context) {
 	c.JSON(200, "DDD")

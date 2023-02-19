@@ -236,6 +236,12 @@ func BenchmarkFormattedDateTime(b *testing.B) {
 
 func BenchmarkGenerateSalt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_, _ = generateSalt()
+		generateSalt()
+	}
+}
+
+func BenchmarkCheckUUID(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		checkUUID("123e4567-e89b-12d3-a456-426614174000.")
 	}
 }
