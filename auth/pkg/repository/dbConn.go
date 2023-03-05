@@ -1,19 +1,15 @@
 package repository
 
 import (
-	"auth/internal/entities"
-	"fmt"
-
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"os"
 )
 
-func NewDB(c entities.DBConfig) (*sqlx.DB, error) {
-	db, err := sqlx.Open(
-		// TODO -  Insert password field
-		"postgres", fmt.Sprintf("host=%s port=%s user=%s sslmode=%s",
-			c.Host, c.Port, c.Username, c.SSLMode),
-	)
+func NewDB() (*sqlx.DB, error) {
+	db, err := sqlx.Open("postgres", os.Getenv("DB_CONN_STRING"))
+
+	// TODO - Execute migrations
 
 	err = db.Ping()
 

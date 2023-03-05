@@ -8,7 +8,7 @@ CREATE TABLE users
     email VARCHAR(255) NOT NULL UNIQUE,
     tel_number VARCHAR(50) NOT NULL UNIQUE,
     id_number VARCHAR(15) NOT NULL UNIQUE,
-    password VARCHAR(200) NOT NULL,
+    password VARCHAR(250) NOT NULL,
     salt VARCHAR(50) NOT NULL,
     date_created VARCHAR(100) NOT NULL,
     ip_address VARCHAR(25) NOT NULL

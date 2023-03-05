@@ -6,8 +6,6 @@ import (
 	"log"
 )
 
-/* Methods */
-
 func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error) {
 	err := a.validator.Struct(&u)
 
@@ -80,6 +78,8 @@ func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUse
 
 func (a *AuthService) RecoverPassword(u entities.RecoverPasswordInput) error {
 	err := a.validator.Struct(&u)
+
+	//publisher := a.messageQueue
 
 	if err != nil {
 		return generateValidationStruct(err)
