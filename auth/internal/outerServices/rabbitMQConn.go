@@ -12,5 +12,6 @@ func MqConnection() *mq.Connection {
 	if err != nil {
 		log.Printf("Failed to connect RabbitMQ server: %s", err.Error())
 	}
+
 	return conn
 }

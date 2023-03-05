@@ -11,13 +11,14 @@ import (
 
 func GetAWSCredentials() string {
 	secretName := "ConfigsSecrets"
-	region := "london"
+	region := "eu-west-2"
 
 	config, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(region))
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Create Secrets Manager client
 	svc := secretsmanager.NewFromConfig(config)
 
 	input := &secretsmanager.GetSecretValueInput{
@@ -26,13 +27,14 @@ func GetAWSCredentials() string {
 	}
 
 	result, err := svc.GetSecretValue(context.TODO(), input)
-
 	if err != nil {
-		log.Println(err.Error())
-		return ""
+		// For a list of exceptions thrown, see
+		// https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+		log.Fatal(err.Error())
 	}
 
-	secretString := *result.SecretString
+	// Decrypts secret using the associated KMS key.
+	var secretString string = *result.SecretString
 
 	return secretString
 

@@ -1,0 +1,14 @@
+basePath: localhost:8080/authServer
+info:
+  contact: {}
+  description: Authentication Server documentation. Includes Authentication | Authorization,
+    Reset Password, Messaging Queues
+  title: Authentication Server
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  ApiKetAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
