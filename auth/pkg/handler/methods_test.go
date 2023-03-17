@@ -3,7 +3,7 @@ package handler
 import (
 	"auth/internal/entities"
 	"auth/pkg/service"
-	mock "auth/pkg/service/mocks"
+	mock "auth/pkg/service/serviceTests/mocks"
 	"bytes"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"

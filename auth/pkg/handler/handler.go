@@ -8,6 +8,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+//go:generate mockery --name=Handler
 type Handler struct {
 	service *service.Service
 }

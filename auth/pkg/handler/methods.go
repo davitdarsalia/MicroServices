@@ -28,6 +28,7 @@ func (h *Handler) createUser(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
+
 	resp, err := h.service.CreateUser(u)
 
 	if err != nil {
@@ -55,6 +56,8 @@ func (h *Handler) createUser(c *gin.Context) {
 			RefreshTokenExpiresAt: resp.RefreshTokenExpiresAt,
 		},
 	})
+
+	c.Request.Body.Close()
 }
 
 // loginUser logs in a user.
@@ -106,6 +109,8 @@ func (h *Handler) loginUser(c *gin.Context) {
 			RefreshTokenExpiresAt: resp.RefreshTokenExpiresAt,
 		},
 	})
+
+	c.Request.Body.Close()
 }
 
 func (h *Handler) recoverPassword(c *gin.Context) {
@@ -134,12 +139,19 @@ func (h *Handler) recoverPassword(c *gin.Context) {
 		StatusCode: http.StatusResetContent,
 		Message:    responses.RecoveredPasswordSuccessMessage,
 	})
+	c.Request.Body.Close()
 }
 
-func (h *Handler) recoverSecretKey(c *gin.Context) {}
+func (h *Handler) recoverSecretKey(c *gin.Context) {
+	c.Request.Body.Close()
+}
 
-func (h *Handler) logoutUser(c *gin.Context) {}
+func (h *Handler) logoutUser(c *gin.Context) {
+	c.Request.Body.Close()
+}
 
 func (h *Handler) getUserInfo(c *gin.Context) {
 	c.JSON(200, "DDD")
+
+	c.Request.Body.Close()
 }

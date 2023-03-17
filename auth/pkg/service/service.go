@@ -7,8 +7,7 @@ import (
 	mq "github.com/rabbitmq/amqp091-go"
 )
 
-//go:generate mockgen -source=service.go -destination=mocks/mock.go
-
+//go:generate mockery --name=Authorizer
 type Authorizer interface {
 	CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error)
 	LoginUser(u entities.UserInput) (entities.AuthenticatedUserResponse, error)

@@ -23,9 +23,6 @@ import (
 // @name Authorization
 func main() {
 	err := godotenv.Load()
-	logFile, err := os.Create("info.log")
-	logrus.SetOutput(logFile)
-	defer logFile.Close()
 
 	if err != nil {
 		Println("Unable to create info.log: \n", err.Error())
