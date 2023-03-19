@@ -1,7 +1,7 @@
 package handler
 
 import (
-	_ "auth/docs"
+	_ "auth/cmd/docs"
 	"auth/pkg/service"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Authentication Server documentation. Includes Authentication | Authorization, Reset Password, Messaging Queues",
+        "description": "Authentication Server documentation.",
         "title": "Authentication Server",
         "contact": {},
         "version": "1.0"

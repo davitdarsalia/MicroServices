@@ -31,7 +31,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "localhost:8080/authServer",
 	Schemes:          []string{},
 	Title:            "Authentication Server",
-	Description:      "Authentication Server documentation. Includes Authentication | Authorization, Reset Password, Messaging Queues",
+	Description:      "Authentication Server documentation.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

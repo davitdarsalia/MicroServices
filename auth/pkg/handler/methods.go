@@ -12,15 +12,15 @@ import (
 // createUser creates a new user.
 // @Summary Create a new user
 // @Description Creates a new user with the given details.
-// @Tags auth
-// @Accept  json
-// @Produce  json
-// @Param user body CreateUserRequest true "User details"
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body User true "User details"
 // @Success 201 {object} responses.CreateUserResponse
 // @Failure 400 {object} newErrorResponse
 // @Failure 406 {object} newErrorResponse
 // @Failure 409 {object} newErrorResponse
-// @Router /auth/users [post]
+// @Router /create-user [post]
 func (h *Handler) createUser(c *gin.Context) {
 	var u entities.User
 

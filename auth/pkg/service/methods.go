@@ -4,60 +4,54 @@ import (
 	"auth/internal/entities"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 )
 
 func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error) {
 	err := a.validator.Struct(&u)
-
 	if err != nil {
 		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
 	}
 
-	s, _ := salt()
-
-	if err != nil {
-		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
-	}
-
-	u.Salt = string(s)
-	//hashedPass, err := hash(u.Password, u.Salt)
-	hashedPass, err := hash(u.Password, u.Salt)
-
-	fmt.Println(hashedPass, "sdfhdasfhdsfhdsahf")
-
+	s, err := salt()
 	if err != nil {
 		return entities.AuthenticatedUserResponse{}, err
 	}
+	u.Salt = string(s)
+
+	hashedPass, err := hash(u.Password, u.Salt)
+	if err != nil {
+		return entities.AuthenticatedUserResponse{}, err
+	}
+
 	u.Password = hashedPass
 	u.IPAddress = getIPv6()
 	u.DateCreated = getFormattedDateTime()
 
 	id, err := a.repo.CreateUser(u)
+	if err != nil {
+		return entities.AuthenticatedUserResponse{}, err
+	}
 
-	if err == nil {
-		aT, err := accessToken([]byte(u.Salt), &u, id)
-		rT, err := refreshToken()
+	aT, err := accessToken([]byte(u.Salt), &u, id)
+	if err != nil {
+		return entities.AuthenticatedUserResponse{}, err
+	}
 
-		if err != nil {
-			log.Println("Token Generation Error")
-		}
-
-		return entities.AuthenticatedUserResponse{
-			UserID:                id,
-			AccessToken:           aT,
-			AccessTokenExpiresAt:  fmt.Sprintf("%s Minutes", os.Getenv("TOKEN_EXPIRY_TIME")),
-			RefreshToken:          rT,
-			RefreshTokenExpiresAt: "13 days",
-		}, nil
+	rT, err := refreshToken()
+	if err != nil {
+		return entities.AuthenticatedUserResponse{}, err
 	}
 
 	return entities.AuthenticatedUserResponse{
-		AccessToken: "No access",
-	}, err
-
+		UserID:                id,
+		AccessToken:           aT,
+		AccessTokenExpiresAt:  fmt.Sprintf("%s Minutes", os.Getenv("TOKEN_EXPIRY_TIME")),
+		RefreshToken:          rT,
+		RefreshTokenExpiresAt: "13 days",
+	}, nil
 }
+
 func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUserResponse, error) {
 	err := a.validator.Struct(&u)
 
