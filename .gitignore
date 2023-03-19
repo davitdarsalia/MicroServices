@@ -2,3 +2,5 @@
 .DS_Store
 secrets.txt
 .gitignore
+auth/.env
+email/env
