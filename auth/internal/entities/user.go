@@ -33,3 +33,9 @@ type AuthenticatedUserResponse struct {
 	RefreshToken          string `json:"refresh_token"`
 	RefreshTokenExpiresAt string `json:"refresh_token_exp"`
 }
+
+type UserMetaInfo struct {
+	Password string `json:"password"`
+	Salt     string `json:"salt"`
+	UserID   string `json:"user_id"`
+}

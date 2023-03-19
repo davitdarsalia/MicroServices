@@ -4,6 +4,7 @@ import (
 	"auth/internal/entities"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -33,7 +34,7 @@ func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserRes
 		return entities.AuthenticatedUserResponse{}, err
 	}
 
-	aT, err := accessToken([]byte(u.Salt), &u, id)
+	aT, err := accessToken([]byte(u.Salt), id)
 	if err != nil {
 		return entities.AuthenticatedUserResponse{}, err
 	}
@@ -54,29 +55,30 @@ func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserRes
 
 func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUserResponse, error) {
 	err := a.validator.Struct(&u)
-
 	if err != nil {
 		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
 	}
 
-	//data, err := a.repo.LoginUser(u)
-	//
-	//if data[0] == hash(u.Password, data[1]) {
-	//	aT, err := accessToken(data[2], data[1])
-	//	rT, err := refreshToken(data[2], data[1])
-	//
-	//	if err != nil {
-	//		log.Println("Token Generation Error")
-	//	}
-	//
-	//	return entities.AuthenticatedUserResponse{
-	//		UserID:                data[2],
-	//		AccessToken:           aT,
-	//		AccessTokenExpiresAt:  "200 Minutes",
-	//		RefreshToken:          rT,
-	//		RefreshTokenExpiresAt: "200 Hours",
-	//	}, nil
-	//}
+	userInfo, err := a.repo.LoginUser(u)
+
+	hashedPass, err := hash(u.Password, userInfo.Salt)
+
+	if userInfo.Password == hashedPass {
+		aT, err := accessToken([]byte(userInfo.Salt), userInfo.UserID)
+		rT, err := refreshToken()
+
+		if err != nil {
+			log.Println("Token Generation Error")
+		}
+
+		return entities.AuthenticatedUserResponse{
+			UserID:                userInfo.UserID,
+			AccessToken:           aT,
+			AccessTokenExpiresAt:  "200 Minutes",
+			RefreshToken:          rT,
+			RefreshTokenExpiresAt: "200 Hours",
+		}, nil
+	}
 
 	err = errors.New("user not found")
 

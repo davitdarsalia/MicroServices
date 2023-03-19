@@ -36,20 +36,22 @@ func (a *AuthPostgres) CreateUser(u entities.User) (string, error) {
 	return userID, nil
 }
 
-func (a *AuthPostgres) LoginUser(u entities.UserInput) ([3]string, error) {
-	//var userID string
-	//var salt string
-	//var password string
+func (a *AuthPostgres) LoginUser(u entities.UserInput) (entities.UserMetaInfo, error) {
+	var userID string
+	var salt string
+	var password string
 
-	//row := a.db.QueryRow(queries.LoginUserQuery, u.Email, u.IDNumber)
-	//
-	//if err := row.Scan(&userID, &salt, &password); err != nil {
-	//	return [3]string{"", "", ""}, err
-	//}
-	//
-	//var userData = [3]string{password, salt, userID}
+	row := a.db.QueryRow(context.Background(), queries.LoginUserQuery, u.Email, u.IDNumber)
 
-	return [3]string{}, nil
+	if err := row.Scan(&userID, &salt, &password); err != nil {
+		return entities.UserMetaInfo{}, err
+	}
+
+	return entities.UserMetaInfo{
+		Password: password,
+		Salt:     salt,
+		UserID:   userID,
+	}, nil
 }
 
 func (a *AuthPostgres) RecoverPassword(u entities.RecoverPasswordInput) error {

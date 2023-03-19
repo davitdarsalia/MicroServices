@@ -3,7 +3,6 @@ package handler
 import (
 	"auth/internal/entities"
 	"auth/internal/responses"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -60,17 +59,16 @@ func (h *Handler) createUser(c *gin.Context) {
 	c.Request.Body.Close()
 }
 
-// loginUser logs in a user.
-// @Summary Log in a user
-// @Description Logs in a user with the given credentials.
-// @Tags auth
-// @Accept  json
-// @Produce  json
-// @Param user body LoginUserRequest true "User credentials"
-// @Success 200 {object} responses.LoginUserResponse
-// @Failure 400 {object} newErrorResponse
-// @Failure 404 {object} newErrorResponse
-// @Router /auth/login [post]
+// @Summary Log in an existing user
+// @Description Logs in an existing user and returns an access and refresh token
+// @Tags authentication
+// @Accept json
+// @Produce json
+// @Param user body UserInput true "User login information"
+// @Success 200 {object} LoginUserResponse
+// @Failure 400 {object} respError
+// @Failure 404 {object} respError
+// @Router /login-user [post]
 func (h *Handler) loginUser(c *gin.Context) {
 	var u entities.UserInput
 
@@ -80,8 +78,6 @@ func (h *Handler) loginUser(c *gin.Context) {
 	}
 
 	resp, err := h.service.LoginUser(u)
-
-	fmt.Println(resp, "DDDD")
 
 	if err != nil {
 		var statusCode int

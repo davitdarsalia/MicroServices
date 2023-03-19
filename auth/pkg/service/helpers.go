@@ -55,7 +55,7 @@ func checkToken(authToken, signKey string) (string, error) {
 
 }
 
-func accessToken(pKey []byte, u *entities.User, userID string) (string, error) {
+func accessToken(pKey []byte, userID string) (string, error) {
 	m, err := strconv.Atoi(os.Getenv("TOKEN_EXPIRY_TIME"))
 	if err != nil {
 		return "", err
@@ -70,8 +70,6 @@ func accessToken(pKey []byte, u *entities.User, userID string) (string, error) {
 			Subject:   "Authorization, Authentication",
 		},
 		AccessTokenCustomClaims: entities.AccessTokenCustomClaims{
-			TelNumber:      u.TelNumber,
-			IDNumber:       u.IDNumber,
 			UserID:         userID,
 			CreatedAt:      time.Now().String(),
 			UserRole:       "User",

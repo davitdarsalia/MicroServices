@@ -8,7 +8,7 @@ import (
 //go:generate mockery --name=AuthDB
 type AuthDB interface {
 	CreateUser(u entities.User) (string, error)
-	LoginUser(u entities.UserInput) ([3]string, error)
+	LoginUser(u entities.UserInput) (entities.UserMetaInfo, error)
 	RecoverPassword(u entities.RecoverPasswordInput) error
 }
 
