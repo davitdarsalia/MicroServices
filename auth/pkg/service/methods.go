@@ -3,7 +3,9 @@ package service
 import (
 	"auth/internal/entities"
 	"errors"
+	"fmt"
 	"log"
+	"os"
 )
 
 func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error) {
@@ -13,18 +15,30 @@ func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserRes
 		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
 	}
 
-	salt, _ := generateSalt()
+	s, _ := salt()
 
-	u.Salt = salt
-	u.Password = hash(u.Password, u.Salt)
+	if err != nil {
+		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
+	}
+
+	u.Salt = string(s)
+	//hashedPass, err := hash(u.Password, u.Salt)
+	hashedPass, err := hash(u.Password, u.Salt)
+
+	fmt.Println(hashedPass, "sdfhdasfhdsfhdsahf")
+
+	if err != nil {
+		return entities.AuthenticatedUserResponse{}, err
+	}
+	u.Password = hashedPass
 	u.IPAddress = getIPv6()
 	u.DateCreated = getFormattedDateTime()
 
 	id, err := a.repo.CreateUser(u)
 
 	if err == nil {
-		aT, err := accessToken(id, u.Salt)
-		rT, err := refreshToken(id, u.Salt)
+		aT, err := accessToken([]byte(u.Salt), &u, id)
+		rT, err := refreshToken()
 
 		if err != nil {
 			log.Println("Token Generation Error")
@@ -33,9 +47,9 @@ func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserRes
 		return entities.AuthenticatedUserResponse{
 			UserID:                id,
 			AccessToken:           aT,
-			AccessTokenExpiresAt:  "200 Minutes",
+			AccessTokenExpiresAt:  fmt.Sprintf("%s Minutes", os.Getenv("TOKEN_EXPIRY_TIME")),
 			RefreshToken:          rT,
-			RefreshTokenExpiresAt: "200 Hours",
+			RefreshTokenExpiresAt: "13 days",
 		}, nil
 	}
 
@@ -44,7 +58,6 @@ func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserRes
 	}, err
 
 }
-
 func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUserResponse, error) {
 	err := a.validator.Struct(&u)
 
@@ -52,24 +65,24 @@ func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUse
 		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
 	}
 
-	data, err := a.repo.LoginUser(u)
-
-	if data[0] == hash(u.Password, data[1]) {
-		aT, err := accessToken(data[2], data[1])
-		rT, err := refreshToken(data[2], data[1])
-
-		if err != nil {
-			log.Println("Token Generation Error")
-		}
-
-		return entities.AuthenticatedUserResponse{
-			UserID:                data[2],
-			AccessToken:           aT,
-			AccessTokenExpiresAt:  "200 Minutes",
-			RefreshToken:          rT,
-			RefreshTokenExpiresAt: "200 Hours",
-		}, nil
-	}
+	//data, err := a.repo.LoginUser(u)
+	//
+	//if data[0] == hash(u.Password, data[1]) {
+	//	aT, err := accessToken(data[2], data[1])
+	//	rT, err := refreshToken(data[2], data[1])
+	//
+	//	if err != nil {
+	//		log.Println("Token Generation Error")
+	//	}
+	//
+	//	return entities.AuthenticatedUserResponse{
+	//		UserID:                data[2],
+	//		AccessToken:           aT,
+	//		AccessTokenExpiresAt:  "200 Minutes",
+	//		RefreshToken:          rT,
+	//		RefreshTokenExpiresAt: "200 Hours",
+	//	}, nil
+	//}
 
 	err = errors.New("user not found")
 
@@ -85,13 +98,13 @@ func (a *AuthService) RecoverPassword(u entities.RecoverPasswordInput) error {
 		return generateValidationStruct(err)
 	}
 
-	newSalt, err := generateSalt()
-
-	if err != nil {
-		log.Printf("Salt Generation Error, %s", err.Error())
-	}
-
-	u.NewPassword = hash(u.NewPassword, newSalt)
+	//newSalt, err := generateSalt()
+	//
+	//if err != nil {
+	//	log.Printf("Salt Generation Error, %s", err.Error())
+	//}
+	//
+	//u.NewPassword = hash(u.NewPassword, newSalt)
 
 	// Add code verification
 	return a.repo.RecoverPassword(u)

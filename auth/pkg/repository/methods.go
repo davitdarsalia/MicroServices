@@ -4,10 +4,7 @@ import (
 	"auth/internal/entities"
 	"auth/internal/queries"
 	"context"
-)
-
-const (
-	CreateUserTransactionStatement = "create-user"
+	"fmt"
 )
 
 func (a *AuthPostgres) CreateUser(u entities.User) (string, error) {
@@ -18,6 +15,7 @@ func (a *AuthPostgres) CreateUser(u entities.User) (string, error) {
 		return "", err
 	}
 
+	fmt.Println(u.Password, "DSsfaas")
 	row := tx.QueryRow(context.Background(), queries.CreateUserQuery,
 		u.Name, u.Surname, u.UserName, u.Email, u.TelNumber,
 		u.IDNumber, u.Password, u.DateCreated, u.IPAddress, u.Salt,
@@ -35,30 +33,7 @@ func (a *AuthPostgres) CreateUser(u entities.User) (string, error) {
 		return "", err
 	}
 
-	//ps, err := a.db.Prepare(context.Background(), "create-user", stmt)
-	//if err != nil {
-	//	return "", fmt.Errorf("failed to prepare create user statement: %v", err)
-	//}
-	//defer ps.Close()
-	//
-	//// Execute the statement and retrieve the new user's ID
-	//if _, err := ps.Exec(context.Background(), u.Name, u.Surname, u.UserName, u.Email, u.TelNumber, u.IDNumber, u.Password, u.DateCreated, u.IPAddress, u.Salt).Scan(&userID); err != nil {
-	//	if pgErr, ok := err.(*pgconn.PgError); ok && pgErr.Code == "23505" { // Check for unique constraint violation error
-	//		if strings.Contains(pgErr.Detail, "email") {
-	//			return "", fmt.Errorf("email already exists")
-	//		} else if strings.Contains(pgErr.Detail, "username") {
-	//			return "", fmt.Errorf("username already exists")
-	//		} else {
-	//			return "", fmt.Errorf("failed to create user: %v", err)
-	//		}
-	//	}
-	//	return "", fmt.Errorf("failed to create user: %v", err)
-	//}
-
-	// Learn pgx transactions
-
 	return userID, nil
-
 }
 
 func (a *AuthPostgres) LoginUser(u entities.UserInput) ([3]string, error) {

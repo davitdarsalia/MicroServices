@@ -1,11 +1,17 @@
 package service
 
 import (
+	"auth/internal/entities"
 	"errors"
 	"testing"
 )
 
-/* Benchmarks */
+func BenchmarkHash(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		hash("RandomPassword", "63e0112d-120f-4d15-be48-a8539ea0218b")
+	}
+}
+
 func BenchmarkGenerateStruct(b *testing.B) {
 	input := errors.New("verifications failed for fields: [Email]")
 
@@ -15,20 +21,24 @@ func BenchmarkGenerateStruct(b *testing.B) {
 }
 
 func BenchmarkAccessToken(b *testing.B) {
+	user := entities.User{
+		Name:      "Random",
+		Surname:   "User",
+		UserName:  "Random.User",
+		Email:     "random21@gmail.com",
+		TelNumber: "+995599223215",
+		IDNumber:  "21212121521",
+		Password:  "RandomUserPass",
+		Salt:      "63e0112d",
+	}
 	for i := 0; i < b.N; i++ {
-		accessToken("63e0112d-120f-4d15-be48-a8539ea0218b", "63e0112d-120f-4d15-be48-a8539ea0218b")
+		accessToken([]byte("63e0112d-120f-4d15-be48-a8539ea0218b"), &user, "63e0112d-120f-4d15-be48-a8539ea0218b")
 	}
 }
 
 func BenchmarkRefreshToken(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		refreshToken("63e0112d-120f-4d15-be48-a8539ea0218b", "63e0112d-120f-4d15-be48-a8539ea0218b")
-	}
-}
-
-func BenchmarkHash(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		hash("RandomPass", "63e0112d-120f-4d15-be48-a8539ea0218b")
+		refreshToken()
 	}
 }
 
@@ -46,7 +56,7 @@ func BenchmarkFormattedDateTime(b *testing.B) {
 
 func BenchmarkGenerateSalt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		generateSalt()
+		salt()
 	}
 }
 

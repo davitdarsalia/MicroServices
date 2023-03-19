@@ -1,9 +1,5 @@
 package entities
 
-import (
-	"github.com/dgrijalva/jwt-go"
-)
-
 type User struct {
 	Name        string `json:"name" binding:"required" validate:"required,min=2,max=255"`
 	Surname     string `json:"surname" binding:"required" validate:"required,min=2,max=255"`
@@ -28,12 +24,6 @@ type RecoverPasswordInput struct {
 	IDNumber    string `json:"id_number" binding:"required" validate:"required,min=11,max=11"`
 	TelNumber   string `json:"tel_number" binding:"required" validate:"required,min=5,max=50,e164"`
 	NewPassword string `json:"new_password" binding:"required" validate:"required,min=7,max=200"`
-}
-
-type AccessToken struct {
-	jwt.StandardClaims
-	User
-	TokenCreatedAtString string `json:"token_created_at"`
 }
 
 type AuthenticatedUserResponse struct {

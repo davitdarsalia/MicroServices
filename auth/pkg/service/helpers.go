@@ -1,19 +1,22 @@
 package service
 
 import (
-	"crypto/sha512"
+	"auth/internal/entities"
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"golang.org/x/crypto/argon2"
 	_ "golang.org/x/crypto/bcrypt"
 	"math/rand"
 	"net"
 	"os"
 	"regexp"
-	"strings"
+	"strconv"
+	"sync"
 	"time"
+	"unicode/utf8"
 )
 
 // TODO - move token expiry time in .env or config
@@ -54,25 +57,50 @@ func checkToken(authToken, signKey string) (string, error) {
 
 }
 
-func accessToken(userId, signKey string) (string, error) {
-	var length = len(strings.Split(signKey, ""))
-
-	if length < 20 || length > 40 {
-		return "", errors.New("invalid sign key")
+func accessToken(pKey []byte, u *entities.User, userID string) (string, error) {
+	m, err := strconv.Atoi(os.Getenv("TOKEN_EXPIRY_TIME"))
+	if err != nil {
+		return "", err
 	}
 
-	if ok := checkUUID(userId); !ok {
-		return "", errors.New("invalid user id. User id is not correct uuid format")
+	claims := entities.AccessToken{
+		StandardClaims: jwt.StandardClaims{
+			Audience:  "Regular User",
+			ExpiresAt: time.Now().Add(time.Minute * time.Duration(m)).Unix(),
+			Issuer:    "Auth Server",
+			NotBefore: 0,
+			Subject:   "Authorization, Authentication",
+		},
+		AccessTokenCustomClaims: entities.AccessTokenCustomClaims{
+			TelNumber:      u.TelNumber,
+			IDNumber:       u.IDNumber,
+			UserID:         userID,
+			CreatedAt:      time.Now().String(),
+			UserRole:       "User",
+			ExpirationTime: fmt.Sprintf("%d Minutes", m),
+			IpAddress:      getIPv6(),
+		},
 	}
 
-	t := jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.StandardClaims{
-		ExpiresAt: time.Now().Add(expiry * time.Minute).Unix(),
-		Id:        userId,
-		IssuedAt:  time.Now().Unix(),
-		Subject:   "Authorization",
-	})
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	return t.SignedString([]byte(signKey))
+	tokenString, err := token.SignedString(pKey)
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
+}
+
+// refreshToken - TODO - Add signature
+func refreshToken() (string, error) {
+	tokenBytes := make([]byte, 32)
+	_, err := rand.Read(tokenBytes)
+	if err != nil {
+		return "", err
+	}
+	token := base64.RawURLEncoding.EncodeToString(tokenBytes)
+	return token, nil
 }
 
 func checkUUID(uuid string) bool {
@@ -81,25 +109,47 @@ func checkUUID(uuid string) bool {
 	return condition.MatchString(uuid)
 }
 
-func refreshToken(userId, signKey string) (string, error) {
-	t := jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.StandardClaims{
-		ExpiresAt: time.Now().Add(expiry * time.Hour).Unix(),
-		Id:        userId,
-		IssuedAt:  time.Now().Unix(),
-		Subject:   "Authentication ",
-	})
+func hash(password, salt string) (string, error) {
+	const timeCost = 1
+	const memoryCost = 64 * 1024
+	const threads = 4
+	const keyLen = 32
 
-	return t.SignedString([]byte(signKey))
+	hash := argon2.IDKey([]byte(password), []byte(salt), timeCost, memoryCost, threads, keyLen)
+	if hash == nil {
+		return "", errors.New("failed to generate hash")
+	}
+
+	hashRunes := []rune(hex.EncodeToString(hash))
+
+	// Use a wait group to wait for all goroutines to finish
+	var wg sync.WaitGroup
+	for i := 0; i < len(hashRunes); i++ {
+		wg.Add(1)
+		go func(i int) {
+			// Replace any invalid UTF-8 characters with a placeholder
+			if !utf8.ValidRune(hashRunes[i]) {
+				hashRunes[i] = '�'
+			}
+			wg.Done()
+		}(i)
+	}
+	wg.Wait()
+
+	// Convert the slice of runes back to a string
+	hashString := string(hashRunes)
+	return hashString, nil
+
 }
 
-func hash(password, salt string) string {
-	hasher := sha512.New()
-	hasher.Write([]byte(password))
-	b := hasher.Sum([]byte(salt))
+func salt() ([]byte, error) {
+	salt := make([]byte, 30)
+	_, err := rand.Read(salt)
+	if err != nil {
+		return nil, err
+	}
 
-	// hasher.Size()
-
-	return hex.EncodeToString(b)
+	return []byte("DAD"), nil
 }
 
 func getIPv6() (result string) {
@@ -117,14 +167,4 @@ func getIPv6() (result string) {
 
 func getFormattedDateTime() string {
 	return time.Now().Format("2006-01-02 15:04")
-}
-
-func generateSalt() (string, error) {
-	b := make([]byte, 30)
-	_, err := rand.Read(b)
-	if err != nil {
-		return "", err
-	}
-
-	return base64.URLEncoding.EncodeToString(b), nil
 }
