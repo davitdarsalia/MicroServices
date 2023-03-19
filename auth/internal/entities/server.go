@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -20,7 +21,7 @@ func (s *Server) Run(port string, h http.Handler) error {
 		WriteTimeout:   10 * time.Second,
 	}
 
-	return s.httpServer.ListenAndServe()
+	return s.httpServer.ListenAndServeTLS(os.Getenv("SERVER_CERT_PATH"), os.Getenv("SERVER_KEY_PATH"))
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {

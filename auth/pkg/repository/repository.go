@@ -2,8 +2,7 @@ package repository
 
 import (
 	"auth/internal/entities"
-
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 //go:generate mockery --name=AuthDB
@@ -18,13 +17,13 @@ type Repository struct {
 }
 
 type AuthPostgres struct {
-	db *sqlx.DB
+	db *pgxpool.Pool
 }
 
-func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
+func NewAuthPostgres(db *pgxpool.Pool) *AuthPostgres {
 	return &AuthPostgres{db: db}
 }
 
-func New(db *sqlx.DB) Repository {
+func New(db *pgxpool.Pool) Repository {
 	return Repository{AuthDB: NewAuthPostgres(db)}
 }

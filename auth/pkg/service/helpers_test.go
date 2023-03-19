@@ -1,10 +1,19 @@
 package service
 
 import (
+	"errors"
 	"testing"
 )
 
 /* Benchmarks */
+func BenchmarkGenerateStruct(b *testing.B) {
+	input := errors.New("verifications failed for fields: [Email]")
+
+	for i := 0; i < b.N; i++ {
+		generateValidationStruct(input)
+	}
+}
+
 func BenchmarkAccessToken(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		accessToken("63e0112d-120f-4d15-be48-a8539ea0218b", "63e0112d-120f-4d15-be48-a8539ea0218b")

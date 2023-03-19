@@ -6,6 +6,8 @@ import (
 )
 
 func TestCreateUser(t *testing.T) {
+	type mockBehaviour func(s *MockAuthorizer, u entities.User)
+
 	u := entities.User{
 		Name:      "Nona",
 		Surname:   "Davitashvili",
@@ -17,6 +19,9 @@ func TestCreateUser(t *testing.T) {
 	}
 
 	a := NewMockAuthorizer(t)
-	a.EXPECT().CreateUser(u).Return(entities.AuthenticatedUserResponse{}, nil)
+
+	d := func(s *MockAuthorizer, u entities.User) {
+		a.EXPECT().CreateUser(u).Return(entities.AuthenticatedUserResponse{}, nil)
+	}
 
 }
