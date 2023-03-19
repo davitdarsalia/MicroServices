@@ -3,6 +3,7 @@ package handler
 import (
 	_ "auth/cmd/docs"
 	"auth/pkg/service"
+	"github.com/gin-contrib/size"
 	"github.com/gin-gonic/gin"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -27,6 +28,7 @@ func (h *Handler) DefineRoutes() *gin.Engine {
 	}
 
 	auth := router.Group("/authServer")
+	auth.Use(limits.RequestSizeLimiter(1 << 20))
 	{
 		auth.POST("/create-user", h.createUser)
 		auth.POST("/login-user", h.loginUser)
