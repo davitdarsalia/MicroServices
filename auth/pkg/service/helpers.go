@@ -2,6 +2,7 @@ package service
 
 import (
 	"auth/internal/entities"
+	"crypto/rand"
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
@@ -9,7 +10,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/argon2"
 	_ "golang.org/x/crypto/bcrypt"
-	"math/rand"
 	"net"
 	"os"
 	"regexp"
@@ -19,8 +19,6 @@ import (
 	"unicode/utf8"
 )
 
-// TODO - move token expiry time in .env or config
-const expiry = 200
 const notAuthorizedResponse = "Not authorized"
 
 func generateValidationStruct(e error) error {
@@ -143,13 +141,20 @@ func hash(password, salt string) (string, error) {
 }
 
 func salt() ([]byte, error) {
-	salt := make([]byte, 30)
-	_, err := rand.Read(salt)
+	const length = 30
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[];:<>,.?/~`"
+
+	var saltBytes = make([]byte, length)
+	_, err := rand.Read(saltBytes)
 	if err != nil {
 		return nil, err
 	}
 
-	return []byte("DAD"), nil
+	for i, b := range saltBytes {
+		saltBytes[i] = charset[int(b)%len(charset)]
+	}
+
+	return saltBytes, nil
 }
 
 func getIPv6() (result string) {
