@@ -7,9 +7,9 @@ import (
 
 //go:generate mockery --name=AuthDB
 type AuthDB interface {
-	CreateUser(u entities.User) (string, error)
+	CreateUser(u *entities.User) (string, error)
 	LoginUser(u entities.UserInput) (entities.UserMetaInfo, error)
-	RecoverPassword(u entities.RecoverPasswordInput) error
+	RecoverPassword(u *entities.RecoverPasswordInput) error
 }
 
 type Repository struct {
@@ -17,13 +17,14 @@ type Repository struct {
 }
 
 type AuthPostgres struct {
-	db *pgxpool.Pool
+	db          *pgxpool.Pool
+	credentials *entities.AWSCredentials
 }
 
-func NewAuthPostgres(db *pgxpool.Pool) *AuthPostgres {
-	return &AuthPostgres{db: db}
+func NewAuthPostgres(db *pgxpool.Pool, c *entities.AWSCredentials) *AuthPostgres {
+	return &AuthPostgres{db: db, credentials: c}
 }
 
-func New(db *pgxpool.Pool) Repository {
-	return Repository{AuthDB: NewAuthPostgres(db)}
+func New(db *pgxpool.Pool, c *entities.AWSCredentials) Repository {
+	return Repository{AuthDB: NewAuthPostgres(db, c)}
 }

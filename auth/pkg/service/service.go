@@ -9,12 +9,9 @@ import (
 
 //go:generate mockery --name=Authorizer
 type Authorizer interface {
-	CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error)
+	CreateUser(u *entities.User) (entities.AuthenticatedUserResponse, error)
 	LoginUser(u entities.UserInput) (entities.AuthenticatedUserResponse, error)
-	RecoverPassword(u entities.RecoverPasswordInput) error
-
-	// CheckToken -  Helper method
-	CheckToken(authToken, signKey string) (string, error)
+	RecoverPassword(u *entities.RecoverPasswordInput) error
 }
 
 type Service struct {
@@ -25,12 +22,13 @@ type AuthService struct {
 	repo         repository.AuthDB
 	messageQueue *mq.Connection
 	validator    *validator.Validate
+	credentials  *entities.AWSCredentials
 }
 
-func newAuthService(repo repository.Repository, mq *mq.Connection, v *validator.Validate) *AuthService {
-	return &AuthService{repo: repo, messageQueue: mq, validator: v}
+func newAuthService(repo repository.Repository, mq *mq.Connection, v *validator.Validate, c *entities.AWSCredentials) *AuthService {
+	return &AuthService{repo: repo, messageQueue: mq, validator: v, credentials: c}
 }
 
-func New(r repository.Repository, mq *mq.Connection, v *validator.Validate) *Service {
-	return &Service{Authorizer: newAuthService(r, mq, v)}
+func New(r repository.Repository, mq *mq.Connection, v *validator.Validate, c *entities.AWSCredentials) *Service {
+	return &Service{Authorizer: newAuthService(r, mq, v, c)}
 }
