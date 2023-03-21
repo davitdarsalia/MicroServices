@@ -86,7 +86,7 @@ func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUse
 }
 
 func (a *AuthService) RecoverPassword(u *entities.RecoverPasswordInput) error {
-	err := a.validator.Struct(&u)
+	err := a.validator.Struct(u)
 
 	//publisher := a.messageQueue
 
