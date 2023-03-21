@@ -3,7 +3,6 @@ package service
 import (
 	"auth/internal/entities"
 	"crypto/rand"
-	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -19,8 +18,6 @@ import (
 	"unicode/utf8"
 )
 
-const notAuthorizedResponse = "Not authorized"
-
 func generateValidationStruct(e error) error {
 	fieldNames := make([]string, 0, 0)
 	re := regexp.MustCompile(`'([^']*)' failed`)
@@ -33,30 +30,8 @@ func generateValidationStruct(e error) error {
 	return errors.New(fmt.Sprintf("verifications failed for fields: %v", fieldNames))
 }
 
-func checkToken(authToken, signKey string) (string, error) {
-	tok, err := jwt.ParseWithClaims(authToken, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("invalid signing method")
-		}
-		return []byte(signKey), nil
-	})
-
-	if err != nil {
-		return notAuthorizedResponse, err
-	}
-
-	claims, ok := tok.Claims.(*jwt.StandardClaims)
-
-	if !ok {
-		return notAuthorizedResponse, errors.New("invalid token claims")
-	}
-
-	return claims.Id, nil
-
-}
-
-func accessToken(pKey []byte, userID string) (string, error) {
-	m, err := strconv.Atoi(os.Getenv("TOKEN_EXPIRY_TIME"))
+func accessToken(pKey []byte, userID, expiryTime string) (string, error) {
+	m, err := strconv.Atoi(expiryTime)
 	if err != nil {
 		return "", err
 	}
@@ -66,7 +41,7 @@ func accessToken(pKey []byte, userID string) (string, error) {
 			Audience:  "Regular User",
 			ExpiresAt: time.Now().Add(time.Minute * time.Duration(m)).Unix(),
 			Issuer:    "Auth Server",
-			NotBefore: 0,
+			NotBefore: time.Now().Unix(),
 			Subject:   "Authorization, Authentication",
 		},
 		AccessTokenCustomClaims: entities.AccessTokenCustomClaims{
@@ -88,15 +63,41 @@ func accessToken(pKey []byte, userID string) (string, error) {
 	return tokenString, nil
 }
 
-// refreshToken - TODO - Add signature
-func refreshToken() (string, error) {
-	tokenBytes := make([]byte, 32)
-	_, err := rand.Read(tokenBytes)
+func refreshToken(pKey []byte, userID string) (string, error) {
+	claims := jwt.StandardClaims{
+		Audience: "Regular Use",
+		// TODO - Let user choose logout time and it must be stored on server
+		ExpiresAt: time.Now().Add(time.Hour * time.Duration(24*13)).Unix(),
+		Id:        userID,
+		IssuedAt:  time.Now().Unix(),
+		Issuer:    "Auth Server",
+		NotBefore: time.Now().Unix(),
+		Subject:   "Refresh Token",
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	tokenString, err := token.SignedString(pKey)
 	if err != nil {
 		return "", err
 	}
-	token := base64.RawURLEncoding.EncodeToString(tokenBytes)
-	return token, nil
+
+	return tokenString, nil
+}
+
+func validateToken(tokenString string, pKey []byte) (bool, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &entities.AccessToken{}, func(token *jwt.Token) (interface{}, error) {
+		return pKey, nil
+	})
+	if err != nil {
+		return false, err
+	}
+
+	if _, ok := token.Claims.(*entities.AccessToken); ok && token.Valid {
+		return true, nil
+	}
+
+	return false, errors.New("invalid token")
 }
 
 func checkUUID(uuid string) bool {

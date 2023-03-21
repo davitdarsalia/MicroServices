@@ -5,10 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 )
 
-func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserResponse, error) {
+func (a *AuthService) CreateUser(u *entities.User) (entities.AuthenticatedUserResponse, error) {
 	err := a.validator.Struct(&u)
 	if err != nil {
 		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
@@ -34,12 +33,12 @@ func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserRes
 		return entities.AuthenticatedUserResponse{}, err
 	}
 
-	aT, err := accessToken([]byte(u.Salt), id)
+	aT, err := accessToken([]byte(u.Salt), id, a.credentials.TokenExpiryTime)
 	if err != nil {
 		return entities.AuthenticatedUserResponse{}, err
 	}
 
-	rT, err := refreshToken()
+	rT, err := refreshToken([]byte(u.Salt), id)
 	if err != nil {
 		return entities.AuthenticatedUserResponse{}, err
 	}
@@ -47,7 +46,7 @@ func (a *AuthService) CreateUser(u entities.User) (entities.AuthenticatedUserRes
 	return entities.AuthenticatedUserResponse{
 		UserID:                id,
 		AccessToken:           aT,
-		AccessTokenExpiresAt:  fmt.Sprintf("%s Minutes", os.Getenv("TOKEN_EXPIRY_TIME")),
+		AccessTokenExpiresAt:  fmt.Sprintf("%s Minutes", a.credentials.TokenExpiryTime),
 		RefreshToken:          rT,
 		RefreshTokenExpiresAt: "13 days",
 	}, nil
@@ -64,8 +63,8 @@ func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUse
 	hashedPass, err := hash(u.Password, userInfo.Salt)
 
 	if userInfo.Password == hashedPass {
-		aT, err := accessToken([]byte(userInfo.Salt), userInfo.UserID)
-		rT, err := refreshToken()
+		aT, err := accessToken([]byte(userInfo.Salt), userInfo.UserID, a.credentials.TokenExpiryTime)
+		rT, err := refreshToken([]byte(userInfo.Salt), userInfo.UserID)
 
 		if err != nil {
 			log.Println("Token Generation Error")
@@ -74,9 +73,9 @@ func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUse
 		return entities.AuthenticatedUserResponse{
 			UserID:                userInfo.UserID,
 			AccessToken:           aT,
-			AccessTokenExpiresAt:  "200 Minutes",
+			AccessTokenExpiresAt:  fmt.Sprintf("%s Minutes", a.credentials.TokenExpiryTime),
 			RefreshToken:          rT,
-			RefreshTokenExpiresAt: "200 Hours",
+			RefreshTokenExpiresAt: "13 days",
 		}, nil
 	}
 
@@ -85,7 +84,7 @@ func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUse
 	return entities.AuthenticatedUserResponse{}, err
 }
 
-func (a *AuthService) RecoverPassword(u entities.RecoverPasswordInput) error {
+func (a *AuthService) RecoverPassword(u *entities.RecoverPasswordInput) error {
 	err := a.validator.Struct(&u)
 
 	//publisher := a.messageQueue
@@ -104,14 +103,4 @@ func (a *AuthService) RecoverPassword(u entities.RecoverPasswordInput) error {
 
 	// Add code verification
 	return a.repo.RecoverPassword(u)
-}
-
-func (a *AuthService) CheckToken(authToken, signKey string) (string, error) {
-	userID, err := checkToken(authToken, signKey)
-
-	if err != nil {
-		return "Not Authorized", err
-	}
-
-	return userID, nil
 }

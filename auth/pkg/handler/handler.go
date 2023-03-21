@@ -20,14 +20,15 @@ func New(s *service.Service) *Handler {
 }
 
 func (h *Handler) DefineRoutes() *gin.Engine {
-	router := gin.Default()
+	r := gin.New()
+	r.Use(CustomLogger())
 
-	docs := router.Group("/docs")
+	docs := r.Group("/docs")
 	{
 		docs.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
-	auth := router.Group("/authServer")
+	auth := r.Group("/authServer")
 	auth.Use(limits.RequestSizeLimiter(1 << 20))
 	{
 		auth.POST("/create-user", h.createUser)
@@ -38,5 +39,5 @@ func (h *Handler) DefineRoutes() *gin.Engine {
 		auth.GET("/get-user-info", h.getUserInfo)
 	}
 
-	return router
+	return r
 }

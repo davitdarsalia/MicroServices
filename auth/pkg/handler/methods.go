@@ -28,7 +28,7 @@ func (h *Handler) createUser(c *gin.Context) {
 		return
 	}
 
-	resp, err := h.service.CreateUser(u)
+	resp, err := h.service.CreateUser(&u)
 
 	if err != nil {
 		var statusCode int
@@ -117,7 +117,7 @@ func (h *Handler) recoverPassword(c *gin.Context) {
 		return
 	}
 
-	err := h.service.RecoverPassword(u)
+	err := h.service.RecoverPassword(&u)
 
 	if err != nil {
 		var statusCode int

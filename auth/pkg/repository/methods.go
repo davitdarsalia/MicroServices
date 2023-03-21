@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-func (a *AuthPostgres) CreateUser(u entities.User) (string, error) {
+func (a *AuthPostgres) CreateUser(u *entities.User) (string, error) {
 	var userID string
 
 	tx, err := a.db.Begin(context.Background())
@@ -54,7 +54,7 @@ func (a *AuthPostgres) LoginUser(u entities.UserInput) (entities.UserMetaInfo, e
 	}, nil
 }
 
-func (a *AuthPostgres) RecoverPassword(u entities.RecoverPasswordInput) error {
+func (a *AuthPostgres) RecoverPassword(u *entities.RecoverPasswordInput) error {
 	//_, err := a.db.Exec(queries.UpdatePasswordQuery, u.NewPassword, u.Email, u.IDNumber, u.TelNumber)
 	//
 	//if err != nil {
