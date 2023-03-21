@@ -8,7 +8,7 @@ import (
 )
 
 func (a *AuthService) CreateUser(u *entities.User) (entities.AuthenticatedUserResponse, error) {
-	err := a.validator.Struct(&u)
+	err := a.validator.Struct(u)
 	if err != nil {
 		return entities.AuthenticatedUserResponse{}, generateValidationStruct(err)
 	}
@@ -30,6 +30,7 @@ func (a *AuthService) CreateUser(u *entities.User) (entities.AuthenticatedUserRe
 
 	id, err := a.repo.CreateUser(u)
 	if err != nil {
+		fmt.Println(err)
 		return entities.AuthenticatedUserResponse{}, err
 	}
 
