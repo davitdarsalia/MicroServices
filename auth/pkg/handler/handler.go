@@ -20,7 +20,7 @@ func New(s *service.Service) *Handler {
 
 func (h *Handler) DefineRoutes() *gin.Engine {
 	r := gin.New()
-	r.Use(customLogger(), sizeLimiter())
+	r.Use(customLogger())
 
 	docs := r.Group("/docs")
 	{
