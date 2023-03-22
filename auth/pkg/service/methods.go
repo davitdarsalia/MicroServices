@@ -85,23 +85,25 @@ func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUse
 	return entities.AuthenticatedUserResponse{}, err
 }
 
-func (a *AuthService) RecoverPassword(u *entities.RecoverPasswordInput) error {
+func (a *AuthService) RequestPasswordRecover(u *entities.RecoverPasswordInput) error {
 	err := a.validator.Struct(u)
-
-	//publisher := a.messageQueue
-
 	if err != nil {
 		return generateValidationStruct(err)
 	}
 
-	//newSalt, err := generateSalt()
-	//
-	//if err != nil {
-	//	log.Printf("Salt Generation Error, %s", err.Error())
-	//}
-	//
-	//u.NewPassword = hash(u.NewPassword, newSalt)
+	id, err := a.repo.RequestPasswordRecover(u)
 
-	// Add code verification
-	return a.repo.RecoverPassword(u)
+	isUUID := checkUUID(id)
+
+	fmt.Println(id)
+
+	if err != nil || (err != nil && !isUUID) {
+		return err
+	}
+
+	return nil
+}
+
+func (a *AuthService) ResetPassword(u *entities.RecoverPasswordInput) error {
+	return nil
 }

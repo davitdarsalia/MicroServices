@@ -52,6 +52,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Injecting Dependencies To Inner Layers
 	v := validator.New()
 	mq := outerServices.MqConnection(&secrets.RabbitMQConn)
 	repos := repository.New(conn, &secrets)

@@ -24,7 +24,7 @@ func (h *Handler) createUser(c *gin.Context) {
 	var u entities.User
 
 	if err := c.BindJSON(&u); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, responses.BadRequestErrorMessage)
 		return
 	}
 
@@ -38,7 +38,7 @@ func (h *Handler) createUser(c *gin.Context) {
 		} else {
 			statusCode = http.StatusConflict
 		}
-		newErrorResponse(c, statusCode, err.Error())
+		newErrorResponse(c, statusCode, responses.BadRequestErrorMessage)
 		return
 	}
 
@@ -73,7 +73,7 @@ func (h *Handler) loginUser(c *gin.Context) {
 	var u entities.UserInput
 
 	if err := c.BindJSON(&u); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, responses.BadRequestErrorMessage)
 		return
 	}
 
@@ -109,15 +109,15 @@ func (h *Handler) loginUser(c *gin.Context) {
 	c.Request.Body.Close()
 }
 
-func (h *Handler) recoverPassword(c *gin.Context) {
+func (h *Handler) requestResetPassword(c *gin.Context) {
 	var u entities.RecoverPasswordInput
 
 	if err := c.BindJSON(&u); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, responses.BadRequestErrorMessage)
 		return
 	}
 
-	err := h.service.RecoverPassword(&u)
+	err := h.service.RequestPasswordRecover(&u)
 
 	if err != nil {
 		var statusCode int
@@ -127,18 +127,19 @@ func (h *Handler) recoverPassword(c *gin.Context) {
 		} else {
 			statusCode = http.StatusNotFound
 		}
+
 		newErrorResponse(c, statusCode, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusResetContent, responses.RecoveredPasswordResponse{
-		StatusCode: http.StatusResetContent,
+	c.JSON(http.StatusOK, responses.RecoveredPasswordResponse{
+		StatusCode: http.StatusOK,
 		Message:    responses.RecoveredPasswordSuccessMessage,
 	})
 	c.Request.Body.Close()
 }
 
-func (h *Handler) recoverSecretKey(c *gin.Context) {
+func (h *Handler) resetPassword(c *gin.Context) {
 	c.Request.Body.Close()
 }
 
