@@ -9,7 +9,8 @@ import (
 type AuthDB interface {
 	CreateUser(u *entities.User) (string, error)
 	LoginUser(u entities.UserInput) (entities.UserMetaInfo, error)
-	RecoverPassword(u *entities.RecoverPasswordInput) error
+	RequestPasswordRecover(u *entities.RecoverPasswordInput) (string, error)
+	ResetPassword(u *entities.RecoverPasswordInput) (string, error)
 }
 
 type Repository struct {

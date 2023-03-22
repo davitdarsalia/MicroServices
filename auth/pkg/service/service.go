@@ -11,7 +11,8 @@ import (
 type Authorizer interface {
 	CreateUser(u *entities.User) (entities.AuthenticatedUserResponse, error)
 	LoginUser(u entities.UserInput) (entities.AuthenticatedUserResponse, error)
-	RecoverPassword(u *entities.RecoverPasswordInput) error
+	RequestPasswordRecover(u *entities.RecoverPasswordInput) error
+	ResetPassword(u *entities.RecoverPasswordInput) error
 }
 
 type Service struct {
