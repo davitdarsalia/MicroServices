@@ -7,6 +7,7 @@ import (
 	"auth/pkg/repository"
 	"auth/pkg/service"
 	"context"
+	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/joho/godotenv"
@@ -47,17 +48,20 @@ func main() {
 		logrus.Fatalf("Failed to create database: %v", err.Error())
 	}
 
-	conn, err := pgxpool.Connect(context.Background(), secrets.DBConnString)
+	dbConn, err := pgxpool.Connect(context.Background(), secrets.DBConnString)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Injecting Dependencies To Inner Layers
 	v := validator.New()
-	mq := outerServices.MqConnection(&secrets.RabbitMQConn)
-	repos := repository.New(conn, &secrets)
-	services := service.New(repos, mq, v, &secrets)
+	mqConn := outerServices.MQ(&secrets.RabbitMQConn)
+	outerServices.AuthQueue(mqConn)
+
+	repos := repository.New(dbConn, &secrets)
+	services := service.New(repos, mqConn, v, &secrets)
 	h := handler.New(services)
+
 	s := new(entities.Server)
 
 	signalChan := make(chan os.Signal, 1)
@@ -71,6 +75,10 @@ func main() {
 
 	<-signalChan
 
-	mq.Close()
-	conn.Close()
+	if err := mqConn.Close(); err != nil {
+		fmt.Println("Failed to close RabbitMQ Connection")
+	}
+	dbConn.Close()
+
+	log.Println("All Connections Closed")
 }
