@@ -11,9 +11,10 @@ const (
 /* Errors */
 
 const (
-	CreateUserErrorMessage = `[Create User Handler] - User Already Exists`
-	LogInUserErrorMessage  = `[Log In User Handler] - User Not Found`
-	BadRequestErrorMessage = `[Generic Message] - Some Of Your Credentials Are Missing`
+	CreateUserErrorMessage     = `[Create User Handler] - User Already Exists`
+	LogInUserErrorMessage      = `[Log In User Handler] - User Not Found`
+	BadRequestErrorMessage     = `[Generic Message] - Some Of Your Credentials Are Missing`
+	RequestEntityTooLargeError = `[Middleware Generic Message] - Request Body Is Too Large: x > 300KB`
 )
 
 /* Constants */

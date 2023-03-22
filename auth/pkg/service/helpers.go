@@ -32,7 +32,7 @@ func otp() (string, error) {
 
 	randomInt.Add(randomInt, min)
 
-o	otp := fmt.Sprintf("%03d %03d %03d %03d",
+	otp := fmt.Sprintf("%03d %03d %03d %03d",
 		randomInt.Uint64()/1_000_000_000,
 		(randomInt.Uint64()%1_000_000_000)/1_000_000,
 		(randomInt.Uint64()%1_000_000)/1_000,

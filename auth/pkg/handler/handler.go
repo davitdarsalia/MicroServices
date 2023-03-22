@@ -3,7 +3,6 @@ package handler
 import (
 	_ "auth/cmd/docs"
 	"auth/pkg/service"
-	"github.com/gin-contrib/size"
 	"github.com/gin-gonic/gin"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -21,7 +20,7 @@ func New(s *service.Service) *Handler {
 
 func (h *Handler) DefineRoutes() *gin.Engine {
 	r := gin.New()
-	r.Use(CustomLogger())
+	r.Use(customLogger(), sizeLimiter())
 
 	docs := r.Group("/docs")
 	{
@@ -29,14 +28,13 @@ func (h *Handler) DefineRoutes() *gin.Engine {
 	}
 
 	auth := r.Group("/authServer")
-	auth.Use(limits.RequestSizeLimiter(1 << 20))
 	{
 		auth.POST("/create-user", h.createUser)
 		auth.POST("/login-user", h.loginUser)
 		auth.POST("/logout-user", h.logoutUser)
+
 		auth.POST("/request-password-reset", h.requestResetPassword)
 		auth.POST("/reset-password", h.resetPassword)
-		auth.GET("/get-user-info", h.getUserInfo)
 	}
 
 	return r
