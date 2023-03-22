@@ -2,8 +2,10 @@ package service
 
 import (
 	"auth/internal/entities"
+	"context"
 	"errors"
 	"fmt"
+	mq "github.com/rabbitmq/amqp091-go"
 	"log"
 )
 
@@ -95,7 +97,30 @@ func (a *AuthService) RequestPasswordRecover(u *entities.RecoverPasswordInput) e
 
 	isUUID := checkUUID(id)
 
-	fmt.Println(id)
+	ch, err := a.messageQueue.Channel()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		ch.Close()
+	}()
+
+	otp, err := otp()
+	log.Print(otp)
+	if err != nil {
+		return err
+	}
+
+	err = ch.PublishWithContext(
+		context.Background(),
+		"auth_exchange",
+		"auth",
+		false, false,
+		mq.Publishing{
+			ContentType: "text/plain",
+			Body:        []byte(otp),
+		},
+	)
 
 	if err != nil || (err != nil && !isUUID) {
 		return err

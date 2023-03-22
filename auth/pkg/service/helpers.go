@@ -22,26 +22,21 @@ func otp() (string, error) {
 	min := big.NewInt(100_000_000_000)
 	max := big.NewInt(999_999_999_999)
 
-	// Calculate the range
 	rangeInt := big.NewInt(0).Sub(max, min)
 	rangeInt.Add(rangeInt, big.NewInt(1))
 
-	// Generate a random number within the range
 	randomInt, err := rand.Int(rand.Reader, rangeInt)
 	if err != nil {
 		return "", err
 	}
 
-	// Add the minimum value to get a number within the desired range
 	randomInt.Add(randomInt, min)
 
-	// Convert the random number to a formatted string
-	otp := fmt.Sprintf("%03d %03d %03d %03d",
+o	otp := fmt.Sprintf("%03d %03d %03d %03d",
 		randomInt.Uint64()/1_000_000_000,
 		(randomInt.Uint64()%1_000_000_000)/1_000_000,
 		(randomInt.Uint64()%1_000_000)/1_000,
-		randomInt.Uint64()%1_000,
-	)
+		randomInt.Uint64()%1_000)
 
 	return otp, nil
 }
