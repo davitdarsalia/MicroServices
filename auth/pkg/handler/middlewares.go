@@ -6,12 +6,6 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
-	"github.com/ulule/limiter"
-	ginLimiter "github.com/ulule/limiter/drivers/middleware/gin"
-	"github.com/ulule/limiter/drivers/store/memory"
-	"io"
-	"io/ioutil"
-	"net/http"
 	"sync"
 	"time"
 )
@@ -42,41 +36,6 @@ var logPool = sync.Pool{
 
 type logMessage struct {
 	message []byte
-}
-
-func requestQuantityLimiter() gin.HandlerFunc {
-	rate, err := limiter.NewRateFromFormatted("1000000-H")
-	if err != nil {
-		fmt.Printf("Request Quantity Limiter: %s", err.Error())
-	}
-
-	store := memory.NewStore()
-
-	limiter := limiter.New(store, rate)
-
-	return ginLimiter.NewMiddleware(limiter)
-
-}
-
-func sizeLimiter() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		maxBodySize := int64(0)
-		if c.Request.Body != nil {
-			c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, maxBodySize)
-			if _, err := io.Copy(ioutil.Discard, c.Request.Body); err != nil {
-				c.AbortWithStatusJSON(http.StatusRequestEntityTooLarge, gin.H{
-					"error": "request body size limit exceeded",
-				})
-				return
-			}
-		}
-
-		c.Next()
-
-		if c.Writer.Status() == http.StatusRequestEntityTooLarge {
-			c.Abort()
-		}
-	}
 }
 
 func customLogger() gin.HandlerFunc {
