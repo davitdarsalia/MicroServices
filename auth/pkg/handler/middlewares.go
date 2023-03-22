@@ -38,7 +38,7 @@ type logMessage struct {
 	message []byte
 }
 
-func CustomLogger() gin.HandlerFunc {
+func customLogger() gin.HandlerFunc {
 	logChan := make(chan *logMessage, 100)
 	var wg sync.WaitGroup
 	wg.Add(1)

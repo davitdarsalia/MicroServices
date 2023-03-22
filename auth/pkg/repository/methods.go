@@ -4,31 +4,17 @@ import (
 	"auth/internal/entities"
 	"auth/internal/queries"
 	"context"
-	"fmt"
 )
 
 func (a *AuthPostgres) CreateUser(u *entities.User) (string, error) {
 	var userID string
 
-	tx, err := a.db.Begin(context.Background())
-	if err != nil {
-		return "", err
-	}
-
-	fmt.Println(u.Password, "DSsfaas")
-	row := tx.QueryRow(context.Background(), queries.CreateUserQuery,
+	row := a.db.QueryRow(context.Background(), queries.CreateUserQuery,
 		u.Name, u.Surname, u.UserName, u.Email, u.TelNumber,
 		u.IDNumber, u.Password, u.DateCreated, u.IPAddress, u.Salt,
 	)
 
-	err = row.Scan(&userID)
-
-	if err != nil {
-		return "", err
-	}
-
-	err = tx.Commit(context.Background())
-
+	err := row.Scan(&userID)
 	if err != nil {
 		return "", err
 	}
@@ -54,11 +40,24 @@ func (a *AuthPostgres) LoginUser(u entities.UserInput) (entities.UserMetaInfo, e
 	}, nil
 }
 
-func (a *AuthPostgres) RecoverPassword(u *entities.RecoverPasswordInput) error {
+func (a *AuthPostgres) RequestPasswordRecover(u *entities.RecoverPasswordInput) (string, error) {
+	var userID string
+
+	row := a.db.QueryRow(context.Background(), queries.UpdatePasswordQuery, u.Email, u.IDNumber, u.TelNumber)
+
+	err := row.Scan(&userID)
+	if err != nil {
+		return "", err
+	}
+
+	return userID, nil
+}
+
+func (a *AuthPostgres) ResetPassword(u *entities.RecoverPasswordInput) (string, error) {
 	//_, err := a.db.Exec(queries.UpdatePasswordQuery, u.NewPassword, u.Email, u.IDNumber, u.TelNumber)
 	//
 	//if err != nil {
 	//	return err
 	//}
-	return nil
+	return "", nil
 }

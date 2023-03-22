@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 )
 
@@ -164,4 +165,11 @@ func BenchmarkCheckUUID(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		checkUUID("123e4567-e89b-12d3-a456-426614174000.")
 	}
+}
+
+func BenchmarkOTP(b *testing.B) {
+	//for i := 0; i < 1; i++ {
+	a, _ := otp()
+	fmt.Println(a)
+	//}
 }
