@@ -2,8 +2,10 @@ package service
 
 import (
 	"auth/internal/entities"
+	"context"
 	"errors"
 	"fmt"
+	mq "github.com/rabbitmq/amqp091-go"
 	"log"
 )
 
@@ -85,23 +87,48 @@ func (a *AuthService) LoginUser(u entities.UserInput) (entities.AuthenticatedUse
 	return entities.AuthenticatedUserResponse{}, err
 }
 
-func (a *AuthService) RecoverPassword(u *entities.RecoverPasswordInput) error {
+func (a *AuthService) RequestPasswordRecover(u *entities.RecoverPasswordInput) error {
 	err := a.validator.Struct(u)
-
-	//publisher := a.messageQueue
-
 	if err != nil {
 		return generateValidationStruct(err)
 	}
 
-	//newSalt, err := generateSalt()
-	//
-	//if err != nil {
-	//	log.Printf("Salt Generation Error, %s", err.Error())
-	//}
-	//
-	//u.NewPassword = hash(u.NewPassword, newSalt)
+	id, err := a.repo.RequestPasswordRecover(u)
 
-	// Add code verification
-	return a.repo.RecoverPassword(u)
+	isUUID := checkUUID(id)
+
+	ch, err := a.messageQueue.Channel()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		ch.Close()
+	}()
+
+	otp, err := otp()
+	log.Print(otp)
+	if err != nil {
+		return err
+	}
+
+	err = ch.PublishWithContext(
+		context.Background(),
+		"auth_exchange",
+		"auth",
+		false, false,
+		mq.Publishing{
+			ContentType: "text/plain",
+			Body:        []byte(otp),
+		},
+	)
+
+	if err != nil || (err != nil && !isUUID) {
+		return err
+	}
+
+	return nil
+}
+
+func (a *AuthService) ResetPassword(u *entities.RecoverPasswordInput) error {
+	return nil
 }

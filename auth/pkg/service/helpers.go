@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/argon2"
-	_ "golang.org/x/crypto/bcrypt"
+	"math/big"
 	"net"
 	"os"
 	"regexp"
@@ -17,6 +17,29 @@ import (
 	"time"
 	"unicode/utf8"
 )
+
+func otp() (string, error) {
+	min := big.NewInt(100_000_000_000)
+	max := big.NewInt(999_999_999_999)
+
+	rangeInt := big.NewInt(0).Sub(max, min)
+	rangeInt.Add(rangeInt, big.NewInt(1))
+
+	randomInt, err := rand.Int(rand.Reader, rangeInt)
+	if err != nil {
+		return "", err
+	}
+
+	randomInt.Add(randomInt, min)
+
+	otp := fmt.Sprintf("%03d %03d %03d %03d",
+		randomInt.Uint64()/1_000_000_000,
+		(randomInt.Uint64()%1_000_000_000)/1_000_000,
+		(randomInt.Uint64()%1_000_000)/1_000,
+		randomInt.Uint64()%1_000)
+
+	return otp, nil
+}
 
 func generateValidationStruct(e error) error {
 	fieldNames := make([]string, 0, 0)
@@ -101,7 +124,7 @@ func validateToken(tokenString string, pKey []byte) (bool, error) {
 }
 
 func checkUUID(uuid string) bool {
-	condition := regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`)
+	condition := regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`)
 
 	return condition.MatchString(uuid)
 }
