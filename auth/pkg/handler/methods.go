@@ -35,10 +35,12 @@ func (h *Handler) createUser(c *gin.Context) {
 
 		if strings.Contains(err.Error(), responses.ValidationFailedErrorMessage) {
 			statusCode = http.StatusNotAcceptable
+			newErrorResponse(c, statusCode, err.Error())
 		} else {
 			statusCode = http.StatusConflict
+			newErrorResponse(c, statusCode, responses.CreateUserErrorMessage)
 		}
-		newErrorResponse(c, statusCode, responses.BadRequestErrorMessage)
+
 		return
 	}
 
@@ -84,11 +86,11 @@ func (h *Handler) loginUser(c *gin.Context) {
 
 		if strings.Contains(err.Error(), responses.ValidationFailedErrorMessage) {
 			statusCode = http.StatusNotAcceptable
+			newErrorResponse(c, statusCode, err.Error())
 		} else {
 			statusCode = http.StatusNotFound
+			newErrorResponse(c, statusCode, responses.LogInUserErrorMessage)
 		}
-
-		newErrorResponse(c, statusCode, err.Error())
 		return
 	}
 
