@@ -1,0 +1,18 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Authentication Server documentation.",
+        "title": "Authentication Server",
+        "contact": {},
+        "version": "1.0"
+    },
+    "basePath": "localhost:8080/authServer",
+    "paths": {},
+    "securityDefinitions": {
+        "ApiKetAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
