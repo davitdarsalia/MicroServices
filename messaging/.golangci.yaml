@@ -1,0 +1,21 @@
+linters-settings:
+  # All linters are enabled by default
+  enable-all: true
+
+linters:
+  # Individual linters can be disabled if necessary
+  enable:
+    - deadcode
+    - errcheck
+    - goconst
+    - goimports
+    - golangci-lint
+    - gosec
+    - govet
+    - ineffassign
+    - misspell
+    - staticcheck
+    - structcheck
+    - typecheck
+    - unconvert
+    - unused
